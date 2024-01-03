@@ -95,7 +95,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                     ),
                   ],
                 ),
-                child: Column(
+                child: ListView(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,8 +133,10 @@ class _DepenseDetailState extends State<DepenseDetail> {
                             depense.image != null && depense.image!.isNotEmpty
                                 ? Image.network(
                                     'http://10.0.2.2/${depense.image}',
-                                    width: 50,
-                                    height: 50,
+                                    width: 200,
+                                    height: 210,
+                                    scale: 1,
+                                    fit: BoxFit.contain,
                                   )
                                 : const Text("Aucune justificatif"),
                       )),
@@ -151,38 +153,46 @@ class _DepenseDetailState extends State<DepenseDetail> {
                       color: Colors.grey,
                       thickness: 0.5,
                     ),
-                    const Text(
-                      "Dépense faite par:",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black87,
+                    const Center(
+                      child: Text(
+                        "Dépense faite par:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                        "${depense.admin!.nom.toUpperCase()} ${depense.admin!.prenom.toUpperCase()}",
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
+                    Center(
+                      child: Text(
+                          "${depense.admin!.nom.toUpperCase()} ${depense.admin!.prenom.toUpperCase()}",
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold)),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    const Text(
-                      "Budget concerné:",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black87,
+                    const Center(
+                      child: Text(
+                        "Budget concerné:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(depense.budget.description,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
+                    Center(
+                      child: Text(depense.budget.description,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold)),
+                    ),
                   ],
                 ),
               ),

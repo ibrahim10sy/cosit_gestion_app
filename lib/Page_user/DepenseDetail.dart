@@ -11,7 +11,7 @@ class DepenseDetail extends StatefulWidget {
   State<DepenseDetail> createState() => _DepenseDetailState();
 }
 
-class _DepenseDetailState extends State<DepenseDetail> {
+class _DepenseDetailState extends  State<DepenseDetail> {
   late Depense depense;
   bool _showJustification =
       false; // État pour contrôler la visibilité de la pièce justificative
@@ -64,13 +64,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
     );
   }
 
-  void _showImage() {
-    setState(() {
-      depense.image == null || depense.image?.isEmpty == true
-          ? Text("Aucune justification", style: valueStyle)
-          : Image.network("http://10.0.2.2/${depense.image}");
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,19 +97,51 @@ class _DepenseDetailState extends State<DepenseDetail> {
                     ),
                   ],
                 ),
-                child: Column(
+                child: ListView(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                              horizontal: 10, vertical: 10),
                           child: Text("Justification", style: labelStyle),
-                        ), // Utilisez l'état pour décider d'afficher ou masquer la pièce justificative
-                        TextButton(
-                            onPressed: _showImage, child: const Text("Voir"))
+                        ),
+                        // Utilisez l'état pour décider d'afficher ou masquer la pièce justificative
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _showJustification = !_showJustification;
+                            });
+                          },
+                          icon: Icon(
+                            _showJustification
+                                ? Icons.visibility_off_sharp
+                                : Icons.remove_red_eye,
+                            color: d_red,
+                          ),
+                          label: Text(
+                            _showJustification ? 'Masquer' : 'Voir',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
                       ],
+                    ),
+                    Container(
+                      child: Flexible(
+                          child: Visibility(
+                        visible: _showJustification,
+                        child:
+                            depense.image != null && depense.image!.isNotEmpty
+                                ? Image.network(
+                                    'http://10.0.2.2/${depense.image}',
+                                    width: 200,
+                                    height: 210,
+                                    scale: 1,
+                                    fit: BoxFit.contain,
+                                  )
+                                : const Text("Aucune justificatif"),
+                      )),
                     ),
                     _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
@@ -129,38 +155,46 @@ class _DepenseDetailState extends State<DepenseDetail> {
                       color: Colors.grey,
                       thickness: 0.5,
                     ),
-                    const Text(
-                      "Dépense faite par: ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black87,
+                    const Center(
+                      child: Text(
+                        "Dépense faite par:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                        "${depense.utilisateur!.nom.toUpperCase()} ${depense.utilisateur!.prenom.toUpperCase()}",
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
+                    Center(
+                      child: Text(
+                          "${depense.utilisateur!.nom.toUpperCase()} ${depense.utilisateur!.prenom.toUpperCase()}",
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold)),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    const Text(
-                      "Budget concerné:",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black87,
+                    const Center(
+                      child: Text(
+                        "Budget concerné:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),
-                    Text(depense.budget.description,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
+                    Center(
+                      child: Text(depense.budget.description,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold)),
+                    ),
                   ],
                 ),
               ),
