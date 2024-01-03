@@ -9,17 +9,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class DemandeListe extends StatefulWidget {
   const DemandeListe({super.key});
 
   @override
   State<DemandeListe> createState() => _DemandeListeState();
 }
-const d_red = Colors.red;
-class _DemandeListeState extends State<DemandeListe> {
 
-   late List<Demande> listDemande = [];
+const d_red = Colors.red;
+
+class _DemandeListeState extends State<DemandeListe> {
+  late List<Demande> listDemande = [];
   late Future<List<Demande>> futureDemande;
   late Utilisateur utilisateur;
 
@@ -35,18 +35,19 @@ class _DemandeListeState extends State<DemandeListe> {
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     futureDemande = getListDemande(utilisateur.idUtilisateur!);
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: CustomAppBars(),
+    return Scaffold(
+      appBar: const CustomAppBars(),
       body: SingleChildScrollView(
         child: Column(children: [
-          CustomCard(
+          const CustomCard(
             title: "Demande ",
             imagePath: 'assets/images/demande.png',
-           subTitle: "Les demandes approuvés",
+            subTitle: "Les demandes approuvés",
           ),
-const SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
@@ -86,7 +87,7 @@ const SizedBox(
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
                                     child: Text(
-                                      "Demandes non approuver:",
+                                      "Les demandes approuver:",
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
@@ -257,4 +258,3 @@ const SizedBox(
     );
   }
 }
-

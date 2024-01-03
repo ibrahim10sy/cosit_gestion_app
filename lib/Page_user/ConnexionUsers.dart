@@ -15,10 +15,11 @@ class ConnexionUsers extends StatefulWidget {
   @override
   State<ConnexionUsers> createState() => _ConnexionUsersState();
 }
-const d_red = Colors.red;
-class _ConnexionUsersState extends State<ConnexionUsers> {
 
-   final _formKey = GlobalKey<FormState>();
+const d_red = Colors.red;
+
+class _ConnexionUsersState extends State<ConnexionUsers> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController motDePasseController = TextEditingController();
   String _errorMessage = '';
@@ -84,15 +85,26 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
         );
 
         utilisateurProvider.setUtilisateur(utilisateur);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              title: Center(child: Text('Connexion en cours')),
-              content: CupertinoActivityIndicator(radius: 20.0, color: d_red),
-            );
-          },
-        );
+        // final snackBar = SnackBar(
+        //   content: const Text(
+        //     'Connexion en cours ...',
+        //     style: TextStyle(color: Colors.white, fontSize: 20),
+        //   ),
+        //   backgroundColor: d_red, // Couleur de fond du SnackBar
+        //   elevation: 5, // Élévation du SnackBar
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(10), // Contour arrondi
+        //   ),
+        //   duration: const Duration(seconds: 2),
+        //   padding: const EdgeInsets.all(20),
+        //   action: SnackBarAction(
+        //     label: 'Connexion',
+        //     textColor: Colors.white,
+        //     onPressed: () {},
+        //   ),
+        // );
+
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -139,6 +151,7 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

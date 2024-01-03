@@ -33,7 +33,7 @@ class _CustomAppBarsState extends State<CustomAppBars> {
 
   Future<List<SendNotification>> getNotif() async {
     try {
-      final response = await SendNotifService().getNotification();
+      final response = await SendNotifService().fetchData(utilisateur.idUtilisateur!);
       setState(() {
         listNotif = response;
       });

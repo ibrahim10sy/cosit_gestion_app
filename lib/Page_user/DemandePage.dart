@@ -286,31 +286,3 @@ class _DemandePageState extends State<DemandePages> {
   }
 }
 
-// IconButton(
-//                                                       onPressed: () async {
-//                                                         await DemandeService()
-//                                                             .deleteDemande(
-//                                                                 demande
-//                                                                     .idDemande!)
-//                                                             .then((value) => {
-//                                                                   Provider.of<DemandeService>(
-//                                                                           context,
-//                                                                           listen:
-//                                                                               false)
-//                                                                       .applyChange(),
-//                                                                   setState(() {
-//                                                                     futureDemande =
-//                                                                         DemandeService()
-//                                                                             .getDemande();
-//                                                                   })
-//                                                                 })
-//                                                             .catchError(
-//                                                                 (onError) => {
-//                                                                       print(
-//                                                                           onError)
-//                                                                     });
-//                                                       },
-//                                                       icon: const Icon(
-//                                                         Icons.delete,
-//                                                         color: d_red,
-//                                                       )),

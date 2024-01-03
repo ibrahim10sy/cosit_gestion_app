@@ -91,7 +91,7 @@ class _StatistiqueState extends State<Statistique>
                     const SizedBox(
                       height: 20,
                     ),
-                    ListView(
+                    Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20),
@@ -105,6 +105,9 @@ class _StatistiqueState extends State<Statistique>
                               ),
                             ),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -192,8 +195,8 @@ class _StatistiqueState extends State<Statistique>
                                                   Curves.easeInOutQuint,
                                               PieChartData(
                                                   startDegreeOffset: 100,
-                                                  sectionsSpace: 0.5,
-                                                  centerSpaceRadius: 40,
+                                                  sectionsSpace: 0.8,
+                                                  centerSpaceRadius: 45,
                                                   sections: procedures.map((e) {
                                                     double pourcentage = (double
                                                                 .tryParse(e

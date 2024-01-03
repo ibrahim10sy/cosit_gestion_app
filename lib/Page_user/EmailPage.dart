@@ -1,6 +1,7 @@
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_admin/DetailNotifAdmin.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
+import 'package:cosit_gestion/Page_user/DetailNotification.dart';
 import 'package:cosit_gestion/model/SendNotification.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
@@ -145,7 +146,7 @@ class _EmailPageUserState extends State<EmailPageUser> {
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  DetailNotifAdmin(
+                                                                  DetailNotification(
                                                                     notification:
                                                                         send,
                                                                   )));

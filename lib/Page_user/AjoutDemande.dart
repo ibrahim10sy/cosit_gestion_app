@@ -17,11 +17,13 @@ class AjoutDemande extends StatefulWidget {
   @override
   State<AjoutDemande> createState() => _AjoutDemandeState();
 }
+
 const d_red = Colors.red;
 
 class _AjoutDemandeState extends State<AjoutDemande> {
   TextEditingController motifController = TextEditingController();
   TextEditingController montant_control = TextEditingController();
+
   late Admin admin;
   late Future _admin;
   int? adminValue;
@@ -30,9 +32,10 @@ class _AjoutDemandeState extends State<AjoutDemande> {
   @override
   void initState() {
     super.initState();
-     _admin = http.get(Uri.parse('http://10.0.2.2:8080/Admin/list'));
+    _admin = http.get(Uri.parse('http://10.0.2.2:8080/Admin/list'));
 
-    utilisateur = Provider.of<UtilisateurProvider>(context, listen:false).utilisateur!;    
+    utilisateur =
+        Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
   }
 
   @override
@@ -301,24 +304,73 @@ class _AjoutDemandeState extends State<AjoutDemande> {
                                       );
                                     },
                                   );
-                                }
-                                try{
-                                  await DemandeService().addDemande(
-                                    motif: motif, 
-                                    montantDemande: montant, 
-                                    utilisateur: utilisateur, 
-                                    admin: admin).
-                                    then((value) => {
-                                      Provider.of<DemandeService>(context,
-                                          listen: false)
-                                      .applyChange(),
-                                 motifController.clear(),
-                                  montant_control.clear()
-                                    }).catchError((onError) => {
-                                      print(onError)
-                                    });
-                                }catch(e){
-                                  print(e.toString());
+                                } else {
+                                  final snackBar = SnackBar(
+                                    content: const Text(
+                                      'Validation en cours ...',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                    backgroundColor:
+                                        d_red, // Couleur de fond du SnackBar
+                                    elevation: 5, // Élévation du SnackBar
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          10), // Contour arrondi
+                                    ),
+                                    duration: const Duration(seconds: 15),
+                                    padding: const EdgeInsets.all(5),
+                                    action: SnackBarAction(
+                                      label: 'Validation',
+                                      textColor: Colors.white,
+                                      onPressed: () {},
+                                    ),
+                                  );
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+
+                                  try {
+                                    await DemandeService()
+                                        .addDemande(
+                                            motif: motif,
+                                            montantDemande: montant,
+                                            utilisateur: utilisateur,
+                                            admin: admin)
+                                        .then((value) => {
+                                              Provider.of<DemandeService>(
+                                                      context,
+                                                      listen: false)
+                                                  .applyChange(),
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Center(
+                                                        child: Text('Succès')),
+                                                    content: const Text(
+                                                        "Demande faite avec succès"),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop(context);
+                                                        },
+                                                        child: const Text('OK'),
+                                                      )
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                              motifController.clear(),
+                                              montant_control.clear()
+                                            })
+                                        .catchError(
+                                            (onError) => {print(onError)});
+                                  } catch (e) {
+                                    print(e.toString());
+                                  }
                                 }
                               },
                               icon: const Icon(

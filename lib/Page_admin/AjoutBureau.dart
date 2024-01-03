@@ -12,9 +12,11 @@ class AjoutBureau extends StatefulWidget {
   @override
   State<AjoutBureau> createState() => _AjoutBureauState();
 }
+
 const d_red = Colors.red;
+
 class _AjoutBureauState extends State<AjoutBureau> {
-   final formkey = GlobalKey<FormState>();
+  final formkey = GlobalKey<FormState>();
   TextEditingController nomController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
 
@@ -308,7 +310,7 @@ class _AjoutBureauState extends State<AjoutBureau> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton(
+                        ElevatedButton.icon(
                           onPressed: () async {
                             final String nom = nomController.text;
                             final String adresse = adresseController.text;
@@ -336,7 +338,11 @@ class _AjoutBureauState extends State<AjoutBureau> {
                             backgroundColor: Colors.green,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                           ),
-                          child: const Text(
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                          label: const Text(
                             "Ajouter",
                             style: TextStyle(
                               fontSize: 18,
@@ -345,7 +351,7 @@ class _AjoutBureauState extends State<AjoutBureau> {
                             ),
                           ),
                         ),
-                        ElevatedButton(
+                        ElevatedButton.icon(
                           onPressed: () {
                             Navigator.of(context)
                                 .pop(); // Ferme la boîte de dialogue
@@ -354,7 +360,11 @@ class _AjoutBureauState extends State<AjoutBureau> {
                             backgroundColor: d_red,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                           ),
-                          child: const Text(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                          label: const Text(
                             "Annuler",
                             style: TextStyle(
                               fontSize: 18,

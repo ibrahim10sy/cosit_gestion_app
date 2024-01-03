@@ -81,7 +81,7 @@ class DetailNotifAdmin extends StatelessWidget {
             Text(
               'Montant demandé: ${notification.demande?.montantDemande} FCFA',
               style: const TextStyle(color: Colors.black, fontSize: 16),
-            ),
+             ),
             Text(
               'Date de Demande: ${notification.demande?.dateDemande}',
               style: const TextStyle(color: Colors.black, fontSize: 16),

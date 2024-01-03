@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -5,13 +7,11 @@ import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BudgetService.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 
 class updateBudgets extends StatefulWidget {
   final Budget budget;
@@ -30,21 +30,22 @@ class _updateBudgetsState extends State<updateBudgets> {
   TextEditingController userController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   late Admin admin;
-  late Future _mesUser;
+  late Future _utilisateur;
+  int? userValue;
   Utilisateur? user;
   late Budget _budget;
-  int? userValue;
 
   @override
   void initState() {
+    super.initState();
     _budget = widget.budget;
     descriptionController.text = _budget.description;
     montant_control.text = _budget.montant.toString();
     userController.text = _budget.utilisateur.toString();
     dateController.text = _budget.dateDebut;
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
-    _mesUser = http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/read'));
-    super.initState();
+    _utilisateur =
+        http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
   }
 
   @override
@@ -147,7 +148,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                           Expanded(
                             flex: 4,
                             child: FutureBuilder(
-                                future: _mesUser,
+                                future: _utilisateur,
                                 builder: (_, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -163,8 +164,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                   if (snapshot.hasData) {
                                     final response =
                                         json.decode(snapshot.data.body) as List;
-
-                                    final mesUsers = response
+                                    final utilisateurs = response
                                         .map((e) => Utilisateur.fromMap(e))
                                         .toList();
 
@@ -185,28 +185,30 @@ class _updateBudgetsState extends State<updateBudgets> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                        items: mesUsers
+                                         icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: d_red,
+                                        ),
+                                        items: utilisateurs
                                             .where((e) =>
-                                                e.role == "comptable" ||
+                                                e.role == "Directeur" ||
                                                 e.role == "Comptable" ||
-                                                e.role == "directeur" ||
-                                                e.role == "Directeur")
+                                                e.role == "Sécretaire"
+                                              )
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
-                                                  child: Center(
-                                                    child: Column(
-                                                      children: [
-                                                        Text(e.role),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ))
+                                                  child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                      e.role),
+                                                )))
                                             .toList(),
                                         value: userValue,
                                         onChanged: (newValue) {
                                           setState(() {
                                             userValue = newValue;
-                                            user = mesUsers.firstWhere(
+                                            user = utilisateurs.firstWhere(
                                                 (element) =>
                                                     element.idUtilisateur ==
                                                     newValue);

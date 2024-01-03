@@ -12,27 +12,29 @@ class DemandeService extends ChangeNotifier {
   List<Demande> demandes = [];
 
   Future<void> addDemande(
-      {required String motif,
+      {
+      required String motif,
       required String montantDemande,
       required Utilisateur utilisateur,
       required Admin admin}) async {
-    var addDemande = jsonEncode({
+    var addDemande = {
       'idDemande': null,
+      'motif' : motif,
       'moontDemande': int.tryParse(montantDemande),
       'utilisateur': utilisateur.toMap(),
       'admin': admin.toMap()
-    });
+    };
 
     final response = await http.post(
       Uri.parse("$baseUrl/create"),
       headers: {'Content-Type': 'application/json'},
-      body: addDemande,
+      body: jsonEncode(addDemande),
     );
-
+   debugPrint(addDemande.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       debugPrint(response.body);
     } else {
-      throw Exception("Une erreur s'est produite' : ${response.statusCode}");
+      throw Exception("Une erreur s'est produite lors de l'ajout de la demande' : ${response.statusCode}");
     }
   }
 
