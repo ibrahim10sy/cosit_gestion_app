@@ -12,24 +12,25 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UpdateSalaire extends StatefulWidget {
-    final Salaire salaires;
+  final Salaire salaires;
 
   const UpdateSalaire({super.key, required this.salaires});
 
   @override
   State<UpdateSalaire> createState() => _UpdateSalaireState();
 }
-const d_red = Colors.red;
-class _UpdateSalaireState extends State<UpdateSalaire> {
 
-   DateTime selectedDate = DateTime.now();
+const d_red = Colors.red;
+
+class _UpdateSalaireState extends State<UpdateSalaire> {
+  DateTime selectedDate = DateTime.now();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController montant_control = TextEditingController();
   TextEditingController userController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  late Future _mesUser;
-  late Utilisateur user;
+  late Future _utilisateur;
   int? userValue;
+  late Utilisateur user;
   late Salaire salaire;
   @override
   void initState() {
@@ -38,8 +39,8 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
     montant_control.text = salaire.montant.toString();
     userController.text = salaire.utilisateur.toString();
     dateController.text = salaire.date;
-    _mesUser = http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/read'));
-
+    _utilisateur =
+        http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
     super.initState();
   }
 
@@ -51,7 +52,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
     dateController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +60,8 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomCard(
-              title: "Ajout de salaire",
+            const CustomCard(
+              title: "Modifier salaire",
               imagePath: "assets/images/piece.png",
             ),
             const SizedBox(
@@ -137,13 +138,13 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: d_red),
                                 ),
                               )),
                           Expanded(
                             flex: 4,
                             child: FutureBuilder(
-                                future: _mesUser,
+                                future: _utilisateur,
                                 builder: (_, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
@@ -159,8 +160,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   if (snapshot.hasData) {
                                     final response =
                                         json.decode(snapshot.data.body) as List;
-
-                                    final mesUsers = response
+                                    final utilisateurs = response
                                         .map((e) => Utilisateur.fromMap(e))
                                         .toList();
 
@@ -181,25 +181,29 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                        items: mesUsers
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: d_red,
+                                        ),
+                                        items: utilisateurs
                                             .map((e) => DropdownMenuItem(
-                                                  value: e.idUtilisateur,
-                                                  child: Center(
-                                                    child: Text(
-                                                        "${e.nom} ${e.prenom}"),
-                                                  ),
-                                                ))
+                                                value: e.idUtilisateur,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(e.role),
+                                                )))
                                             .toList(),
                                         value: userValue,
                                         onChanged: (newValue) {
                                           setState(() {
                                             userValue = newValue;
-                                            user = mesUsers.firstWhere(
+                                            user = utilisateurs.firstWhere(
                                                 (element) =>
                                                     element.idUtilisateur ==
                                                     newValue);
                                             debugPrint(
-                                                "User selectionnée ${user.toString()}");
+                                                "User sélectionnée ${user.toString()}");
                                           });
                                         },
                                       ),
@@ -300,7 +304,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: d_red),
                                 )),
                           ),
                           Expanded(
@@ -332,7 +336,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2100));
                                 if (pickedDate != null) {
                                   print(pickedDate);
@@ -361,7 +365,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                         children: [
                           Padding(
                               padding: const EdgeInsets.all(0),
-                              child: ElevatedButton(
+                              child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder(
@@ -458,10 +462,14 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                     );
                                   }
                                 },
-                                child: const Text("Modifier",
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                                label: const Text("Modifier",
                                     style: TextStyle(color: Colors.white)),
                               )),
-                          ElevatedButton(
+                          ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 shape: RoundedRectangleBorder(
@@ -470,7 +478,11 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text(
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                              label: const Text(
                                 "Annuler",
                                 style: TextStyle(color: Colors.white),
                               ))

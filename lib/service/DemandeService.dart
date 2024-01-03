@@ -81,21 +81,22 @@ class DemandeService extends ChangeNotifier {
     }
   }
 
-  Future<void> approuveAdmin(
-      {required int idDemande,
+  Future<void> approuveAdmin({
+      required int idDemande,
       required Admin admin,
       required Utilisateur utilisateur}) async {
-    var addDemande = jsonEncode({
+    var addDemande = {
       'idDemande': idDemande,
       'admin': admin.toMap(),
       'utilisateur': utilisateur.toMap(),
-    });
+    };
 
     final response = await http.put(
       Uri.parse("$baseUrl/approuveDemandeByAdmin/$idDemande"),
       headers: {'Content-Type': 'application/json'},
-      body: addDemande,
+      body: jsonEncode(addDemande),
     );
+     debugPrint(response.toString());
     print("iD de la demande $idDemande");
     if (response.statusCode == 200 || response.statusCode == 201) {
       debugPrint(response.body);

@@ -185,7 +185,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                         icon: const Icon(
+                                        icon: const Icon(
                                           Icons.arrow_drop_down,
                                           color: d_red,
                                         ),
@@ -193,15 +193,13 @@ class _updateBudgetsState extends State<updateBudgets> {
                                             .where((e) =>
                                                 e.role == "Directeur" ||
                                                 e.role == "Comptable" ||
-                                                e.role == "Sécretaire"
-                                              )
+                                                e.role == "Sécretaire")
                                             .map((e) => DropdownMenuItem(
-                                                  value: e.idUtilisateur,
-                                                  child: Padding(
+                                                value: e.idUtilisateur,
+                                                child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      e.role),
+                                                  child: Text(e.role),
                                                 )))
                                             .toList(),
                                         value: userValue,
@@ -375,7 +373,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                         children: [
                           Padding(
                               padding: const EdgeInsets.all(0),
-                              child: ElevatedButton(
+                              child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder(
@@ -486,10 +484,14 @@ class _updateBudgetsState extends State<updateBudgets> {
                                     // );
                                   }
                                 },
-                                child: const Text("Modifier",
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                                label: const Text("Modifier",
                                     style: TextStyle(color: Colors.white)),
                               )),
-                          ElevatedButton(
+                          ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 shape: RoundedRectangleBorder(
@@ -498,7 +500,11 @@ class _updateBudgetsState extends State<updateBudgets> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text(
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                              label: const Text(
                                 "Annuler",
                                 style: TextStyle(color: Colors.white),
                               ))

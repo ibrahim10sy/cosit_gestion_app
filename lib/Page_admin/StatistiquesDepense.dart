@@ -24,7 +24,7 @@ Color hexToColor(String code) {
 class _StatistiqueState extends State<Statistique>
     with SingleTickerProviderStateMixin {
   List<Procedure> procedures = [];
-  late Future<List<Procedure>> _legendeList;
+  late Future<List<Procedure>> _procedureList;
   late Future<List<Procedure>> _procedureListe;
   var procedureService = ProcedureService();
   late Admin admin;
@@ -76,7 +76,7 @@ class _StatistiqueState extends State<Statistique>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               child: Container(
-                height: 480,
+                height: 590,
                 width: 400,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -84,8 +84,7 @@ class _StatistiqueState extends State<Statistique>
                   boxShadow: const [
                     BoxShadow(
                       color: Color.fromARGB(40, 15, 15, 15),
-                      spreadRadius: 5,
-                      blurRadius: 7,
+                      blurRadius: 5,
                       offset: Offset(0, 3),
                     ),
                   ],
@@ -109,13 +108,13 @@ class _StatistiqueState extends State<Statistique>
                           ),
                         ],
                       ),
-                      child: ListView(
+                      child: Column(
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: Center(
                               child: Text(
-                                "MES DÉPENSES PAR CATÉGORIES",
+                                "MES DÉPENSES PAR CATÉGORIE",
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
@@ -255,7 +254,196 @@ class _StatistiqueState extends State<Statistique>
                                   child: Column(
                                     children: [
                                       _buildLegendItem("Courses", Colors.grey),
-                                      _buildLegendItem("Materiel", Colors.amberAccent),
+                                      _buildLegendItem(
+                                          "Materiel", Colors.amberAccent),
+                                      _buildLegendItem(
+                                          "Maintenance",
+                                          const Color.fromARGB(
+                                              141, 6, 68, 240)),
+                                      _buildLegendItem(
+                                          "Frais",
+                                          const Color.fromARGB(
+                                              255, 56, 196, 21)),
+                                      _buildLegendItem("Materiel", Colors.pink),
+                                      _buildLegendItem(
+                                          "Projet",
+                                          const Color.fromARGB(
+                                              141, 143, 77, 77)),
+                                      _buildLegendItem(
+                                          "Electricité", Colors.red),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      height: 250,
+                      width: 410,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromARGB(40, 18, 18, 18),
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: ListView(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                              child: Text(
+                                "DÉPENSES TOTAL PAR CATÉGORIE",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: d_red,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SizedBox(
+                                  height: 150,
+                                  width: 70,
+                                  child: FutureBuilder(
+                                    future: procedureService.getDepenseTotal(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                          child: CupertinoActivityIndicator(
+                                            radius: 20.0,
+                                            color: d_red,
+                                          ),
+                                        );
+                                      }
+
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child:
+                                              Text(snapshot.error.toString()),
+                                        );
+                                      }
+
+                                      if (!snapshot.hasData) {
+                                        return const Center(
+                                          child: Text(
+                                              "Aucune statistique disponible !"),
+                                        );
+                                      } else {
+                                        procedures = snapshot.data!;
+
+                                        debugPrint(
+                                            "libelle : $procedures.libelleCategorie");
+                                        debugPrint("total $procedures");
+                                        return procedures.isEmpty
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                child: PieChart(
+                                                  PieChartData(
+                                                    startDegreeOffset: 80,
+                                                    sectionsSpace: 0.3,
+                                                    centerSpaceRadius: 40,
+                                                    sections: [
+                                                      PieChartSectionData(
+                                                        value: 80,
+                                                        color: Colors.grey,
+                                                        radius: 30,
+                                                        showTitle: false,
+                                                      ),
+                                                      PieChartSectionData(
+                                                        value: 35,
+                                                        color: Colors.blue,
+                                                        radius: 30,
+                                                        showTitle: false,
+                                                      ),
+                                                      PieChartSectionData(
+                                                        value: 35,
+                                                        color:
+                                                            Colors.amberAccent,
+                                                        radius: 30,
+                                                        showTitle: false,
+                                                      ),
+                                                      PieChartSectionData(
+                                                        value: 8,
+                                                        color: Colors.pink,
+                                                        radius: 30,
+                                                        showTitle: false,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            : PieChart(
+                                                swapAnimationDuration:
+                                                    const Duration(
+                                                        milliseconds: 2000),
+                                                swapAnimationCurve:
+                                                    Curves.easeInOutQuint,
+                                                PieChartData(
+                                                    startDegreeOffset: 100,
+                                                    sectionsSpace: 0.5,
+                                                    centerSpaceRadius: 40,
+                                                    sections:
+                                                        procedures.map((e) {
+                                                      double pourcentage = (double
+                                                                  .tryParse(e
+                                                                      .total_depenses
+                                                                      .toString()) ??
+                                                              0.0) /
+                                                          procedures.fold(
+                                                              0,
+                                                              (previousValue,
+                                                                      element) =>
+                                                                  previousValue +
+                                                                  (double.tryParse(element
+                                                                          .total_depenses
+                                                                          .toString()) ??
+                                                                      0.0));
+                                                      String pourcentageString =
+                                                          '${(pourcentage * 100).toStringAsFixed(1)}%';
+                                                      return PieChartSectionData(
+                                                        value: double.tryParse(e
+                                                            .total_depenses
+                                                            .toString()),
+                                                        title:
+                                                            pourcentageString,
+                                                        showTitle: true,
+                                                        radius: 30,
+                                                        color:
+                                                            _getColorFromCategory(
+                                                                e.libelle),
+                                                      );
+                                                    }).toList()),
+                                              );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 60),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      _buildLegendItem("Courses", Colors.grey),
+                                      _buildLegendItem(
+                                          "Materiel", Colors.amberAccent),
                                       _buildLegendItem(
                                           "Maintenance",
                                           const Color.fromARGB(
@@ -326,7 +514,7 @@ class _StatistiqueState extends State<Statistique>
       case 'Materiel' || 'materiel':
         return Colors.amberAccent;
       case 'Autres':
-        return Color.fromARGB(255, 223, 72, 185);
+        return const Color.fromARGB(255, 223, 72, 185);
       default:
         return const Color.fromARGB(255, 156, 148, 148);
     }

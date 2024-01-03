@@ -309,17 +309,12 @@ class _AjoutDemandeState extends State<AjoutDemande> {
                                     content: const Text(
                                       'Validation en cours ...',
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                                          color: Colors.white, fontSize: 18),
                                     ),
                                     backgroundColor:
                                         d_red, // Couleur de fond du SnackBar
-                                    elevation: 5, // Élévation du SnackBar
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          10), // Contour arrondi
-                                    ),
-                                    duration: const Duration(seconds: 15),
-                                    padding: const EdgeInsets.all(5),
+
+                                    duration: const Duration(seconds: 14),
                                     action: SnackBarAction(
                                       label: 'Validation',
                                       textColor: Colors.white,

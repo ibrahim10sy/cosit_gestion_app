@@ -121,7 +121,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: d_red),
                                 ),
                               )),
                           Expanded(
@@ -287,7 +287,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: d_red),
                                 )),
                           ),
                           Expanded(
@@ -319,7 +319,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                 DateTime? pickedDate = await showDatePicker(
                                     context: context,
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2100));
                                 if (pickedDate != null) {
                                   print(pickedDate);

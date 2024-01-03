@@ -94,7 +94,7 @@ class _DepensePageState extends State<DepensePage> {
                               children: [
                                 Image.asset("assets/images/depense.png",
                                     width: 39, height: 39),
-                                const Expanded(
+                                const Expanded( 
                                   //flex: 4,
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),

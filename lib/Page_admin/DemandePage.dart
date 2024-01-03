@@ -14,9 +14,11 @@ class DemandePage extends StatefulWidget {
   @override
   State<DemandePage> createState() => _DemandePageState();
 }
+
 const d_red = Colors.red;
+
 class _DemandePageState extends State<DemandePage> {
-   late List<Demande> listDemande = [];
+  late List<Demande> listDemande = [];
   late Future<List<Demande>> futureDemande;
 
   Future<List<Demande>> getListDemande() async {
@@ -29,7 +31,7 @@ class _DemandePageState extends State<DemandePage> {
     super.initState();
     futureDemande = getListDemande();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,48 +162,119 @@ class _DemandePageState extends State<DemandePage> {
                                 listDemande = snapshot.data!;
                                 return Column(
                                   children: listDemande
+                                      .where((element) =>
+                                          element.autorisationAdmin == false)
                                       .map((Demande demande) => Column(
                                             children: [
                                               ListTile(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              DetailDemandeAdmin(
-                                                                  demande:
-                                                                      demande)));
-                                                },
-                                                leading: Image.asset(
-                                                    "assets/images/demande.png",
-                                                    width: 33,
-                                                    height: 33),
-                                                title: Text(
-                                                  demande.motif,
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
-                                                subtitle:
-                                                    Text(demande.dateDemande!),
-                                                trailing: IconButton(
-                                                    onPressed: () async {
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DetailDemandeAdmin(
+                                                                    demande:
+                                                                        demande)));
+                                                  },
+                                                  leading: Image.asset(
+                                                      "assets/images/demande.png",
+                                                      width: 33,
+                                                      height: 33),
+                                                  title: Text(
+                                                    demande.motif,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                  subtitle:
+                                                      Text(demande.dateDemande),
+                                                  trailing: Checkbox(
+                                                    value: demande
+                                                            .autorisationAdmin ??
+                                                        false,
+                                                    onChanged:
+                                                        (newValue) async {
+                                                      final snackBar = SnackBar(
+                                                        content: const Text(
+                                                          'Validation en cours ...',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                        //  width: 10 0,
+
+                                                        backgroundColor:
+                                                            d_red, // Couleur de fond du SnackBar
+                                                        elevation:
+                                                            5, // Élévation du SnackBar
+                                                        // shape:
+                                                        //     RoundedRectangleBorder(
+                                                        //   borderRadius:
+                                                        //       BorderRadius.circular(
+                                                        //           10), // Contour arrondi
+                                                        // ),
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 16),
+                                                        action: SnackBarAction(
+                                                          label: 'Validation',
+                                                          textColor:
+                                                              Colors.white,
+                                                          onPressed: () {},
+                                                        ),
+                                                      );
+
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackBar);
+
                                                       try {
                                                         await DemandeService()
                                                             .approuveAdmin(
-                                                                idDemande: demande
-                                                                    .idDemande!,
-                                                                admin: demande
-                                                                    .admin!,
-                                                                utilisateur: demande
-                                                                    .utilisateur!)
+                                                              idDemande: demande
+                                                                  .idDemande!,
+                                                              admin:
+                                                                  demande.admin,
+                                                              utilisateur: demande
+                                                                  .utilisateur,
+                                                            )
                                                             .then((value) => {
-                                                                  print(
-                                                                      "Demande approuvée ${demande.autorisationAdmin}")
+                                                                  Provider.of<DemandeService>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .applyChange(),
+                                                                  showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (BuildContext
+                                                                            context) {
+                                                                      return AlertDialog(
+                                                                        title: const Center(
+                                                                            child:
+                                                                                Text('Succès')),
+                                                                        content:
+                                                                            const Text("Demande approuvé avec succès"),
+                                                                        actions: <Widget>[
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.of(context).pop(context);
+                                                                            },
+                                                                            child:
+                                                                                const Text('OK'),
+                                                                          )
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  ),
                                                                 })
                                                             .catchError(
                                                                 (onError) => {
@@ -213,9 +286,8 @@ class _DemandePageState extends State<DemandePage> {
                                                             "Erreur survenue $e");
                                                       }
                                                     },
-                                                    icon: const Icon(
-                                                        Icons.update)),
-                                              ),
+                                                    activeColor: d_red,
+                                                  )),
                                               const Divider(),
                                             ],
                                           ))
