@@ -3,7 +3,6 @@ import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Depense.dart';
 import 'package:flutter/material.dart';
 
-
 class DepenseDetail extends StatefulWidget {
   final Depense depenses;
 
@@ -44,7 +43,6 @@ class _DepenseDetailState extends State<DepenseDetail> {
             label,
             style: labelStyle,
           ),
-          // Afficher le bouton seulement s'il y a une justification
           label == "Justification" && depense.image != null
               ? ElevatedButton(
                   onPressed: () {
@@ -64,14 +62,6 @@ class _DepenseDetailState extends State<DepenseDetail> {
         ],
       ),
     );
-  }
-
-  void _showImage() {
-    setState(() {
-      depense.image == null || depense.image?.isEmpty == true
-          ? Text("Aucune justification", style: valueStyle)
-          : Image.network("http://10.0.2.2/${depense.image}");
-    });
   }
 
   @override
@@ -112,12 +102,42 @@ class _DepenseDetailState extends State<DepenseDetail> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                              horizontal: 10, vertical: 10),
                           child: Text("Justification", style: labelStyle),
-                        ), // Utilisez l'état pour décider d'afficher ou masquer la pièce justificative
-                        TextButton(
-                            onPressed: _showImage, child: const Text("Voir"))
+                        ),
+                        // Utilisez l'état pour décider d'afficher ou masquer la pièce justificative
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _showJustification = !_showJustification;
+                            });
+                          },
+                          icon: Icon(
+                            _showJustification
+                                ? Icons.visibility_off_sharp
+                                : Icons.remove_red_eye,
+                            color: d_red,
+                          ),
+                          label: Text(
+                            _showJustification ? 'Masquer' : 'Voir',
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
                       ],
+                    ),
+                    Container(
+                      child: Flexible(
+                          child: Visibility(
+                        visible: _showJustification,
+                        child:
+                            depense.image != null && depense.image!.isNotEmpty
+                                ? Image.network(
+                                    'http://10.0.2.2/${depense.image}',
+                                    width: 50,
+                                    height: 50,
+                                  )
+                                : const Text("Aucune justificatif"),
+                      )),
                     ),
                     _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
