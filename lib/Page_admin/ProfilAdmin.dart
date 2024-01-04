@@ -22,7 +22,10 @@ class _ProfilAdminState extends State<ProfilAdmin> {
 
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
   }
-
+void seDeconnecter() {
+    
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Connexion()));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,24 +130,22 @@ class _ProfilAdminState extends State<ProfilAdmin> {
                                         style: TextStyle(
                                             color: d_red, fontSize: 20),
                                       ))),
-                              Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: OutlinedButton.icon(
-                                      style: OutlinedButton.styleFrom(
-                                          side: const BorderSide(
-                                              color: Colors.red, width: 1)),
-                                      icon: const Icon(
-                                        Icons.logout,
-                                        color: d_red,
-                                      ),
-                                      onPressed: () {
-                                        
-                                      },
-                                      label: const Text(
-                                        "Se déconnecter",
-                                        style: TextStyle(
-                                            color: d_red, fontSize: 20),
-                                      ))),
+                              // Padding(
+                              //     padding: const EdgeInsets.all(10.0),
+                              //     child: OutlinedButton.icon(
+                              //         style: OutlinedButton.styleFrom(
+                              //             side: const BorderSide(
+                              //                 color: Colors.red, width: 1)),
+                              //         icon: const Icon(
+                              //           Icons.logout,
+                              //           color: d_red,
+                              //         ),
+                              //         onPressed: seDeconnecter,
+                              //         label: const Text(
+                              //           "Se déconnecter",
+                              //           style: TextStyle(
+                              //               color: d_red, fontSize: 20),
+                              //         ))),
                             ],
                           );
                         })

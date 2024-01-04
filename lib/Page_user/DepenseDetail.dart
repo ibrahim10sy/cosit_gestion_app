@@ -11,7 +11,7 @@ class DepenseDetail extends StatefulWidget {
   State<DepenseDetail> createState() => _DepenseDetailState();
 }
 
-class _DepenseDetailState extends  State<DepenseDetail> {
+class _DepenseDetailState extends State<DepenseDetail> {
   late Depense depense;
   bool _showJustification =
       false; // État pour contrôler la visibilité de la pièce justificative
@@ -63,8 +63,6 @@ class _DepenseDetailState extends  State<DepenseDetail> {
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +138,9 @@ class _DepenseDetailState extends  State<DepenseDetail> {
                                     scale: 1,
                                     fit: BoxFit.contain,
                                   )
-                                : const Text("Aucune justificatif"),
+                                : const Text(
+                                    textAlign: TextAlign.center,
+                                    "Aucune justificatif"),
                       )),
                     ),
                     _buildDetailRow("Description", depense.description),

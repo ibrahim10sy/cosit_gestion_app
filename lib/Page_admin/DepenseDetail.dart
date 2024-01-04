@@ -138,7 +138,9 @@ class _DepenseDetailState extends State<DepenseDetail> {
                                     scale: 1,
                                     fit: BoxFit.contain,
                                   )
-                                : const Text("Aucune justificatif"),
+                                : const Text(
+                                    textAlign: TextAlign.center,
+                                    "Aucune justificatif"),
                       )),
                     ),
                     _buildDetailRow("Description", depense.description),
@@ -165,12 +167,21 @@ class _DepenseDetailState extends State<DepenseDetail> {
                     ),
                     const SizedBox(height: 5),
                     Center(
-                      child: Text(
-                          "${depense.admin!.nom.toUpperCase()} ${depense.admin!.prenom.toUpperCase()}",
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
+                      child: (depense.admin == null ||
+                              depense.admin!.nom.isEmpty ||
+                              depense.admin!.prenom.isEmpty)
+                          ? Text(
+                              "${depense.utilisateur!.nom.toUpperCase()} ${depense.utilisateur!.prenom.toUpperCase()}",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold))
+                          : Text(
+                              "${depense.admin!.nom.toUpperCase()} ${depense.admin!.prenom.toUpperCase()}",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(
                       height: 10,

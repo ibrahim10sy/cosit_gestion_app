@@ -166,10 +166,10 @@ class _ConnexionState extends State<Connexion> {
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: Center(
                 child: Text(
-                  'Connexion',
+                  'Connexion en tant qu\'Admin',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 20,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -242,7 +242,7 @@ class _ConnexionState extends State<Connexion> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  ConnexionUsers()));
+                              builder: (context) => const ConnexionUsers()));
                     },
                     child: const Text(
                       "Se connecter en tant que Employer",

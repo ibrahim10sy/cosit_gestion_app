@@ -163,7 +163,7 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
               height: 170,
             ),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 118),
+              margin: const EdgeInsets.symmetric(horizontal: 115),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
                 child: Image.asset('assets/images/logo.png'),
