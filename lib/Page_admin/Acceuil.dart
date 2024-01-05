@@ -19,10 +19,11 @@ class Accueil extends StatefulWidget {
   @override
   State<Accueil> createState() => _AccueilState();
 }
+
 const d_red = Colors.red;
 
 class _AccueilState extends State<Accueil> {
-   late Future<Map<String, dynamic>> future;
+  late Future<Map<String, dynamic>> future;
 
   late Admin admin;
   @override
@@ -34,7 +35,7 @@ class _AccueilState extends State<Accueil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(),
+        appBar: const CustomAppBar(),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -98,56 +99,64 @@ class _AccueilState extends State<Accueil> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
-          if (index == 6) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const AjoutBureau()));
-          } else if (index == 5) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const UtilisateurPage()));
-          } else if (index == 4) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const Statistique()));
-          } else if (index == 3) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const CategorieDepensePage()));
-          } else if (index == 2) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const DepensePage()));
-          } else if (index == 1) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const BudgetPage()));
-          }
-        },
-        borderRadius: BorderRadius.circular(28),
-        highlightColor: d_red,
-        child: Card(
-          color: Colors.white,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/images/$imgLocation"),
-              Text(
-                titre,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
+          onTap: () {
+            if (index == 6) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AjoutBureau()));
+            } else if (index == 5) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UtilisateurPage()));
+            } else if (index == 4) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Statistique()));
+            } else if (index == 3) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CategorieDepensePage()));
+            } else if (index == 2) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const DepensePage()));
+            } else if (index == 1) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const BudgetPage()));
+            }
+          },
+          borderRadius: BorderRadius.circular(28),
+          highlightColor: d_red,
+          child: Card(
+            color: Colors.white,
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width *
+                      0.25, // Set width to 80% of the screen width
+                  child: Image.asset(
+                    "assets/images/$imgLocation",
+                    fit: BoxFit
+                        .cover, // You can adjust the BoxFit based on your needs
+                  ),
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  titre,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

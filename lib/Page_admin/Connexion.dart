@@ -158,7 +158,7 @@ class _ConnexionState extends State<Connexion> {
                 padding: const EdgeInsets.symmetric(vertical: 40),
                 child: DelayedAnimation(
                   delay: 2000,
-                  child: Image.asset('assets/images/logo.png'),
+                  child: Center(child: Image.asset('assets/images/logo.png')),
                 ),
               ),
             ),

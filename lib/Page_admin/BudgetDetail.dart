@@ -171,7 +171,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Container(
               height: 480,
-              width: 350,
+              width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),

@@ -54,7 +54,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: Container(
                 height: 480,
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -132,6 +132,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     return DropdownButton(
+                                        padding: EdgeInsets.all(20),
                                         value: "Selectionner",
                                         items: const [],
                                         dropdownColor: d_red,
@@ -165,7 +166,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                        // padding: const EdgeInsets.all(12),
+                                        padding: const EdgeInsets.all(10),
                                         items: mesUsers
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
@@ -209,7 +210,9 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                                   0) //blur radius of shadow
                                         ]),
                                     child: DropdownButton(
-                                        items: const [], onChanged: (value) {}),
+                                        // padding: EdgeInsets.all(80),
+                                        items: const [],
+                                        onChanged: (value) {}),
                                   );
                                 }),
                           )

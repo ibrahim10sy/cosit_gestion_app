@@ -33,6 +33,13 @@ class _DepenseDetailState extends State<DepenseDetail> {
     depense = widget.depenses;
   }
 
+  @override
+  void dispose() {
+    // TODO: implement
+    super.dispose();
+    depense = widget.depenses;
+  }
+
   Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -82,7 +89,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: Container(
                 height: 480,
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),

@@ -15,17 +15,19 @@ class UtilisateurPage extends StatefulWidget {
   @override
   State<UtilisateurPage> createState() => _UtilisateurPageState();
 }
+
 const d_red = Colors.red;
+
 class _UtilisateurPageState extends State<UtilisateurPage> {
   late List<Utilisateur> utilisateurListe = [];
   late Future<List<Utilisateur>> _futureListe;
   var utilisateurService = UtilisateurService();
-  
-   Future<List<Utilisateur>> getUser() async {
+
+  Future<List<Utilisateur>> getUser() async {
     return utilisateurService.fetchData();
   }
 
-   @override
+  @override
   void initState() {
     _futureListe = getUser();
     debugPrint(_futureListe.toString());
@@ -77,7 +79,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Container(
                   height: 480,
-                  width: 300,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -127,7 +129,11 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                 );
                               } else {
                                 utilisateurListe = snapshot.data!;
-                                return Column(
+                                return utilisateurListe.isEmpty ?
+                                Center(
+                                  child: Text("Aucun employé trouvé"),
+                                ):
+                                Column(
                                   children: utilisateurListe
                                       .map((Utilisateur user) => Column(
                                             children: [

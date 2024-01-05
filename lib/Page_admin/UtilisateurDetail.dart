@@ -38,7 +38,7 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
               padding: const EdgeInsets.all(16),
               child: Container(
                 height: 450,
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),

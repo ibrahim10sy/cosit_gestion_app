@@ -99,21 +99,23 @@ class _UpdateProfilState extends State<UpdateProfil> {
             decoration: const BoxDecoration(
                 // color: Color(0xfff5f8fd),
                 borderRadius: BorderRadius.all(Radius.circular(20))),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 5,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
-                backgroundColor: const Color(0xff2ffffff), // Button color
-              ),
-              onPressed: () {
-                _pickImage();
-              },
-              child: const Text(
-                'Sélectionner une photo de profil',
-                style: TextStyle(
-                  color: d_red,
-                  fontWeight: FontWeight.w900,
+            child: Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
+                  backgroundColor: const Color(0xff2ffffff), // Button color
+                ),
+                onPressed: () {
+                  _pickImage();
+                },
+                child: const Text(
+                  'Sélectionner une photo de profil',
+                  style: TextStyle(
+                    color: d_red,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
             ),

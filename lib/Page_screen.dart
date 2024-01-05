@@ -16,7 +16,7 @@ class _PageScreenState extends State<PageScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 4),
       () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => const Connexion(),

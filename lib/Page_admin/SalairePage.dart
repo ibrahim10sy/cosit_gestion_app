@@ -15,10 +15,11 @@ class SalairePage extends StatefulWidget {
   @override
   State<SalairePage> createState() => _SalairePageState();
 }
+
 const d_red = Colors.red;
 
 class _SalairePageState extends State<SalairePage> {
-   late List<Salaire> salaireListe = [];
+  late List<Salaire> salaireListe = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,10 +77,13 @@ class _SalairePageState extends State<SalairePage> {
               height: 15,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
+              padding: const EdgeInsets.symmetric(
+                // 10% padding on each side
+                vertical: 15,
+              ),
               child: Container(
                 height: 480,
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),

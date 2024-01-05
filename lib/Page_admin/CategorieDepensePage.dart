@@ -69,7 +69,7 @@ class _CategorieDepensePageState extends State<CategorieDepensePage> {
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: Container(
                 height: 480,
-                width: 350,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -324,65 +324,75 @@ class _CategorieDepensePageState extends State<CategorieDepensePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () async {
-                            final String libelle = libelleController.text;
-                            if (formkey.currentState!.validate()) {
-                              try {
-                                await CategorieService()
-                                    .addCategorieByAdmin(
-                                        libelle: libelle, admin: admin)
-                                    .then((value) => {
-                                          Provider.of<CategorieService>(context,
-                                                  listen: false)
-                                              .applyChange(),
-                                          libelleController.clear(),
-                                          Navigator.of(context).pop()
-                                        })
-                                    .catchError((onError) =>
-                                        {print(onError.toString())});
-                              } catch (e) {
-                                final String errorMessage = e.toString();
-                                print(errorMessage);
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final String libelle = libelleController.text;
+                              if (formkey.currentState!.validate()) {
+                                try {
+                                  await CategorieService()
+                                      .addCategorieByAdmin(
+                                          libelle: libelle, admin: admin)
+                                      .then((value) => {
+                                            Provider.of<CategorieService>(
+                                                    context,
+                                                    listen: false)
+                                                .applyChange(),
+                                            libelleController.clear(),
+                                            Navigator.of(context).pop()
+                                          })
+                                      .catchError((onError) =>
+                                          {print(onError.toString())});
+                                } catch (e) {
+                                  final String errorMessage = e.toString();
+                                  print(errorMessage);
+                                }
                               }
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          icon: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            "Ajouter",
-                            style: TextStyle(
-                              fontSize: 20,
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            icon: const Icon(
+                              Icons.add,
                               color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            ),
+                            label: const Text(
+                              "Ajouter",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Ferme la boîte de dialogue
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: d_red,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            "Annuler",
-                            style: TextStyle(
-                              fontSize: 20,
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pop(); // Ferme la boîte de dialogue
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: d_red,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            icon: const Icon(
+                              Icons.close,
                               color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            ),
+                            label: const Text(
+                              "Annuler",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),

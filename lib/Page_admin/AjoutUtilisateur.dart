@@ -92,21 +92,23 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
             decoration: const BoxDecoration(
                 // color: Color(0xfff5f8fd),
                 borderRadius: BorderRadius.all(Radius.circular(20))),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 5,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
-                backgroundColor: const Color(0xff2ffffff), // Button color
-              ),
-              onPressed: () {
-                _pickImage();
-              },
-              child: const Text(
-                'Sélectionner une photo de profil',
-                style: TextStyle(
-                  color: d_red,
-                  fontWeight: FontWeight.w900,
+            child: Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
+                  backgroundColor: const Color(0xff2ffffff), // Button color
+                ),
+                onPressed: () {
+                  _pickImage();
+                },
+                child: const Text(
+                  'Sélectionner une photo de profil',
+                  style: TextStyle(
+                    color: d_red,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
             ),
@@ -114,9 +116,13 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
           const SizedBox(
             height: 10,
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40),
-            child: Text(
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width *
+                  0.05, // 10% padding on each side
+              vertical: 10,
+            ),
+            child: const Text(
               'Inscription',
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -136,8 +142,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: TextField(
                       controller: nom_controller,
                       style: const TextStyle(fontSize: 18.0),
@@ -157,8 +166,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: TextField(
                       controller: prenom_controller,
                       style: const TextStyle(fontSize: 18.0),
@@ -178,8 +190,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: TextField(
                       keyboardType: TextInputType.emailAddress,
                       controller: email_controller,
@@ -203,8 +218,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: TextField(
                       controller: phone_controller,
                       style: const TextStyle(fontSize: 18.0),
@@ -224,32 +242,39 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
-                    child: DropdownMenu<String>(
-                      width: 330,
-                      inputDecorationTheme: const InputDecorationTheme(
-                        contentPadding: EdgeInsets.all(18),
-                        border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width *
+                        0.05, // 10% padding on each side
+                    vertical: 10,
+                  ),
+                  child: DropdownMenu<String>(
+                    width: MediaQuery.of(context).size.width *
+                        0.9, // 80% of the screen width
+                    inputDecorationTheme: const InputDecorationTheme(
+                      contentPadding: EdgeInsets.all(18),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 2.0),
                       ),
-                      initialSelection: list.first,
-                      onSelected: (String? value) {
-                        setState(() {
-                          defaultRole = value!;
-                        });
-                      },
-                      dropdownMenuEntries:
-                          list.map<DropdownMenuEntry<String>>((String value) {
-                        return DropdownMenuEntry<String>(
-                            value: value, label: value);
-                      }).toList(),
-                    )),
+                    ),
+                    initialSelection: list.first,
+                    onSelected: (String? value) {
+                      setState(() {
+                        defaultRole = value!;
+                      });
+                    },
+                    dropdownMenuEntries:
+                        list.map<DropdownMenuEntry<String>>((String value) {
+                      return DropdownMenuEntry<String>(
+                          value: value, label: value);
+                    }).toList(),
+                  ),
+                ),
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: TextField(
                       obscureText: true,
                       controller: motDepasse_controller,
@@ -270,8 +295,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                       ),
                     )),
                 Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: TextField(
                       obscureText: true,
                       controller: ConfirmerMotDePasse_controller,
@@ -294,8 +322,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                 SizedBox(
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 15),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
+                    ),
                     child: ElevatedButton(
                       onPressed: () async {
                         String nom = nom_controller.text;

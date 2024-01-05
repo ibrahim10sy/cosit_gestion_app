@@ -22,10 +22,12 @@ class _ProfilAdminState extends State<ProfilAdmin> {
 
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
   }
-void seDeconnecter() {
-    
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Connexion()));
+
+  void seDeconnecter() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Connexion()));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -7,10 +7,10 @@ import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BudgetService.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/cupertino.dart';
 
 class BudgetPage extends StatefulWidget {
   const BudgetPage({super.key});
@@ -18,10 +18,11 @@ class BudgetPage extends StatefulWidget {
   @override
   State<BudgetPage> createState() => _BudgetPageState();
 }
-const d_red = Colors.red;
-class _BudgetPageState extends State<BudgetPage> {
 
-   late Future<Map<String, dynamic>> future;
+const d_red = Colors.red;
+
+class _BudgetPageState extends State<BudgetPage> {
+  late Future<Map<String, dynamic>> future;
   late List<Budget> BudgetList;
   late Future<List<Budget>> _futureListBudget;
   late List<Budget>? budgets = [];
@@ -50,7 +51,7 @@ class _BudgetPageState extends State<BudgetPage> {
     super.initState();
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +78,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold));
                           } else {
-                            return Center(
+                            return const Center(
                               child: CupertinoActivityIndicator(
                                   radius: 20.0, color: d_red),
                             ); //const CircularProgressIndicator();
@@ -115,7 +116,7 @@ class _BudgetPageState extends State<BudgetPage> {
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Container(
                   height: 480,
-                  width: 350,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),

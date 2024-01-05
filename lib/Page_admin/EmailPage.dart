@@ -49,7 +49,7 @@ class _EmailPageState extends State<EmailPage> {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Container(
                     height: 500,
-                    width: 350,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),

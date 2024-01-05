@@ -116,25 +116,33 @@ class _AccueilState extends State<Accueil> {
         borderRadius: BorderRadius.circular(28),
         highlightColor: d_red,
         child: Card(
-          color: Colors.white,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/images/$imgLocation"),
-              Text(
-                titre,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
+            color: Colors.white,
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width *
+                      0.25, // Set width to 80% of the screen width
+                  child: Image.asset(
+                    "assets/images/$imgLocation",
+                    fit: BoxFit
+                        .cover, // You can adjust the BoxFit based on your needs
+                  ),
                 ),
-              )
-            ],
-          ),
-        ),
+                Text(
+                  titre,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          )
       ),
     );
   }

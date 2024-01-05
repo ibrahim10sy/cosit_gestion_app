@@ -71,7 +71,7 @@ class _StatistiqueState extends State<Statistique>
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               child: Container(
                 height: 380,
-                width: 400,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -116,7 +116,7 @@ class _StatistiqueState extends State<Statistique>
                             children: [
                               SizedBox(
                                 height: 150,
-                                width: 70,
+                                width: 55,
                                 child: FutureBuilder(
                                   future: procedureService.getDepenseByUser(
                                       utilisateur.idUtilisateur!),

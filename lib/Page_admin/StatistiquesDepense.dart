@@ -77,7 +77,7 @@ class _StatistiqueState extends State<Statistique>
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
               child: Container(
                 height: 590,
-                width: 400,
+                width: MediaQuery.of(context).size.width * 0.95,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -95,7 +95,7 @@ class _StatistiqueState extends State<Statistique>
                   children: [
                     Container(
                       height: 250,
-                      width: 410,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -249,7 +249,7 @@ class _StatistiqueState extends State<Statistique>
                                     },
                                   ),
                                 ),
-                                const SizedBox(width: 60),
+                                const SizedBox(width: 55),
                                 Expanded(
                                   child: Column(
                                     children: [
@@ -257,7 +257,7 @@ class _StatistiqueState extends State<Statistique>
                                       _buildLegendItem(
                                           "Materiel", Colors.amberAccent),
                                       _buildLegendItem(
-                                          "Maintenance",
+                                          "Maintenan..",
                                           const Color.fromARGB(
                                               141, 6, 68, 240)),
                                       _buildLegendItem(
@@ -285,7 +285,7 @@ class _StatistiqueState extends State<Statistique>
                     ),
                     Container(
                       height: 250,
-                      width: 410,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -437,7 +437,7 @@ class _StatistiqueState extends State<Statistique>
                                     },
                                   ),
                                 ),
-                                const SizedBox(width: 60),
+                                const SizedBox(width: 55),
                                 Expanded(
                                   child: Column(
                                     children: [
@@ -445,7 +445,7 @@ class _StatistiqueState extends State<Statistique>
                                       _buildLegendItem(
                                           "Materiel", Colors.amberAccent),
                                       _buildLegendItem(
-                                          "Maintenance",
+                                          "Maintenan..",
                                           const Color.fromARGB(
                                               141, 6, 68, 240)),
                                       _buildLegendItem(
@@ -489,6 +489,7 @@ class _StatistiqueState extends State<Statistique>
           ),
           const SizedBox(width: 10),
           Text(p.libelle,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.black)),
           const SizedBox(height: 30),
@@ -531,6 +532,7 @@ class _StatistiqueState extends State<Statistique>
         ),
         Text(
           label,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
       ],
