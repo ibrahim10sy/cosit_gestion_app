@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:cosit_gestion/model/Admin.dart';
@@ -25,27 +24,6 @@ class Budget {
   });
   
 
-  Budget copyWith({
-    int? idBudget,
-    String? description,
-    int? montant,
-    int? montantRestant,
-    String? dateDebut,
-    String? dateFin,
-    Admin? admin,
-    Utilisateur? utilisateur,
-  }) {
-    return Budget(
-      idBudget: idBudget ?? this.idBudget,
-      description: description ?? this.description,
-      montant: montant ?? this.montant,
-      montantRestant: montantRestant ?? this.montantRestant,
-      dateDebut: dateDebut ?? this.dateDebut,
-      dateFin: dateFin ?? this.dateFin,
-      admin: admin ?? this.admin,
-      utilisateur: utilisateur ?? this.utilisateur,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -73,39 +51,18 @@ class Budget {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory Budget.fromJson(String source) => Budget.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'Budget(idBudget: $idBudget, description: $description, montant: $montant, montantRestant: $montantRestant, dateDebut: $dateDebut, dateFin: $dateFin, admin: $admin, utilisateur: $utilisateur)';
-  }
-
-  @override
-  bool operator ==(covariant Budget other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.idBudget == idBudget &&
-      other.description == description &&
-      other.montant == montant &&
-      other.montantRestant == montantRestant &&
-      other.dateDebut == dateDebut &&
-      other.dateFin == dateFin &&
-      other.admin == admin &&
-      other.utilisateur == utilisateur;
-  }
-
-  @override
-  int get hashCode {
-    return idBudget.hashCode ^
-      description.hashCode ^
-      montant.hashCode ^
-      montantRestant.hashCode ^
-      dateDebut.hashCode ^
-      dateFin.hashCode ^
-      admin.hashCode ^
-      utilisateur.hashCode;
+  factory Budget.fromJson(Map<String, dynamic> json) {
+    return Budget(
+      idBudget: json['idBudget'],
+      description: json['description'],
+      montant: json['montant'],
+      montantRestant: json['montantRestant'],
+      dateDebut: json['dateDebut'],
+      dateFin: json['dateFin'],
+      admin: Admin.fromJson(json['admin']),
+      utilisateur: json['utilisateur'] != null
+          ? Utilisateur.fromJson(json['utilisateur'])
+          : null,
+    );
   }
 }

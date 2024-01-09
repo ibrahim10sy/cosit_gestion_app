@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cosit_gestion/model/Salaire.dart';
+import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,7 @@ class SalaireService extends ChangeNotifier {
     required String montant,
     required String date,
     required Utilisateur utilisateur,
+    required SousCategorie sousCategorie
   }) async {
     var salaire = jsonEncode({
       'idSalaire': null,
@@ -21,6 +23,7 @@ class SalaireService extends ChangeNotifier {
       'montant': int.tryParse(montant),
       'date': date,
       'utilisateur': utilisateur.toMap(),
+      'sousCategorie' : sousCategorie.toMap()
     });
 
     final response = await http.post(
@@ -42,6 +45,7 @@ class SalaireService extends ChangeNotifier {
     required String montant,
     required String date,
     required Utilisateur utilisateur,
+    required SousCategorie sousCategorie,
   }) async {
     var salaire = jsonEncode({
       'idSalaire': null,
@@ -49,6 +53,7 @@ class SalaireService extends ChangeNotifier {
       'montant': int.tryParse(montant),
       'date': date,
       'utilisateur': utilisateur.toMap(),
+      'sousCategorie': sousCategorie.toMap()
     });
 
     final response = await http.put(Uri.parse("$baseUrl/update/$idSalaire"),

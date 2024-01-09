@@ -241,7 +241,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                         ),
                       ),
                     )),
-                Padding(
+                Padding( 
                   padding: EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.width *
                         0.05, // 10% padding on each side

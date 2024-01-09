@@ -69,39 +69,14 @@ class Utilisateur {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory Utilisateur.fromJson(String source) => Utilisateur.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'Utilisateur(idUtilisateur: $idUtilisateur, nom: $nom, prenom: $prenom, email: $email, image: $image, role: $role, phone: $phone, passWord: $passWord)';
-  }
-
-  @override
-  bool operator ==(covariant Utilisateur other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.idUtilisateur == idUtilisateur &&
-      other.nom == nom &&
-      other.prenom == prenom &&
-      other.email == email &&
-      other.image == image &&
-      other.role == role &&
-      other.phone == phone &&
-      other.passWord == passWord;
-  }
-
-  @override
-  int get hashCode {
-    return idUtilisateur.hashCode ^
-      nom.hashCode ^
-      prenom.hashCode ^
-      email.hashCode ^
-      image.hashCode ^
-      role.hashCode ^
-      phone.hashCode ^
-      passWord.hashCode;
-  }
+   factory Utilisateur.fromJson(Map<String, dynamic> json) => Utilisateur(
+        idUtilisateur: json["idUtilisateur"],
+        nom: json["nom"],
+        prenom: json["prenom"],
+        email: json["email"],
+        image: json["image"],
+        role: json["role"],
+        phone: json["phone"],
+        passWord: json["passWord"],
+      );
 }

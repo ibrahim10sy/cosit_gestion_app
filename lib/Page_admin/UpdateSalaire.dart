@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Salaire.dart';
+import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/service/SalaireService.dart';
+import 'package:cosit_gestion/service/SousCategorieService.dart';
+import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -28,10 +31,22 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
   TextEditingController montant_control = TextEditingController();
   TextEditingController userController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  late Future _utilisateur;
-  int? userValue;
+  late Future<List<Utilisateur>> _utilisateur;
+  late Future<List<SousCategorie>> _categorie;
   late Utilisateur user;
+  late SousCategorie sousCategorie;
+
+  int? userValue;
+  int? catValue;
   late Salaire salaire;
+
+   Future<List<SousCategorie>> getCategorie() async {
+    return SousCategorieService().fetchAllSousCategorie();
+  }
+  
+  Future<List<Utilisateur>> getUser() async {
+    return UtilisateurService().fetchData();
+  }
   @override
   void initState() {
     salaire = widget.salaires;
@@ -39,8 +54,8 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
     montant_control.text = salaire.montant.toString();
     userController.text = salaire.utilisateur.toString();
     dateController.text = salaire.date;
-    _utilisateur =
-        http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
+     _utilisateur = getUser();
+    _categorie = getCategorie();
     super.initState();
   }
 
@@ -155,14 +170,41 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                         onChanged: (value) {});
                                   }
                                   if (snapshot.hasError) {
-                                    return Text("${snapshot.error}");
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                            color: d_red,
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: Text(
+                                              "Choisir un employé",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {}),
+                                    );
                                   }
                                   if (snapshot.hasData) {
-                                    final response =
-                                        json.decode(snapshot.data.body) as List;
-                                    final utilisateurs = response
-                                        .map((e) => Utilisateur.fromMap(e))
-                                        .toList();
+                                    List<Utilisateur> utilisateur =
+                                        snapshot.data!;
 
                                     return DecoratedBox(
                                       decoration: BoxDecoration(
@@ -181,53 +223,157 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: d_red,
-                                        ),
-                                        items: utilisateurs
+                                        // padding: const EdgeInsets.all(12),
+                                        items: utilisateur
                                             .map((e) => DropdownMenuItem(
-                                                value: e.idUtilisateur,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(e.role),
-                                                )))
+                                                  value: e.idUtilisateur,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(e.role),
+                                                  ),
+                                                ))
                                             .toList(),
                                         value: userValue,
                                         onChanged: (newValue) {
                                           setState(() {
                                             userValue = newValue;
-                                            user = utilisateurs.firstWhere(
+                                            user = utilisateur.firstWhere(
                                                 (element) =>
                                                     element.idUtilisateur ==
                                                     newValue);
                                             debugPrint(
-                                                "User sélectionnée ${user.toString()}");
+                                                "User categorie sélectionnée ${user.toString()}");
                                           });
                                         },
                                       ),
                                     );
                                   }
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.black,
-                                        ), //border of dropdown button
-                                        borderRadius: BorderRadius.circular(
-                                            20), //border raiuds of dropdown button
-                                        boxShadow: const <BoxShadow>[
-                                          //apply shadow on Dropdown button
-                                          BoxShadow(
-                                              color: Color.fromRGBO(0, 0, 0,
-                                                  0.57), //shadow for button
-                                              blurRadius:
-                                                  0) //blur radius of shadow
-                                        ]),
-                                    child: DropdownButton(
-                                        items: const [], onChanged: (value) {}),
-                                  );
+                                  return DropdownButton(
+                                      items: const [], onChanged: (value) {});
+                                }),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 15),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/categorie.png',
+                            width: 23,
+                          ),
+                          const Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5.0),
+                                child: Text(
+                                  "Catégorie",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: d_red),
+                                ),
+                              )),
+                          Expanded(
+                            flex: 4,
+                            child: FutureBuilder(
+                                future: _categorie,
+                                builder: (_, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return DropdownButton(
+                                        value: "Selectionner",
+                                        items: const [],
+                                        dropdownColor: d_red,
+                                        onChanged: (value) {});
+                                  }
+                                  if (snapshot.hasError) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                            color: d_red,
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: Text(
+                                              "Choisir une catégorie",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {}),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    List<SousCategorie> sousCategories =
+                                        snapshot.data!;
+
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                        // padding: const EdgeInsets.all(12),
+                                        items: sousCategories
+                                            .map((e) => DropdownMenuItem(
+                                                  value: e.idSousCategorie,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(e.libelle),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: catValue,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            catValue = newValue;
+                                            sousCategorie = sousCategories
+                                                .firstWhere((element) =>
+                                                    element.idSousCategorie ==
+                                                    newValue);
+                                            debugPrint(
+                                                "Sous categorie sélectionnée ${catValue.toString()}");
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  }
+                                  return DropdownButton(
+                                      items: const [], onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -408,6 +554,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                         description: description,
                                         montant: montant,
                                         date: date,
+                                        sousCategorie: sousCategorie,
                                         utilisateur: user);
 
                                     Provider.of<SalaireService>(context,

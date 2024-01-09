@@ -21,6 +21,7 @@ class UpdateUtilisateur extends StatefulWidget {
 }
 
 const d_red = Colors.red;
+
 List<String> list = <String>[
   'Directeur',
   'Comptable',
@@ -44,7 +45,8 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
   String? imageSrc;
   File? photo;
   String _errorMessage = '';
-  late String defaultRole;
+  String defaultRole = "";
+  String role = "";
   Future<void> _pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -136,7 +138,7 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              'Inscription',
+              'Modification',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 25,
@@ -262,17 +264,16 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
                   ),
                   child: DropdownMenu<String>(
                     width: MediaQuery.of(context).size.width *
-                        0.9, // 80% of the screen width
+                        0.9, 
                     inputDecorationTheme: const InputDecorationTheme(
                       contentPadding: EdgeInsets.all(18),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black, width: 2.0),
                       ),
                     ),
-                    initialSelection: list.first,
                     onSelected: (String? value) {
                       setState(() {
-                        defaultRole = value!;
+                        role = value!;
                       });
                     },
                     dropdownMenuEntries:
@@ -342,7 +343,6 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
                         String nom = nom_controller.text;
                         String prenom = prenom_controller.text;
                         String email = email_controller.text;
-                        String role = role_controller.text;
                         String phone = phone_controller.text;
                         String passWord = motDepasse_controller.text;
                         String Confirmer = ConfirmerMotDePasse_controller.text;
@@ -405,7 +405,7 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
                                           prenom: prenom,
                                           email: email,
                                           phone: phone,
-                                          role: defaultRole,
+                                          role: role,
                                           passWord: passWord,
                                           image: photo as File);
                             } else {
@@ -418,7 +418,7 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
                                 prenom: prenom,
                                 email: email,
                                 phone: phone,
-                                role: defaultRole,
+                                role: role,
                                 passWord: passWord,
                               );
                               print(updateUtilisateur.toString());

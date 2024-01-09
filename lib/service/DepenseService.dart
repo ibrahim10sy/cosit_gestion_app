@@ -7,6 +7,7 @@ import 'package:cosit_gestion/model/Bureau.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/model/Demande.dart';
 import 'package:cosit_gestion/model/Depense.dart';
+import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -28,7 +29,7 @@ class DepenseService extends ChangeNotifier {
       required String dateDepense,
       required Utilisateur utilisateur,
        Demande? demande,
-      required CategorieDepense categorieDepense,
+      required SousCategorie sousCategorie,
       required Bureau bureau,
       required Budget budget}) async {
     try {
@@ -51,7 +52,7 @@ class DepenseService extends ChangeNotifier {
         'dateDepense': dateDepense,
         'utilisateur': utilisateur.toMap(),
         if(demande != null) 'demande' : demande.toMap(),
-        'categorieDepense': categorieDepense.toMap(),
+        'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
       });
@@ -79,7 +80,7 @@ class DepenseService extends ChangeNotifier {
       required String montantDepense,
       required String dateDepense,
       required Admin admin,
-      required CategorieDepense categorieDepense,
+      required SousCategorie sousCategorie,
       required Bureau bureau,
       required Budget budget}) async {
     try {
@@ -101,7 +102,7 @@ class DepenseService extends ChangeNotifier {
         'montantDepense': montantDepense,
         'dateDepense': dateDepense,
         'admin': admin.toMap(),
-        'categorieDepense': categorieDepense.toMap(),
+        'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
       });
@@ -130,7 +131,7 @@ class DepenseService extends ChangeNotifier {
       required String montantDepense,
       required String dateDepense,
       required Admin admin,
-      required CategorieDepense categorieDepense,
+      required SousCategorie sousCategorie,
       required Bureau bureau,
       required Budget budget}) async {
     try {
@@ -151,7 +152,7 @@ class DepenseService extends ChangeNotifier {
         'image': "",
         'montantDepense': montantDepense,
         'dateDepense': dateDepense,
-        'categorieDepense': categorieDepense.toMap(),
+        'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
       });
@@ -173,6 +174,24 @@ class DepenseService extends ChangeNotifier {
     }
   }
 
+  Future<void> marquerView(int id) async {
+    final String url = '$baseUrl/marquer/$id';
+
+    try {
+      final response = await http.put(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // Succès : La dépense a été marquée comme vue
+        print('Dépense marquée comme vue avec succès.');
+      } else {
+        // Gestion des erreurs
+        print('Erreur lors de la requête : ${response.statusCode}');
+      }
+    } catch (e) {
+      // Gestion des erreurs lors de la requête
+      print('Erreur lors de la requête : $e');
+    }
+  }
   Future<Map<String, dynamic>> getSommeDepenseTotalByBudget(
       int idBudget) async {
     print("Fetching data: $idBudget");

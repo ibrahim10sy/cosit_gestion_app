@@ -10,18 +10,7 @@ class Bureau {
     required this.adresse,
   });
 
-  Bureau copyWith({
-    int? idBureau,
-    String? nom,
-    String? adresse,
-  }) {
-    return Bureau(
-      idBureau: idBureau ?? this.idBureau,
-      nom: nom ?? this.nom,
-      adresse: adresse ?? this.adresse,
-    );
-  }
-
+ 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'idBureau': idBureau,
@@ -38,23 +27,9 @@ class Bureau {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory Bureau.fromJson(String source) => Bureau.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() => 'Bureau(idBureau: $idBureau, nom: $nom, adresse: $adresse)';
-
-  @override
-  bool operator ==(covariant Bureau other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.idBureau == idBureau &&
-      other.nom == nom &&
-      other.adresse == adresse;
-  }
-
-  @override
-  int get hashCode => idBureau.hashCode ^ nom.hashCode ^ adresse.hashCode;
+  factory Bureau.fromJson(Map<String, dynamic> json) => Bureau(
+        idBureau: json["idBureau"],
+        nom: json["nom"],
+        adresse: json["adresse"],
+      );
 }

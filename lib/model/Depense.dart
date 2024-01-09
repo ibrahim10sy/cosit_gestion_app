@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
-import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/model/Demande.dart';
+import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 
 class Depense {
@@ -16,10 +16,10 @@ class Depense {
   final Utilisateur? utilisateur;
   final Admin? admin;
   final Demande? demande;
-  final CategorieDepense categorieDepense;
+  final SousCategorie sousCategorie;
   final Bureau bureau;
   final Budget budget;
-  
+  bool viewed;
   Depense({
     this.idDepense,
     this.image,
@@ -29,9 +29,10 @@ class Depense {
     this.utilisateur,
     this.admin,
     this.demande,
-    required this.categorieDepense,
+    required this.sousCategorie,
     required this.bureau,
     required this.budget,
+    required this.viewed,
   });
 
   Depense copyWith({
@@ -43,9 +44,10 @@ class Depense {
     Utilisateur? utilisateur,
     Admin? admin,
     Demande? demande,
-    CategorieDepense? categorieDepense,
+    SousCategorie? sousCategorie,
     Bureau? bureau,
     Budget? budget,
+    bool? viewed,
   }) {
     return Depense(
       idDepense: idDepense ?? this.idDepense,
@@ -56,9 +58,10 @@ class Depense {
       utilisateur: utilisateur ?? this.utilisateur,
       admin: admin ?? this.admin,
       demande: demande ?? this.demande,
-      categorieDepense: categorieDepense ?? this.categorieDepense,
+      sousCategorie: sousCategorie ?? this.sousCategorie,
       bureau: bureau ?? this.bureau,
       budget: budget ?? this.budget,
+      viewed: viewed ?? this.viewed,
     );
   }
 
@@ -72,9 +75,10 @@ class Depense {
       'utilisateur': utilisateur?.toMap(),
       'admin': admin?.toMap(),
       'demande': demande?.toMap(),
-      'categorieDepense': categorieDepense.toMap(),
+      'sousCategorie': sousCategorie.toMap(),
       'bureau': bureau.toMap(),
       'budget': budget.toMap(),
+      'viewed': viewed,
     };
   }
 
@@ -88,9 +92,10 @@ class Depense {
       utilisateur: map['utilisateur'] != null ? Utilisateur.fromMap(map['utilisateur'] as Map<String,dynamic>) : null,
       admin: map['admin'] != null ? Admin.fromMap(map['admin'] as Map<String,dynamic>) : null,
       demande: map['demande'] != null ? Demande.fromMap(map['demande'] as Map<String,dynamic>) : null,
-      categorieDepense: CategorieDepense.fromMap(map['categorieDepense'] as Map<String,dynamic>),
+      sousCategorie: SousCategorie.fromMap(map['sousCategorie'] as Map<String,dynamic>),
       bureau: Bureau.fromMap(map['bureau'] as Map<String,dynamic>),
       budget: Budget.fromMap(map['budget'] as Map<String,dynamic>),
+      viewed: map['viewed'] as bool,
     );
   }
 
@@ -100,7 +105,7 @@ class Depense {
 
   @override
   String toString() {
-    return 'Depense(idDepense: $idDepense, image: $image, description: $description, montantDepense: $montantDepense, dateDepense: $dateDepense, utilisateur: $utilisateur, admin: $admin, demande: $demande, categorieDepense: $categorieDepense, bureau: $bureau, budget: $budget)';
+    return 'Depense(idDepense: $idDepense, image: $image, description: $description, montantDepense: $montantDepense, dateDepense: $dateDepense, utilisateur: $utilisateur, admin: $admin, demande: $demande, sousCategorie: $sousCategorie, bureau: $bureau, budget: $budget, viewed: $viewed)';
   }
 
   @override
@@ -116,9 +121,10 @@ class Depense {
       other.utilisateur == utilisateur &&
       other.admin == admin &&
       other.demande == demande &&
-      other.categorieDepense == categorieDepense &&
+      other.sousCategorie == sousCategorie &&
       other.bureau == bureau &&
-      other.budget == budget;
+      other.budget == budget &&
+      other.viewed == viewed;
   }
 
   @override
@@ -131,8 +137,9 @@ class Depense {
       utilisateur.hashCode ^
       admin.hashCode ^
       demande.hashCode ^
-      categorieDepense.hashCode ^
+      sousCategorie.hashCode ^
       bureau.hashCode ^
-      budget.hashCode;
+      budget.hashCode ^
+      viewed.hashCode;
   }
 }

@@ -17,20 +17,6 @@ class CategorieDepense {
   });
   
 
-  CategorieDepense copyWith({
-    int? idCategoriedepense,
-    String? libelle,
-    Utilisateur? utilisateur,
-    Admin? admin,
-  }) {
-    return CategorieDepense(
-      idCategoriedepense: idCategoriedepense ?? this.idCategoriedepense,
-      libelle: libelle ?? this.libelle,
-      utilisateur: utilisateur ?? this.utilisateur,
-      admin: admin ?? this.admin,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'idCategoriedepense': idCategoriedepense,
@@ -48,32 +34,14 @@ class CategorieDepense {
       admin: map['admin'] != null ? Admin.fromMap(map['admin'] as Map<String,dynamic>) : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory CategorieDepense.fromJson(String source) => CategorieDepense.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'CategorieDepense(idCategoriedepense: $idCategoriedepense, libelle: $libelle, utilisateur: $utilisateur, admin: $admin)';
-  }
-
-  @override
-  bool operator ==(covariant CategorieDepense other) {
-    if (identical(this, other)) return true;
+  factory CategorieDepense.fromJson(Map<String, dynamic> json) =>
+      CategorieDepense(
+        idCategoriedepense: json["idCategoriedepense"],
+        libelle: json["libelle"],
+        utilisateur: json['utilisateur'] != null
+            ? Utilisateur.fromJson(json['utilisateur'])
+            : null,
+        admin: Admin.fromJson(json["admin"]),
+      );
   
-    return 
-      other.idCategoriedepense == idCategoriedepense &&
-      other.libelle == libelle &&
-      other.utilisateur == utilisateur &&
-      other.admin == admin;
-  }
-
-  @override
-  int get hashCode {
-    return idCategoriedepense.hashCode ^
-      libelle.hashCode ^
-      utilisateur.hashCode ^
-      admin.hashCode;
-  }
 }

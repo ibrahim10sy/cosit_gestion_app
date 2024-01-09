@@ -7,9 +7,11 @@ import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
-import 'package:cosit_gestion/model/CategorieDepense.dart';
+import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
+import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
+import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -31,12 +33,12 @@ class _AddDepenseState extends State<AddDepense> {
   TextEditingController montant_control = TextEditingController();
   TextEditingController dateController = TextEditingController();
   late Admin admin;
-  late CategorieDepense categorieDepense;
+  late SousCategorie sousCategorie;
   late Bureau bureau;
   late Budget budget;
-  late Future _categories;
-  late Future _bureau;
-  late Future _budget;
+  late Future<List<SousCategorie>> _categorie;
+  late Future<List<Bureau>> _bureau;
+  late Future<List<Budget>> _budgets;
   int? catValue;
   int? bureauValue;
   int? budgetValue;
@@ -67,15 +69,36 @@ class _AddDepenseState extends State<AddDepense> {
   //   final image = File('${directory.path}/$name');
   //   return File(imagePath).copy(image.path);
   // }
-
+  int? adminID;
   @override
   void initState() {
     super.initState();
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
-    _categories = http.get(Uri.parse(
-        'http://10.0.2.2:8080/Categorie/listeByAdmin/${admin.idAdmin}'));
-    _bureau = http.get(Uri.parse('http://10.0.2.2:8080/Bureau/read'));
-    _budget = http.get(Uri.parse('http://10.0.2.2:8080/Budget/list'));
+    adminID = admin.idAdmin;
+    _bureau = getBureau();
+    _budgets = fetchBudgets(adminID!);
+    _categorie = getCategorie();
+  }
+
+  Future<List<Bureau>> getBureau() async {
+    return BureauService().fetchBureau();
+  }
+
+  Future<List<SousCategorie>> getCategorie() async {
+    return SousCategorieService().fetchAllSousCategorie();
+  }
+
+  Future<List<Budget>> fetchBudgets(int id) async {
+    final response = await http
+        .get(Uri.parse('http://10.0.2.2:8080/Budget/listeByAdmin/$id'));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      List<dynamic> data = json.decode(response.body);
+      List<Budget> budgets = data.map((item) => Budget.fromJson(item)).toList();
+      return budgets;
+    } else {
+      throw Exception('Aucun budget trouvé  ${response.statusCode}');
+    }
   }
 
   @override
@@ -201,117 +224,6 @@ class _AddDepenseState extends State<AddDepense> {
                       child: Row(
                         children: [
                           Image.asset(
-                            'assets/images/categorie.png',
-                            width: 23,
-                          ),
-                          const Expanded(
-                              flex: 2,
-                              child: Padding(
-                                  padding: EdgeInsets.only(left: 5.0),
-                                  child: Text("Catégorie",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: d_red,
-                                      )))),
-                          Expanded(
-                            flex: 4,
-                            child: FutureBuilder(
-                                future: _categories,
-                                builder: (_, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return DropdownButton(
-                                        value: "Selectionner",
-                                        items: const [],
-                                        dropdownColor: d_red,
-                                        onChanged: (value) {});
-                                  }
-                                  if (snapshot.hasError) {
-                                    return Text("${snapshot.error}");
-                                  }
-                                  if (snapshot.hasData) {
-                                    final response =
-                                        json.decode(snapshot.data.body) as List;
-
-                                    final mesCat = response
-                                        .map((e) => CategorieDepense.fromMap(e))
-                                        .toList();
-                                    return DecoratedBox(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: Colors.black,
-                                            ), //border of dropdown button
-                                            borderRadius: BorderRadius.circular(
-                                                20), //border raiuds of dropdown button
-                                            boxShadow: const <BoxShadow>[
-                                              //apply shadow on Dropdown button
-                                              BoxShadow(
-                                                  color: Color.fromRGBO(0, 0, 0,
-                                                      0.57), //shadow for button
-                                                  blurRadius:
-                                                      0) //blur radius of shadow
-                                            ]),
-                                        child: DropdownButton(
-                                            icon: const Icon(
-                                              Icons.arrow_drop_down,
-                                              color: d_red,
-                                            ),
-                                            items: mesCat
-                                                .map((e) => DropdownMenuItem(
-                                                    value: e.idCategoriedepense,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(e.libelle),
-                                                    )))
-                                                .toList(),
-                                            value: catValue,
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                catValue = newValue;
-                                                categorieDepense = mesCat
-                                                    .firstWhere((element) =>
-                                                        element
-                                                            .idCategoriedepense ==
-                                                        newValue);
-                                                debugPrint(
-                                                    "Cate sélectionnée ${categorieDepense.idCategoriedepense!}");
-                                              });
-                                            }));
-                                  }
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.black,
-                                        ), //border of dropdown button
-                                        borderRadius: BorderRadius.circular(
-                                            20), //border raiuds of dropdown button
-                                        boxShadow: const <BoxShadow>[
-                                          //apply shadow on Dropdown button
-                                          BoxShadow(
-                                              color: Color.fromRGBO(0, 0, 0,
-                                                  0.57), //shadow for button
-                                              blurRadius:
-                                                  0) //blur radius of shadow
-                                        ]),
-                                    child: DropdownButton(
-                                        items: const [], onChanged: (value) {}),
-                                  );
-                                }),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, bottom: 15),
-                      child: Row(
-                        children: [
-                          Image.asset(
                             'assets/images/budget.png',
                             width: 23,
                           ),
@@ -330,93 +242,101 @@ class _AddDepenseState extends State<AddDepense> {
                           Expanded(
                             flex: 4,
                             child: FutureBuilder(
-                              future: _budget,
-                              builder: (_, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return DropdownButton(
-                                      value: "Selectionner",
-                                      items: const [],
-                                      dropdownColor: d_red,
-                                      onChanged: (value) {});
-                                }
-                                if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
-                                }
-                                if (snapshot.hasData) {
-                                  final response =
-                                      json.decode(snapshot.data.body) as List;
+                                future: _budgets,
+                                builder: (_, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return DropdownButton(
+                                        value: "Selectionner",
+                                        items: const [],
+                                        dropdownColor: d_red,
+                                        onChanged: (value) {});
+                                  }
+                                  if (snapshot.hasError) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                            color: d_red,
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: Text(
+                                              "Choisir un budget",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {}),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    List<Budget> budgets = snapshot.data!;
 
-                                  final mesBudgets = response
-                                      .map((e) => Budget.fromMap(e))
-                                      .toList();
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                        color: Colors.black,
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                        // padding: const EdgeInsets.all(12),
+                                        items: budgets
+                                            .where((element) =>
+                                                element.utilisateur == null)
+                                            .map((e) => DropdownMenuItem(
+                                                  value: e.idBudget,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(e.description),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: budgetValue,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            budgetValue = newValue;
+                                            budget = budgets.firstWhere(
+                                                (element) =>
+                                                    element.idBudget ==
+                                                    newValue);
+                                            debugPrint(
+                                                "Budget sélectionnée ${budget.toString()}");
+                                          });
+                                        },
                                       ),
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: const <BoxShadow>[
-                                        BoxShadow(
-                                          color: Color.fromRGBO(0, 0, 0, 0.57),
-                                          blurRadius: 0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: DropdownButton(
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: d_red,
-                                      ),
-                                      items: mesBudgets
-                                          .where((Budget budget) =>
-                                              budget.utilisateur == null)
-                                          .map((e) => DropdownMenuItem(
-                                                value: e.idBudget,
-                                                key: Key(e.idBudget.toString()),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: Text(e.description),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: budgetValue,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          budgetValue = newValue;
-                                          budget = mesBudgets.firstWhere(
-                                              (element) =>
-                                                  element.idBudget == newValue);
-                                          debugPrint(
-                                              "Budget sélectionnée ${budget.description}");
-                                        });
-                                      },
-                                    ),
-                                  );
-                                }
-                                return DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: const <BoxShadow>[
-                                      BoxShadow(
-                                        color: Color.fromRGBO(0, 0, 0, 0.57),
-                                        blurRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: DropdownButton(
-                                    items: const [],
-                                    onChanged: (value) {},
-                                  ),
-                                );
-                              },
-                            ),
+                                    );
+                                  }
+                                  return DropdownButton(
+                                      items: const [], onChanged: (value) {});
+                                }),
                           )
                         ],
                       ),
@@ -433,105 +353,233 @@ class _AddDepenseState extends State<AddDepense> {
                           const Expanded(
                               flex: 2,
                               child: Padding(
-                                padding: EdgeInsets.only(left: 5.0),
-                                child: Text(
-                                  "Bureau",
-                                  style: TextStyle(
+                                  padding: EdgeInsets.only(left: 5.0),
+                                  child: Text(
+                                    "Bureau",
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: d_red),
-                                ),
-                              )),
+                                      color: d_red,
+                                    ),
+                                  ))),
                           Expanded(
                             flex: 4,
                             child: FutureBuilder(
-                              future: _bureau,
-                              builder: (_, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return DropdownButton(
-                                    value: "Sélectionner",
-                                    items: const [],
-                                    dropdownColor: d_red,
-                                    onChanged: (value) {},
-                                  );
-                                }
-                                if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
-                                }
-                                if (snapshot.hasData) {
-                                  final response =
-                                      json.decode(snapshot.data.body) as List;
+                                future: _bureau,
+                                builder: (_, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return DropdownButton(
+                                        value: "Selectionner",
+                                        items: const [],
+                                        dropdownColor: d_red,
+                                        onChanged: (value) {});
+                                  }
+                                  if (snapshot.hasError) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                            color: d_red,
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: Text(
+                                              "Choisir un bureau",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {}),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    List<Bureau> bureaux = snapshot.data!;
 
-                                  final mesBureau = response
-                                      .map((e) => Bureau.fromMap(e))
-                                      .toList();
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                        color: Colors.black,
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                        // padding: const EdgeInsets.all(12),
+                                        items: bureaux
+                                            .map((e) => DropdownMenuItem(
+                                                  value: e.idBureau,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(e.adresse),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: bureauValue,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            bureauValue = newValue;
+                                            bureau = bureaux.firstWhere(
+                                                (element) =>
+                                                    element.idBureau ==
+                                                    newValue);
+                                            debugPrint(
+                                                "Bureau sélectionnée ${budget.toString()}");
+                                          });
+                                        },
                                       ),
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: const <BoxShadow>[
-                                        BoxShadow(
-                                          color: Color.fromRGBO(0, 0, 0, 0.57),
-                                          blurRadius: 0,
-                                        ),
-                                      ],
+                                    );
+                                  }
+                                  return DropdownButton(
+                                      items: const [], onChanged: (value) {});
+                                }),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 15),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/categorie.png',
+                            width: 23,
+                          ),
+                          const Expanded(
+                              flex: 2,
+                              child: Padding(
+                                  padding: EdgeInsets.only(left: 5.0),
+                                  child: Text(
+                                    "Catégorie",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: d_red,
                                     ),
-                                    child: DropdownButton(
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: d_red,
+                                  ))),
+                          Expanded(
+                            flex: 4,
+                            child: FutureBuilder(
+                                future: _categorie,
+                                builder: (_, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return DropdownButton(
+                                        value: "Selectionner",
+                                        items: const [],
+                                        dropdownColor: d_red,
+                                        onChanged: (value) {});
+                                  }
+                                  if (snapshot.hasError) {
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                            color: d_red,
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: Text(
+                                              "Choisir une catégorie",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {}),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    List<SousCategorie> sousCategories =
+                                        snapshot.data!;
+
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                        // padding: const EdgeInsets.all(12),
+                                        items: sousCategories
+                                            .map((e) => DropdownMenuItem(
+                                                  value: e.idSousCategorie,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(e.libelle),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: catValue,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            catValue = newValue;
+                                            sousCategorie = sousCategories
+                                                .firstWhere((element) =>
+                                                    element.idSousCategorie ==
+                                                    newValue);
+                                            debugPrint(
+                                                "Sous categorie sélectionnée ${budget.toString()}");
+                                          });
+                                        },
                                       ),
-                                      items: mesBureau
-                                          .map((e) => DropdownMenuItem(
-                                                value: e.idBureau,
-                                                key: Key(e.idBureau.toString()),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(0),
-                                                  child: Text(e.adresse),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: bureauValue,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          bureauValue = newValue;
-                                          bureau = mesBureau.firstWhere(
-                                            (element) =>
-                                                element.idBureau == newValue,
-                                          );
-                                          debugPrint(
-                                              "Bureau sélectionnée ${bureau.idBureau}");
-                                        });
-                                      },
-                                    ),
-                                  );
-                                }
-                                return DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: const <BoxShadow>[
-                                      BoxShadow(
-                                        color: Color.fromRGBO(0, 0, 0, 0.57),
-                                        blurRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: DropdownButton(
-                                    items: const [],
-                                    onChanged: (value) {},
-                                  ),
-                                );
-                              },
-                            ),
+                                    );
+                                  }
+                                  return DropdownButton(
+                                      items: const [], onChanged: (value) {});
+                                }),
                           )
                         ],
                       ),
@@ -693,7 +741,7 @@ class _AddDepenseState extends State<AddDepense> {
                                           montantDepense: montant,
                                           dateDepense: date,
                                           admin: admin,
-                                          categorieDepense: categorieDepense,
+                                          sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
                                           image: photo as File);
@@ -703,7 +751,7 @@ class _AddDepenseState extends State<AddDepense> {
                                           montantDepense: montant,
                                           dateDepense: date,
                                           admin: admin,
-                                          categorieDepense: categorieDepense,
+                                          sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget);
                                     }

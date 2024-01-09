@@ -223,7 +223,7 @@ class _StatistiqueState extends State<Statistique>
                                                       radius: 30,
                                                       color:
                                                           _getColorFromCategory(
-                                                              e.libelle),
+                                                              e.libelle!),
                                                     );
                                                   }).toList()),
                                             );
@@ -271,10 +271,10 @@ class _StatistiqueState extends State<Statistique>
           Container(
             width: 20,
             height: 20,
-            color: _getColorFromCategory(p.libelle),
+            color: _getColorFromCategory(p.libelle!),
           ),
           const SizedBox(width: 10),
-          Text(p.libelle,
+          Text(p.libelle!,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.black)),
           const SizedBox(height: 30),

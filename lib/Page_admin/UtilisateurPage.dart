@@ -176,6 +176,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                                   user.role,
                                                   style: const TextStyle(
                                                     fontSize: 15,
+                                                    
                                                   ),
                                                 ),
                                                 trailing:

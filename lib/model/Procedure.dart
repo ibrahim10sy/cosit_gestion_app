@@ -2,15 +2,14 @@ import 'dart:convert';
 
 class Procedure {
   int? total_depenses;
-  String libelle;
+  String? libelle;
   int? id_categoriedepense;
   int? id_depense;
   int? admin_id;
   int? utilisateur_id;
-
   Procedure({
     this.total_depenses,
-    required this.libelle,
+    this.libelle,
     this.id_categoriedepense,
     this.id_depense,
     this.admin_id,
@@ -51,7 +50,7 @@ class Procedure {
   factory Procedure.fromMap(Map<String, dynamic> map) {
     return Procedure(
       total_depenses: map['total_depenses'] != null ? map['total_depenses'] as int : null,
-      libelle: map['libelle'] as String,
+      libelle: map['libelle'] != null ? map['libelle'] as String : null,
       id_categoriedepense: map['id_categoriedepense'] != null ? map['id_categoriedepense'] as int : null,
       id_depense: map['id_depense'] != null ? map['id_depense'] as int : null,
       admin_id: map['admin_id'] != null ? map['admin_id'] as int : null,

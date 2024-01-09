@@ -89,6 +89,26 @@ class SousCategorieService extends ChangeNotifier {
       throw Exception(e.toString());
     }
   }
+  Future<List<SousCategorie>> fetchAllSousCategorie() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/liste'));
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(" Fetching data ");
+        List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
+        sousCategorieListe = body.map((e) => SousCategorie.fromMap(e)).toList();
+        debugPrint(sousCategorieListe.toString());
+        return sousCategorieListe;
+      } else {
+        sousCategorieListe = [];
+        print(
+            'Échec de la requête avec le code d\'état: ${response.statusCode}');
+        throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 
   // Future<List<SousCategorie >> fetchCategorie(int idCategoriedepense) async {
   //   final response =

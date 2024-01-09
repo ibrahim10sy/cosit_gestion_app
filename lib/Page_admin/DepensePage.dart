@@ -4,11 +4,10 @@ import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_admin/DepenseDetail.dart';
 import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/cupertino.dart';
-import 'dart:collection';
 
 class DepensePage extends StatefulWidget {
   const DepensePage({super.key});
@@ -22,6 +21,9 @@ const d_red = Colors.red;
 class _DepensePageState extends State<DepensePage> {
   TextEditingController inputController = TextEditingController();
   late List<Depense>? depenseList = [];
+  // bool isView = false;
+
+  List colors = [Colors.green, Colors.yellow];
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +96,7 @@ class _DepensePageState extends State<DepensePage> {
                               children: [
                                 Image.asset("assets/images/depense.png",
                                     width: 39, height: 39),
-                                const Expanded( 
+                                const Expanded(
                                   //flex: 4,
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
@@ -160,10 +162,22 @@ class _DepensePageState extends State<DepensePage> {
                                 });
 
                                 depenseList = snapshot.data!;
+
                                 return Column(
                                   children: depenseList!
                                       .map((Depense depense) => ListTile(
-                                            onTap: () {
+                                            onTap: () async {
+                                              try {
+                                                await DepenseService()
+                                                    .marquerView(
+                                                        depense.idDepense!);
+                                                print(depense.idDepense);
+                                              } catch (error) {
+                                                print(error.toString());
+                                              }
+                                              setState(() {
+                                                depense.viewed = true;
+                                              });
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -180,9 +194,13 @@ class _DepensePageState extends State<DepensePage> {
                                             title: Text(
                                               depense.description,
                                               overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
+                                                color: depense.viewed
+                                                    ? Colors.black
+                                                    : const Color.fromARGB(
+                                                        255, 139, 138, 138),
                                               ),
                                             ),
                                             subtitle: Text(
@@ -269,7 +287,17 @@ class _DepensePageState extends State<DepensePage> {
                             return Column(
                               children: depenseList!
                                   .map((Depense depense) => ListTile(
-                                        onTap: () {
+                                        onTap: () async {
+                                          try {
+                                            await DepenseService().marquerView(
+                                                depense.idDepense!);
+                                            print(depense.idDepense);
+                                          } catch (error) {
+                                            print(error.toString());
+                                          }
+                                          setState(() {
+                                            depense.viewed = true;
+                                          });
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -286,9 +314,13 @@ class _DepensePageState extends State<DepensePage> {
                                         title: Text(
                                           depense.description,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
+                                            color: depense.viewed
+                                                ? Colors.black
+                                                : const Color.fromARGB(
+                                                    255, 139, 138, 138),
                                           ),
                                         ),
                                         subtitle: Text(

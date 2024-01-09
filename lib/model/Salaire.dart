@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 
 class Salaire {
@@ -8,13 +9,17 @@ class Salaire {
   final int montant;
   final String date;
   final Utilisateur utilisateur;
+  final SousCategorie sousCategorie;
+
   Salaire({
     this.idSalaire,
     required this.description,
     required this.montant,
     required this.date,
     required this.utilisateur,
+    required this.sousCategorie,
   });
+  
 
   Salaire copyWith({
     int? idSalaire,
@@ -22,6 +27,7 @@ class Salaire {
     int? montant,
     String? date,
     Utilisateur? utilisateur,
+    SousCategorie? sousCategorie,
   }) {
     return Salaire(
       idSalaire: idSalaire ?? this.idSalaire,
@@ -29,6 +35,7 @@ class Salaire {
       montant: montant ?? this.montant,
       date: date ?? this.date,
       utilisateur: utilisateur ?? this.utilisateur,
+      sousCategorie: sousCategorie ?? this.sousCategorie,
     );
   }
 
@@ -39,6 +46,7 @@ class Salaire {
       'montant': montant,
       'date': date,
       'utilisateur': utilisateur.toMap(),
+      'sousCategorie': sousCategorie.toMap(),
     };
   }
 
@@ -49,6 +57,7 @@ class Salaire {
       montant: map['montant'] as int,
       date: map['date'] as String,
       utilisateur: Utilisateur.fromMap(map['utilisateur'] as Map<String,dynamic>),
+      sousCategorie: SousCategorie.fromMap(map['sousCategorie'] as Map<String,dynamic>),
     );
   }
 
@@ -58,7 +67,7 @@ class Salaire {
 
   @override
   String toString() {
-    return 'Salaire(idSalaire: $idSalaire, description: $description, montant: $montant, date: $date, utilisateur: $utilisateur)';
+    return 'Salaire(idSalaire: $idSalaire, description: $description, montant: $montant, date: $date, utilisateur: $utilisateur, sousCategorie: $sousCategorie)';
   }
 
   @override
@@ -70,7 +79,8 @@ class Salaire {
       other.description == description &&
       other.montant == montant &&
       other.date == date &&
-      other.utilisateur == utilisateur;
+      other.utilisateur == utilisateur &&
+      other.sousCategorie == sousCategorie;
   }
 
   @override
@@ -79,6 +89,7 @@ class Salaire {
       description.hashCode ^
       montant.hashCode ^
       date.hashCode ^
-      utilisateur.hashCode;
+      utilisateur.hashCode ^
+      sousCategorie.hashCode;
   }
 }

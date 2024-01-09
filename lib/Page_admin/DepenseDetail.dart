@@ -64,6 +64,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                 )
               : Text(
                   value,
+                  
                   style: valueStyle,
                 ),
         ],
@@ -153,7 +154,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                     _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
                     _buildDetailRow(
-                        "Catégorie", depense.categorieDepense.libelle),
+                        "Sous catégorie", depense.sousCategorie.libelle),
                     _buildDetailRow("Bureau ", depense.bureau.adresse),
                     _buildDetailRow("Montant ",
                         "${depense.montantDepense.toString()} FCFA"),

@@ -15,7 +15,7 @@ class DemandeService extends ChangeNotifier {
       {
       required String motif,
       required String montantDemande,
-      required Utilisateur utilisateur,
+      required Utilisateur utilisateur, 
       required Admin admin}) async {
     var addDemande = {
       'idDemande': null,

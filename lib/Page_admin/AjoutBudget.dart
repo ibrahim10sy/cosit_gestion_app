@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -9,7 +7,6 @@ import 'package:cosit_gestion/service/BudgetService.dart';
 import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -29,18 +26,15 @@ class _AjoutBudgetState extends State<AjoutBudget> {
   TextEditingController userController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   late Admin admin;
-  late Future _utilisateur;
-  // late Future _mesUser;
+  late Future<List<Utilisateur>> _utilisateur;
   Utilisateur? user;
   int? userValue;
-  late List<String> roles = [];
 
   @override
   void initState() {
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     // _mesUser = getUser();
-    _utilisateur =
-        http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
+    _utilisateur = getUser();
     super.initState();
   }
 
@@ -150,15 +144,41 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                         onChanged: (value) {});
                                   }
                                   if (snapshot.hasError) {
-                                    return Text("${snapshot.error}");
+                                    return DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ), //border of dropdown button
+                                          borderRadius: BorderRadius.circular(
+                                              20), //border raiuds of dropdown button
+                                          boxShadow: const <BoxShadow>[
+                                            //apply shadow on Dropdown button
+                                            BoxShadow(
+                                                color: Color.fromRGBO(0, 0, 0,
+                                                    0.57), //shadow for button
+                                                blurRadius:
+                                                    0) //blur radius of shadow
+                                          ]),
+                                      child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                            color: d_red,
+                                          ),
+                                          hint: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: Text(
+                                              "Choisir un employé",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          items: const [],
+                                          onChanged: (value) {}),
+                                    );
                                   }
                                   if (snapshot.hasData) {
-                                    final response =
-                                        json.decode(snapshot.data.body) as List;
-
-                                    final mesUsers = response
-                                        .map((e) => Utilisateur.fromMap(e))
-                                        .toList();
+                                    List<Utilisateur> utilisateur =
+                                        snapshot.data!;
 
                                     return DecoratedBox(
                                       decoration: BoxDecoration(
@@ -178,11 +198,11 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                           ]),
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
-                                        items: mesUsers
-                                            .where((e) =>
-                                                e.role == "Directeur" ||
-                                                e.role == "Comptable" ||
-                                                e.role == "Sécretaire")
+                                        items: utilisateur
+                                            .where((element) =>
+                                                element.role == "Comptable" ||
+                                                element.role == "Directeur" ||
+                                                element.role == "Scretaire")
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
                                                   child: Padding(
@@ -197,36 +217,19 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                         onChanged: (newValue) {
                                           setState(() {
                                             userValue = newValue;
-                                            user = mesUsers.firstWhere(
+                                            user = utilisateur.firstWhere(
                                                 (element) =>
                                                     element.idUtilisateur ==
                                                     newValue);
                                             debugPrint(
-                                                "User sélectionnée ${user.toString()}");
+                                                "User categorie sélectionnée ${user.toString()}");
                                           });
                                         },
                                       ),
                                     );
                                   }
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Colors.black,
-                                        ), //border of dropdown button
-                                        borderRadius: BorderRadius.circular(
-                                            20), //border raiuds of dropdown button
-                                        boxShadow: const <BoxShadow>[
-                                          //apply shadow on Dropdown button
-                                          BoxShadow(
-                                              color: Color.fromRGBO(0, 0, 0,
-                                                  0.57), //shadow for button
-                                              blurRadius:
-                                                  0) //blur radius of shadow
-                                        ]),
-                                    child: DropdownButton(
-                                        items: const [], onChanged: (value) {}),
-                                  );
+                                  return DropdownButton(
+                                      items: const [], onChanged: (value) {});
                                 }),
                           )
                         ],
