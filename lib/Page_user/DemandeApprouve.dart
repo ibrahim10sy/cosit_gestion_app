@@ -1,28 +1,25 @@
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/Page_user/DepenseDetail.dart';
-import 'package:cosit_gestion/Page_user/DetailDemande.dart';
-import 'package:cosit_gestion/model/Demande.dart';
 import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
-import 'package:cosit_gestion/service/DemandeService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DemandeApprouve extends StatefulWidget {
   const DemandeApprouve({super.key});
- 
+
   @override
   State<DemandeApprouve> createState() => _DemandeApprouveState();
 }
 
 const d_red = Colors.red;
-class _DemandeApprouveState extends State<DemandeApprouve> {
 
-   late List<Depense> listDemande = [];
+class _DemandeApprouveState extends State<DemandeApprouve> {
+  late List<Depense> listDemande = [];
   late Future<List<Depense>> futureDemande;
   late Utilisateur utilisateur;
 
@@ -38,6 +35,7 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     // futureDemande = getListDemande(utilisateur.idUtilisateur!);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +45,6 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
           CustomCard(
             title: "Demande ",
             imagePath: 'assets/images/demande.png',
-           
           ),
           const SizedBox(
             height: 10,
@@ -120,10 +117,10 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                       color: d_red,
                     ),
                     Consumer<DepenseService>(
-                      builder: (context, depenseService, child){
+                      builder: (context, depenseService, child) {
                         return FutureBuilder(
-                            future: depenseService.fetchDepensesByUser(utilisateur.idUtilisateur!)
-                                ,
+                            future: depenseService.fetchDepensesByUser(
+                                utilisateur.idUtilisateur!),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -142,7 +139,10 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                 return listDemande
                                         .where((element) =>
                                             element.autorisationAdmin == true &&
-                                            element.utilisateur != null && element.montantDepense >= element.parametreDepense!.montantSeuil)
+                                            element.utilisateur != null &&
+                                            element.montantDepense >=
+                                                element.parametreDepense!
+                                                    .montantSeuil)
                                         .isEmpty
                                     ? Center(
                                         child: Text(

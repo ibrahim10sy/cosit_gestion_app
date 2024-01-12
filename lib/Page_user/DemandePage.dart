@@ -170,8 +170,11 @@ class _DemandePageState extends State<DemandePages> {
                                 print('Consumer: ');
                                 return listDemande
                                         .where((element) =>
-                                            element.autorisationAdmin == true &&
-                                            element.utilisateur != null)
+                                            element.autorisationAdmin == false &&
+                                            element.utilisateur != null &&
+                                            element.montantDepense >=
+                                                element.parametreDepense!
+                                                    .montantSeuil)
                                         .isEmpty
                                     ? Center(
                                         child: Text(

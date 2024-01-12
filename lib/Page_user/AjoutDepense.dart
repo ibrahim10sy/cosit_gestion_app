@@ -794,7 +794,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         return AlertDialog(
                                           title: const Center(
                                               child: Text('Erreur')),
-                                          content: Text(errorMessage),
+                                          content: Text('Budget epuisé ou montant inférieur'),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {
