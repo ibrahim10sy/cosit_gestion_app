@@ -112,12 +112,12 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
                                     child: Text(
-                                      "Liste des sous catégories :",
+                                       "Liste des sous catégories :",
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
                                           color: d_red),
-                                      overflow: TextOverflow.ellipsis,
+                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 )

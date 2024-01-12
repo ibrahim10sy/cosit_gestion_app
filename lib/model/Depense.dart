@@ -1,9 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
 import 'package:cosit_gestion/model/Demande.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 
@@ -19,7 +21,10 @@ class Depense {
   final SousCategorie sousCategorie;
   final Bureau bureau;
   final Budget budget;
+  final ParametreDepense? parametreDepense;
   bool viewed;
+  final bool autorisationAdmin;
+  
   Depense({
     this.idDepense,
     this.image,
@@ -32,8 +37,12 @@ class Depense {
     required this.sousCategorie,
     required this.bureau,
     required this.budget,
+    this.parametreDepense,
     required this.viewed,
+    required this.autorisationAdmin,
   });
+
+ 
 
   Depense copyWith({
     int? idDepense,
@@ -47,7 +56,9 @@ class Depense {
     SousCategorie? sousCategorie,
     Bureau? bureau,
     Budget? budget,
+    ParametreDepense? parametreDepense,
     bool? viewed,
+    bool? autorisationAdmin,
   }) {
     return Depense(
       idDepense: idDepense ?? this.idDepense,
@@ -61,7 +72,9 @@ class Depense {
       sousCategorie: sousCategorie ?? this.sousCategorie,
       bureau: bureau ?? this.bureau,
       budget: budget ?? this.budget,
+      parametreDepense: parametreDepense ?? this.parametreDepense,
       viewed: viewed ?? this.viewed,
+      autorisationAdmin: autorisationAdmin ?? this.autorisationAdmin,
     );
   }
 
@@ -78,7 +91,9 @@ class Depense {
       'sousCategorie': sousCategorie.toMap(),
       'bureau': bureau.toMap(),
       'budget': budget.toMap(),
+      'parametreDepense': parametreDepense?.toMap(),
       'viewed': viewed,
+      'autorisationAdmin': autorisationAdmin,
     };
   }
 
@@ -95,7 +110,9 @@ class Depense {
       sousCategorie: SousCategorie.fromMap(map['sousCategorie'] as Map<String,dynamic>),
       bureau: Bureau.fromMap(map['bureau'] as Map<String,dynamic>),
       budget: Budget.fromMap(map['budget'] as Map<String,dynamic>),
+      parametreDepense: map['parametreDepense'] != null ? ParametreDepense.fromMap(map['parametreDepense'] as Map<String,dynamic>) : null,
       viewed: map['viewed'] as bool,
+      autorisationAdmin: map['autorisationAdmin'] as bool,
     );
   }
 
@@ -105,7 +122,7 @@ class Depense {
 
   @override
   String toString() {
-    return 'Depense(idDepense: $idDepense, image: $image, description: $description, montantDepense: $montantDepense, dateDepense: $dateDepense, utilisateur: $utilisateur, admin: $admin, demande: $demande, sousCategorie: $sousCategorie, bureau: $bureau, budget: $budget, viewed: $viewed)';
+    return 'Depense(idDepense: $idDepense, image: $image, description: $description, montantDepense: $montantDepense, dateDepense: $dateDepense, utilisateur: $utilisateur, admin: $admin, demande: $demande, sousCategorie: $sousCategorie, bureau: $bureau, budget: $budget, parametreDepense: $parametreDepense, viewed: $viewed, autorisationAdmin: $autorisationAdmin)';
   }
 
   @override
@@ -124,7 +141,9 @@ class Depense {
       other.sousCategorie == sousCategorie &&
       other.bureau == bureau &&
       other.budget == budget &&
-      other.viewed == viewed;
+      other.parametreDepense == parametreDepense &&
+      other.viewed == viewed &&
+      other.autorisationAdmin == autorisationAdmin;
   }
 
   @override
@@ -140,6 +159,8 @@ class Depense {
       sousCategorie.hashCode ^
       bureau.hashCode ^
       budget.hashCode ^
-      viewed.hashCode;
+      parametreDepense.hashCode ^
+      viewed.hashCode ^
+      autorisationAdmin.hashCode;
   }
 }

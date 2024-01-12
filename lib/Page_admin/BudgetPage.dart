@@ -259,11 +259,11 @@ class _BudgetPageState extends State<BudgetPage> {
                                                 PopupMenuItem<String>(
                                                   child: ListTile(
                                                     leading: const Icon(
-                                                      Icons.edit_calendar_sharp,
+                                                      Icons.edit,
                                                       color: Colors.green,
                                                     ),
                                                     title: const Text(
-                                                      "Aperçu",
+                                                      "Modifier",
                                                       style: TextStyle(
                                                         color: Colors.green,
                                                         fontWeight:
@@ -390,11 +390,11 @@ class _BudgetPageState extends State<BudgetPage> {
                                               PopupMenuItem<String>(
                                                 child: ListTile(
                                                   leading: const Icon(
-                                                    Icons.edit_calendar_sharp,
+                                                    Icons.edit,
                                                     color: Colors.green,
                                                   ),
                                                   title: const Text(
-                                                    "Aperçu",
+                                                    "Modifier",
                                                     style: TextStyle(
                                                         color: Colors.green,
                                                         fontWeight:

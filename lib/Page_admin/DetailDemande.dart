@@ -1,5 +1,6 @@
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Demande.dart';
+import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,26 +9,26 @@ import 'package:provider/provider.dart';
 const d_red = Colors.red;
 
 class DetailDemandeAdmin extends StatefulWidget {
-  final Demande demande;
+  final Depense depense;
 
-  const DetailDemandeAdmin({Key? key, required this.demande}) : super(key: key);
+  const DetailDemandeAdmin({Key? key, required this.depense}) : super(key: key);
 
   @override
   State<DetailDemandeAdmin> createState() => _DetailDemandeAdminState();
 }
 
 class _DetailDemandeAdminState extends State<DetailDemandeAdmin> {
-  late Demande demandes;
+  late Depense depense;
   late Admin admins;
 
   @override
   void initState() {
     super.initState();
-    demandes = widget.demande;
+    depense = widget.depense;
   
     admins = Provider.of<AdminProvider>(context, listen: false).admin!;
-    demandes.printInfo();
-  }
+    depense.printInfo();
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +74,9 @@ class _DetailDemandeAdminState extends State<DetailDemandeAdmin> {
                   ),
                 ),
               ),
-              ListTile(
+              ListTile( 
                 title: Text(
-                  '${widget.demande.utilisateur.nom.toUpperCase()} ${widget.demande.utilisateur.prenom.toUpperCase()}',
+                  '${widget.depense.utilisateur!.nom.toUpperCase()} ${widget.depense.utilisateur!.prenom.toUpperCase()}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -85,31 +86,26 @@ class _DetailDemandeAdminState extends State<DetailDemandeAdmin> {
               ),
               ListTile(
                 title: Text(
-                  'Motif : ${widget.demande.motif}',
+                  'Motif : ${widget.depense.description}',
                   style: const TextStyle(color: Colors.black, fontSize: 17),
                 ),
               ),
               ListTile(
                 title: Text(
-                  'Montant demandé: ${widget.demande.montantDemande} FCFA',
+                  'Montant demandé: ${widget.depense.montantDepense} FCFA',
                   style: const TextStyle(color: Colors.black, fontSize: 17),
                 ),
               ),
               ListTile(
                 title: Text(
-                  'Date de Demande: ${widget.demande.dateDemande}',
+                  'Date de Demande: ${widget.depense.dateDepense}',
                   style: const TextStyle(color: Colors.black, fontSize: 17),
                 ),
               ),
+            
               ListTile(
                 title: Text(
-                  'Statut Autorisation Directeur: ${_getStatusText(widget.demande.autorisationDirecteur)}',
-                  style: const TextStyle(color: Colors.black, fontSize: 17),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Statut Autorisation Admin: ${_getStatusText(widget.demande.autorisationAdmin)}',
+                  'Statut Autorisation Admin: ${_getStatusText(widget.depense.autorisationAdmin)}',
                   style: const TextStyle(color: Colors.black, fontSize: 17),
                 ),
               ),

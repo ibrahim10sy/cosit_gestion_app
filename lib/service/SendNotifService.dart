@@ -47,7 +47,7 @@ Future<List<SendNotification>> fetchData(int id) async {
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Fetching data: $id");
         List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
-        notifications = body.map((e) => SendNotification.fromMap(e)).toList();
+         notifications = body.map((e) => SendNotification.fromMap(e)).toList();
         debugPrint(notifications.toString());
         return notifications;
       } else {

@@ -7,6 +7,7 @@ import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
@@ -15,6 +16,7 @@ import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -36,8 +38,10 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   TextEditingController dateController = TextEditingController();
   late Utilisateur utilisateur;
   late SousCategorie sousCategorie;
+  late ParametreDepense parametreDepense;
   late Bureau bureau;
   late Budget budget;
+  late Future<List<ParametreDepense>> _parametre;
   late Future<List<SousCategorie>> _categorie;
   late Future<List<Bureau>> _bureau;
   late Future<List<Budget>> _budgets;
@@ -55,9 +59,28 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     _bureau = getBureau();
     _categorie = getCategorie();
     _budgets = fetchBudgets(utilisateur.idUtilisateur!);
+    _parametre = getData();
   }
 
-Future<List<Bureau>> getBureau() async {
+  void fetchData() async {
+    // Récupérez les données depuis l'API
+    List<ParametreDepense> data = await getData();
+
+    if (data.isNotEmpty) {
+      parametreDepense = data[0];
+      parametreDepense.printInfo();
+    } else {
+      print("Aucune donnée n'a été récupérée depuis l'API.");
+    }
+  }
+
+  Future<List<ParametreDepense>> getData() async {
+    final response = await DepenseService().fetchParametre();
+
+    return response;
+  }
+
+  Future<List<Bureau>> getBureau() async {
     return BureauService().fetchBureau();
   }
 
@@ -65,7 +88,7 @@ Future<List<Bureau>> getBureau() async {
     return SousCategorieService().fetchAllSousCategorie();
   }
 
-   Future<List<Budget>> fetchBudgets(int id) async {
+  Future<List<Budget>> fetchBudgets(int id) async {
     final response = await http
         .get(Uri.parse('http://10.0.2.2:8080/Budget/listeByUser/$id'));
 
@@ -77,6 +100,7 @@ Future<List<Bureau>> getBureau() async {
       throw Exception('Aucun budget trouvé  ${response.statusCode}');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -504,7 +528,7 @@ Future<List<Bureau>> getBureau() async {
                                           items: const [],
                                           onChanged: (value) {}),
                                     );
-                                  } 
+                                  }
                                   if (snapshot.hasData) {
                                     List<SousCategorie> sousCategories =
                                         snapshot.data!;
@@ -720,7 +744,9 @@ Future<List<Bureau>> getBureau() async {
                                           image: photo,
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
-                                          budget: budget);
+                                          budget: budget,
+                                          parametreDepense: parametreDepense,
+                                          );
                                     } else {
                                       await DepenseService().addDepenseByUser(
                                           description: description,
@@ -729,7 +755,9 @@ Future<List<Bureau>> getBureau() async {
                                           utilisateur: utilisateur,
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
-                                          budget: budget);
+                                          budget: budget,
+                                          parametreDepense: parametreDepense,
+                                          );
                                     }
                                     showDialog(
                                       context: context,

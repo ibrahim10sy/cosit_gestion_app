@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Salaire.dart';
@@ -10,7 +8,6 @@ import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -36,17 +33,19 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
   late Utilisateur user;
   late SousCategorie sousCategorie;
 
+  String employe = "";
   int? userValue;
   int? catValue;
   late Salaire salaire;
 
-   Future<List<SousCategorie>> getCategorie() async {
+  Future<List<SousCategorie>> getCategorie() async {
     return SousCategorieService().fetchAllSousCategorie();
   }
-  
+
   Future<List<Utilisateur>> getUser() async {
     return UtilisateurService().fetchData();
   }
+
   @override
   void initState() {
     salaire = widget.salaires;
@@ -54,7 +53,8 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
     montant_control.text = salaire.montant.toString();
     userController.text = salaire.utilisateur.toString();
     dateController.text = salaire.date;
-     _utilisateur = getUser();
+    employe = salaire.utilisateur.toString();
+    _utilisateur = getUser();
     _categorie = getCategorie();
     super.initState();
   }
@@ -224,6 +224,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                           ]),
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
+                                        hint: Text(employe),
                                         items: utilisateur
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
@@ -231,7 +232,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: Text(e.role),
+                                                    child: Text('${e.nom} ${e.prenom}'),
                                                   ),
                                                 ))
                                             .toList(),

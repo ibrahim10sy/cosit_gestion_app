@@ -100,7 +100,7 @@ class _AccueilState extends State<Accueil> {
       child: InkWell(
         onTap: () {
           if (index == 4) {
-            Navigator.push(context,
+            Navigator.push(context, 
                 MaterialPageRoute(builder: (context) => const Statistique()));
           } else if (index == 3) {
             Navigator.push(context,

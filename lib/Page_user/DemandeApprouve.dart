@@ -1,17 +1,20 @@
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
+import 'package:cosit_gestion/Page_user/DepenseDetail.dart';
 import 'package:cosit_gestion/Page_user/DetailDemande.dart';
 import 'package:cosit_gestion/model/Demande.dart';
+import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
 import 'package:cosit_gestion/service/DemandeService.dart';
+import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 class DemandeApprouve extends StatefulWidget {
   const DemandeApprouve({super.key});
-
+ 
   @override
   State<DemandeApprouve> createState() => _DemandeApprouveState();
 }
@@ -19,21 +22,21 @@ class DemandeApprouve extends StatefulWidget {
 const d_red = Colors.red;
 class _DemandeApprouveState extends State<DemandeApprouve> {
 
-   late List<Demande> listDemande = [];
-  late Future<List<Demande>> futureDemande;
+   late List<Depense> listDemande = [];
+  late Future<List<Depense>> futureDemande;
   late Utilisateur utilisateur;
 
-  Future<List<Demande>> getListDemande(int idUtilisateur) async {
-    final response = await DemandeService().fetchDemande(idUtilisateur);
-    return response;
-  }
+  // Future<List<Demande>> getListDemande(int idUtilisateur) async {
+  //   final response = await DemandeService().fetchDemande(idUtilisateur);
+  //   return response;
+  // }
 
   @override
   void initState() {
     super.initState();
     utilisateur =
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
-    futureDemande = getListDemande(utilisateur.idUtilisateur!);
+    // futureDemande = getListDemande(utilisateur.idUtilisateur!);
   }
   @override
   Widget build(BuildContext context) {
@@ -98,17 +101,17 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                               ],
                             ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  futureDemande = DemandeService()
-                                      .fetchDemande(utilisateur.idUtilisateur!);
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.refresh,
-                                color: d_red,
-                              ))
+                          // IconButton(
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         futureDemande = DemandeService()
+                          //             .fetchDemande(utilisateur.idUtilisateur!);
+                          //       });
+                          //     },
+                          //     icon: const Icon(
+                          //       Icons.refresh,
+                          //       color: d_red,
+                          //     ))
                         ],
                       ),
                     ),
@@ -116,11 +119,11 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                       height: 1,
                       color: d_red,
                     ),
-                    Consumer<DemandeService>(
-                      builder: (context, demandeService, child) {
+                    Consumer<DepenseService>(
+                      builder: (context, depenseService, child){
                         return FutureBuilder(
-                            future: demandeService
-                                .fetchDemande(utilisateur.idUtilisateur!),
+                            future: depenseService.fetchDepensesByUser(utilisateur.idUtilisateur!)
+                                ,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -136,48 +139,81 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                               } else {
                                 listDemande = snapshot.data!;
                                 print('Consumer: ');
-                                return Column(
-                                    children: listDemande
+                                return listDemande
                                         .where((element) =>
-                                            element.autorisationAdmin == true)
-                                        .map((Demande demande) => Column(
-                                              children: [
-                                                ListTile(
-                                                  onTap: () {
+                                            element.autorisationAdmin == true &&
+                                            element.utilisateur != null)
+                                        .isEmpty
+                                    ? Center(
+                                        child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                            "Aucune demande approuvé  trouvé"),
+                                      )
+                                    : Column(
+                                        children: listDemande
+                                            .where((element) =>
+                                                element.autorisationAdmin ==
+                                                    true &&
+                                                element.utilisateur != null)
+                                            .map((Depense depense) => ListTile(
+                                                  onTap: () async {
+                                                    try {
+                                                      await DepenseService()
+                                                          .marquerView(depense
+                                                              .idDepense!);
+                                                      print(depense.idDepense);
+                                                    } catch (error) {
+                                                      print(error.toString());
+                                                    }
+                                                    setState(() {
+                                                      depense.viewed = true;
+                                                    });
                                                     Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                DetailDemande(
-                                                                    demande:
-                                                                        demande)));
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DepenseDetail(
+                                                                  depenses:
+                                                                      depense)),
+                                                    );
                                                   },
                                                   leading: Image.asset(
-                                                      "assets/images/demande.png",
-                                                      width: 33,
-                                                      height: 33),
-                                                  title: Text(
-                                                    demande.motif,
-                                                    style: const TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 17,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
+                                                    "assets/images/depense.png",
+                                                    width: 33,
+                                                    height: 33,
                                                   ),
-                                                  subtitle:
-                                                      Text(demande.dateDemande),
+                                                  title: Text(
+                                                    depense.description,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: depense.viewed
+                                                          ? Colors.black
+                                                          : const Color
+                                                              .fromARGB(255,
+                                                              139, 138, 138),
+                                                    ),
+                                                  ),
+                                                  subtitle: Text(
+                                                    depense.dateDepense,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
                                                   trailing:
                                                       PopupMenuButton<String>(
                                                     padding: EdgeInsets.zero,
                                                     itemBuilder: (context) =>
                                                         <PopupMenuEntry<
                                                             String>>[
-                                                      const PopupMenuDivider(),
                                                       PopupMenuItem<String>(
-                                                        // value: localizations
-                                                        //     .demoMenuRemove,
                                                         child: ListTile(
                                                           leading: const Icon(
                                                             Icons.delete,
@@ -193,58 +229,50 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                                             ),
                                                           ),
                                                           onTap: () async {
-                                                            await DemandeService()
-                                                                .deleteDemande(
-                                                                    demande
-                                                                        .idDemande!)
+                                                            await DepenseService()
+                                                                .deleteDepense(
+                                                                    depense
+                                                                        .idDepense!)
                                                                 .then(
                                                                     (value) => {
-                                                                          Provider.of<DemandeService>(context, listen: false)
+                                                                          Provider.of<DepenseService>(context, listen: false)
                                                                               .applyChange(),
-                                                                          setState(
-                                                                              () {
-                                                                            futureDemande =
-                                                                                DemandeService().getDemande();
-                                                                          })
+                                                                          Navigator.of(context)
+                                                                              .pop(),
                                                                         })
                                                                 .catchError(
-                                                                  (onError) => {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return AlertDialog(
-                                                                          title:
-                                                                              const Text("Erreur de suppression"),
-                                                                          content:
-                                                                              Text(onError.toString()),
-                                                                          actions: [
-                                                                            TextButton(
-                                                                              onPressed: () {
-                                                                                Navigator.of(context).pop();
-                                                                              },
-                                                                              child: const Text('OK'),
-                                                                            ),
-                                                                          ],
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop(),
-                                                                  },
-                                                                );
+                                                                    (onError) =>
+                                                                        {
+                                                                          showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (BuildContext context) {
+                                                                              return AlertDialog(
+                                                                                title: const Text("Erreur de suppression"),
+                                                                                content: const Text(
+                                                                                  "Impossible de supprimer le depense ",
+                                                                                ),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.of(context).pop();
+                                                                                    },
+                                                                                    child: const Text('OK'),
+                                                                                  ),
+                                                                                ],
+                                                                              );
+                                                                            },
+                                                                          ),
+                                                                        });
                                                           },
                                                         ),
                                                       ),
                                                     ],
                                                   ),
-                                                )
-                                              ],
-                                            ))
-                                        .toList());
+                                                ))
+                                            .toList(),
+                                      );
                               }
                             });
                       },

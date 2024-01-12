@@ -190,10 +190,17 @@ class _updateBudgetsState extends State<updateBudgets> {
                                           color: d_red,
                                         ),
                                         items: utilisateurs
-                                            .where((e) =>
-                                                e.role == "Directeur" ||
-                                                e.role == "Comptable" ||
-                                                e.role == "Sécretaire")
+                                            .where((element) =>
+                                                element.role == "Comptable" ||
+                                                element.role == "comptable" ||
+                                                element.role == "Directeur" ||
+                                                element.role == "Directrice" ||
+                                                element.role == "directeur" ||
+                                                element.role == "directrice" ||
+                                                element.role == "Secretaire" ||
+                                                element.role == "secrétaire" ||
+                                                element.role == "Secrétaire" ||
+                                                element.role == "secretaire")
                                             .map((e) => DropdownMenuItem(
                                                 value: e.idUtilisateur,
                                                 child: Padding(

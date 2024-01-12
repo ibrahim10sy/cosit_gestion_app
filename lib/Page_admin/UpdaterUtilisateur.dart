@@ -12,12 +12,12 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-class UpdateUtilisateur extends StatefulWidget {
+class UpdaterUtilisateur extends StatefulWidget {
   final Utilisateur utilisateurs;
-  const UpdateUtilisateur({super.key, required this.utilisateurs});
+  UpdaterUtilisateur({super.key, required this.utilisateurs});
 
   @override
-  State<UpdateUtilisateur> createState() => _UpdateUtilisateurState();
+  State<UpdaterUtilisateur> createState() => _UpdaterUtilisateurState();
 }
 
 const d_red = Colors.red;
@@ -30,7 +30,7 @@ List<String> list = <String>[
   'Développeuse'
 ];
 
-class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
+class _UpdaterUtilisateurState extends State<UpdaterUtilisateur> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nom_controller = TextEditingController();
   TextEditingController prenom_controller = TextEditingController();
@@ -40,13 +40,12 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
   TextEditingController motDepasse_controller = TextEditingController();
   TextEditingController ConfirmerMotDePasse_controller =
       TextEditingController();
-  late Utilisateur utilisateur;
-  late int utilisateurId;
   String? imageSrc;
   File? photo;
   String _errorMessage = '';
   String defaultRole = "";
-  String role = "";
+  late Utilisateur utilisateur;
+
   Future<void> _pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -76,403 +75,396 @@ class _UpdateUtilisateurState extends State<UpdateUtilisateur> {
   void initState() {
     super.initState();
     utilisateur = widget.utilisateurs;
-    utilisateurId = utilisateur.idUtilisateur!;
     nom_controller.text = utilisateur.nom;
-    defaultRole = utilisateur.role;
     prenom_controller.text = utilisateur.prenom;
     email_controller.text = utilisateur.email;
+    role_controller.text = utilisateur.role;
     phone_controller.text = utilisateur.phone;
-    ConfirmerMotDePasse_controller.text = utilisateur.passWord;
     motDepasse_controller.text = utilisateur.passWord;
+    ConfirmerMotDePasse_controller.text = utilisateur.passWord;
+    defaultRole = utilisateur.role;
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 118),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              child: DelayedAnimation(
-                delay: 2000,
-                child: Center(
-                  child: (photo != null)
-                      ? Image.file(photo!)
-                      : Image.asset('assets/images/logo.png'),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 118),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: DelayedAnimation(
+              delay: 2000,
+              child: Center(
+                child: (photo != null)
+                    ? Image.file(photo!)
+                    : Image.asset('assets/images/logo.png'),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 5),
+          decoration: const BoxDecoration(
+              // color: Color(0xfff5f8fd),
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 5,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
+                backgroundColor: const Color(0xff2ffffff), // Button color
+              ),
+              onPressed: () {
+                _pickImage();
+              },
+              child: const Text(
+                'Sélectionner une photo de profil',
+                style: TextStyle(
+                  color: d_red,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 5),
-            decoration: const BoxDecoration(
-                // color: Color(0xfff5f8fd),
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            child: Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 5,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
-                  backgroundColor: const Color(0xff2ffffff), // Button color
-                ),
-                onPressed: () {
-                  _pickImage();
-                },
-                child: const Text(
-                  'Sélectionner une photo de profil',
-                  style: TextStyle(
-                    color: d_red,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width *
+                0.05, // 10% padding on each side
+            vertical: 10,
+          ),
+          child: const Text(
+            'Modification',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 25,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40),
-            child: Text(
-              'Modification',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 25,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width *
-                          0.05, // 10% padding on each side
-                      vertical: 10,
-                    ),
-                    child: TextField(
-                      controller: nom_controller,
-                      style: const TextStyle(fontSize: 18.0),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(18.0),
-                        labelText: 'Nom ',
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: d_red,
-                          size: 30.0,
-                        ),
-                        border: OutlineInputBorder(
-                          //  borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width *
-                          0.05, // 10% padding on each side
-                      vertical: 10,
-                    ),
-                    child: TextField(
-                      controller: prenom_controller,
-                      style: const TextStyle(fontSize: 18.0),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(18.0),
-                        labelText: 'Prénom ',
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: d_red,
-                          size: 30.0,
-                        ),
-                        border: OutlineInputBorder(
-                          //  borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width *
-                          0.05, // 10% padding on each side
-                      vertical: 10,
-                    ),
-                    child: TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: email_controller,
-                      style: const TextStyle(fontSize: 18.0),
-                      onChanged: (val) {
-                        validateEmail(val);
-                      },
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(18.0),
-                        labelText: 'Email ',
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: d_red,
-                          size: 30.0,
-                        ),
-                        border: OutlineInputBorder(
-                          //  borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width *
-                          0.05, // 10% padding on each side
-                      vertical: 10,
-                    ),
-                    child: TextField(
-                      controller: phone_controller,
-                      style: const TextStyle(fontSize: 18.0),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(18.0),
-                        labelText: 'Téléphone ',
-                        prefixIcon: Icon(
-                          Icons.phone_android_rounded,
-                          color: d_red,
-                          size: 30.0,
-                        ),
-                        border: OutlineInputBorder(
-                          //  borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    )),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width *
-                        0.05, // 10% padding on each side
-                    vertical: 10,
-                  ),
-                  child: DropdownMenu<String>(
-                    width: MediaQuery.of(context).size.width *
-                        0.9, 
-                    inputDecorationTheme: const InputDecorationTheme(
-                      contentPadding: EdgeInsets.all(18),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0),
-                      ),
-                    ),
-                    onSelected: (String? value) {
-                      setState(() {
-                        role = value!;
-                      });
-                    },
-                    dropdownMenuEntries:
-                        list.map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(
-                          value: value, label: value);
-                    }).toList(),
-                  ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Form(
+          key: _formKey,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
                 ),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width *
-                          0.05, // 10% padding on each side
-                      vertical: 10,
+                child: TextField(
+                  controller: nom_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Nom ',
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: d_red,
+                      size: 30.0,
                     ),
-                    child: TextField(
-                      obscureText: true,
-                      controller: motDepasse_controller,
-                      style: const TextStyle(fontSize: 18.0),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(18.0),
-                        labelText: 'Mot de passe ',
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: d_red,
-                          size: 30.0,
-                        ),
-                        border: OutlineInputBorder(
-                          //  borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width *
-                          0.05, // 10% padding on each side
-                      vertical: 10,
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
                     ),
-                    child: TextField(
-                      obscureText: true,
-                      controller: ConfirmerMotDePasse_controller,
-                      style: const TextStyle(fontSize: 18.0),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(18.0),
-                        labelText: 'Confirmer mot de passe  ',
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: d_red,
-                          size: 30.0,
-                        ),
-                        border: OutlineInputBorder(
-                          //  borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                    )),
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 15),
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        String nom = nom_controller.text;
-                        String prenom = prenom_controller.text;
-                        String email = email_controller.text;
-                        String phone = phone_controller.text;
-                        String passWord = motDepasse_controller.text;
-                        String Confirmer = ConfirmerMotDePasse_controller.text;
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: prenom_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Prénom ',
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: d_red,
+                      size: 30.0,
+                    ),
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: email_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  onChanged: (val) {
+                    validateEmail(val);
+                  },
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Email ',
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: d_red,
+                      size: 30.0,
+                    ),
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: phone_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Téléphone ',
+                    prefixIcon: Icon(
+                      Icons.phone_android_rounded,
+                      color: d_red,
+                      size: 30.0,
+                    ),
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: TextField(
+                  controller: role_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Rôle ',
+                    prefixIcon: Icon(
+                      Icons.work,
+                      color: d_red,
+                      size: 30.0,
+                    ),
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: TextField(
+                  obscureText: true,
+                  controller: motDepasse_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Mot de passe ',
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: d_red,
+                      size: 30.0,
+                    ),
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: TextField(
+                  obscureText: true,
+                  controller: ConfirmerMotDePasse_controller,
+                  style: const TextStyle(fontSize: 18.0),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(18.0),
+                    labelText: 'Confirmer mot de passe  ',
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: d_red,
+                      size: 30.0,
+                    ),
+                    border: OutlineInputBorder(
+                      //  borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    ),
+                  ),
+                )),
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width *
+                      0.05, // 10% padding on each side
+                  vertical: 10,
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    String nom = nom_controller.text;
+                    String prenom = prenom_controller.text;
+                    String email = email_controller.text;
+                    String role = role_controller.text;
+                    String phone = phone_controller.text;
+                    String passWord = motDepasse_controller.text;
+                    String Confirmer = ConfirmerMotDePasse_controller.text;
 
-                        UtilisateurProvider utilisateurprovider =
-                            Provider.of<UtilisateurProvider>(context,
-                                listen: false);
+                    UtilisateurProvider utilisateurprovider =
+                        Provider.of<UtilisateurProvider>(context,
+                            listen: false);
 
-                        if (nom.isEmpty ||
-                            prenom.isEmpty ||
-                            email.isEmpty ||
-                            passWord.isEmpty) {
-                          return showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Formulaire'),
-                                content: const Text(
-                                    "Veuillez remplir tous les champs"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
+                    if (nom.isEmpty ||
+                        prenom.isEmpty ||
+                        email.isEmpty ||
+                        role.isEmpty ||
+                        passWord.isEmpty) {
+                      return showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Formulaire'),
+                            content:
+                                const Text("Veuillez remplir tous les champs"),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
                           );
-                        } else if (Confirmer != passWord) {
-                          return showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Erreur de mot de passe'),
-                                content: const Text(
-                                    'les mots de passe ne doivent pas etre differents'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
+                        },
+                      );
+                    } else if (Confirmer != passWord) {
+                      return showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Erreur de mot de passe'),
+                            content: const Text(
+                                'les mots de passe ne doivent pas etre differents'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
                           );
+                        },
+                      );
+                    } else {
+                      Utilisateur updateUtilisateur;
+                      try {
+                        if (photo != null) {
+                          updateUtilisateur =
+                              await Provider.of<UtilisateurService>(context,
+                                      listen: false)
+                                  .updateUtilisateur(
+                                      idUtilisateur: utilisateur.idUtilisateur!,
+                                      nom: nom,
+                                      prenom: prenom,
+                                      email: email,
+                                      phone: phone,
+                                      role: role,
+                                      passWord: passWord,
+                                      image: photo as File);
                         } else {
-                          Utilisateur updateUtilisateur;
-                          try {
-                            if (photo != null) {
-                              updateUtilisateur =
-                                  await Provider.of<UtilisateurService>(context,
-                                          listen: false)
-                                      .updateUtilisateur(
-                                          idUtilisateur: utilisateurId,
-                                          nom: nom,
-                                          prenom: prenom,
-                                          email: email,
-                                          phone: phone,
-                                          role: role,
-                                          passWord: passWord,
-                                          image: photo as File);
-                            } else {
-                              updateUtilisateur =
-                                  await Provider.of<UtilisateurService>(context,
-                                          listen: false)
-                                      .updateUtilisateur(
-                                idUtilisateur: utilisateurId,
-                                nom: nom,
-                                prenom: prenom,
-                                email: email,
-                                phone: phone,
-                                role: role,
-                                passWord: passWord,
-                              );
-                              print(updateUtilisateur.toString());
-                            }
-
-                            Provider.of<UtilisateurProvider>(context,
-                                    listen: false)
-                                .setUtilisateur(updateUtilisateur);
-                            Provider.of<UtilisateurService>(context,
-                                    listen: false)
-                                .applyChange();
-                            Navigator.of(context).pop();
-                            nom_controller.clear();
-                            prenom_controller.clear();
-                            email_controller.clear();
-                            phone_controller.clear();
-                            role_controller.clear();
-                            motDepasse_controller.clear();
-                            ConfirmerMotDePasse_controller.clear();
-                          } catch (e) {
-                            throw Exception(
-                                'Impossible de modifier le profil $e');
-                          }
+                          updateUtilisateur =
+                              await Provider.of<UtilisateurService>(context,
+                                      listen: false)
+                                  .updateUtilisateur(
+                            idUtilisateur: utilisateur.idUtilisateur!,
+                            nom: nom,
+                            prenom: prenom,
+                            email: email,
+                            phone: phone,
+                            role: role,
+                            passWord: passWord,
+                          );
                         }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: d_red,
-                        // shape: const StadiumBorder(),
-                        padding: const EdgeInsets.all(15),
-                      ),
-                      icon: const Icon(Icons.edit, color: Colors.white),
-                      label: const Text(
-                        'Modifier',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
+
+                        Provider.of<UtilisateurProvider>(context, listen: false)
+                            .setUtilisateur(updateUtilisateur);
+                        Provider.of<UtilisateurService>(context, listen: false)
+                            .applyChange();
+                        Navigator.of(context).pop();
+                        nom_controller.clear();
+                        prenom_controller.clear();
+                        email_controller.clear();
+                        phone_controller.clear();
+                        role_controller.clear();
+                        motDepasse_controller.clear();
+                        ConfirmerMotDePasse_controller.clear();
+                      } catch (e) {
+                        throw Exception('Impossible de modifier le compte $e');
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: d_red,
+                    // shape: const StadiumBorder(),
+                    padding: const EdgeInsets.all(15),
+                  ),
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    'Modifier',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    _errorMessage,
-                    style: const TextStyle(color: d_red),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                textAlign: TextAlign.center,
+                _errorMessage,
+                style: const TextStyle(color: d_red),
+              ),
+            ),
+          ]),
+        )
+      ]),
     );
   }
 

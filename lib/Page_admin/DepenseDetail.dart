@@ -49,6 +49,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
           Text(
             label,
             style: labelStyle,
+            overflow: TextOverflow.ellipsis,
           ),
           label == "Justification" && depense.image != null
               ? ElevatedButton(
@@ -64,7 +65,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                 )
               : Text(
                   value,
-                  
+                  overflow: TextOverflow.ellipsis,
                   style: valueStyle,
                 ),
         ],
@@ -170,6 +171,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: Colors.black87,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
@@ -182,12 +184,14 @@ class _DepenseDetailState extends State<DepenseDetail> {
                               "${depense.utilisateur!.nom.toUpperCase()} ${depense.utilisateur!.prenom.toUpperCase()}",
                               style: const TextStyle(
                                   color: Colors.black,
+                                  overflow: TextOverflow.ellipsis,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold))
                           : Text(
                               "${depense.admin!.nom.toUpperCase()} ${depense.admin!.prenom.toUpperCase()}",
                               style: const TextStyle(
                                   color: Colors.black,
+                                  overflow: TextOverflow.ellipsis,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)),
                     ),
@@ -212,6 +216,21 @@ class _DepenseDetailState extends State<DepenseDetail> {
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                     Center(
+                      child: Text(
+                        'Statut d\'Autorisation : ${_getStatusText(depense.autorisationAdmin)}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                   
                   ],
                 ),
               ),
@@ -220,5 +239,9 @@ class _DepenseDetailState extends State<DepenseDetail> {
         ),
       ),
     );
+  }
+
+   String _getStatusText(bool? status) {
+    return status == true ? 'Oui' : 'Non';
   }
 }

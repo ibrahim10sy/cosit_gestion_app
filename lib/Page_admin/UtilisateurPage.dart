@@ -129,174 +129,186 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                 );
                               } else {
                                 utilisateurListe = snapshot.data!;
-                                return utilisateurListe.isEmpty ?
-                                Center(
-                                  child: Text("Aucun employé trouvé"),
-                                ):
-                                Column(
-                                  children: utilisateurListe
-                                      .map((Utilisateur user) => Column(
-                                            children: [
-                                              ListTile(
-                                                splashColor: Colors.white,
-                                                leading: user.image == null ||
-                                                        user.image?.isEmpty ==
-                                                            true
-                                                    ? CircleAvatar(
-                                                        backgroundColor: d_red,
-                                                        radius: 30,
-                                                        child: Text(
-                                                          "${user.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 25,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.white,
-                                                            letterSpacing: 2,
-                                                          ),
+                                return utilisateurListe.isEmpty
+                                    ? Center(
+                                        child: Text("Aucun employé trouvé"),
+                                      )
+                                    : Column(
+                                        children: utilisateurListe
+                                            .map((Utilisateur user) => Column(
+                                                  children: [
+                                                    ListTile(
+                                                      splashColor: Colors.white,
+                                                      leading: user.image ==
+                                                                  null || 
+                                                              user.image
+                                                                      ?.isEmpty ==
+                                                                  true
+                                                          ? CircleAvatar(
+                                                              backgroundColor:
+                                                                  d_red,
+                                                              radius: 30,
+                                                              child: Text(
+                                                                "${user.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 25,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  letterSpacing:
+                                                                      2,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : CircleAvatar(
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      "http://10.0.2.2/${user.image!}"),
+                                                              radius: 30,
+                                                            ),
+                                                      title: Text(
+                                                        "${user.prenom.toUpperCase()} ${user.nom.toUpperCase()}",
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
-                                                      )
-                                                    : CircleAvatar(
-                                                        backgroundImage:
-                                                            NetworkImage(
-                                                                "http://10.0.2.2/${user.image!}"),
-                                                        radius: 30,
                                                       ),
-                                                title: Text(
-                                                  "${user.prenom.toUpperCase()} ${user.nom.toUpperCase()}",
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                subtitle: Text(
-                                                  user.role,
-                                                  style: const TextStyle(
-                                                    fontSize: 15,
-                                                    
-                                                  ),
-                                                ),
-                                                trailing:
-                                                    PopupMenuButton<String>(
-                                                  padding: EdgeInsets.zero,
-                                                  itemBuilder: (context) =>
-                                                      <PopupMenuEntry<String>>[
-                                                    PopupMenuItem<String>(
-                                                      child: ListTile(
-                                                          leading: const Icon(Icons
-                                                              .remove_red_eye_outlined),
-                                                          title: const Text(
-                                                            "Apercu",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        UtilisateurDetail(
-                                                                            utilisateur:
-                                                                                user)));
-                                                          }),
-                                                    ),
-                                                    PopupMenuItem<String>(
-                                                      child: ListTile(
-                                                        leading: const Icon(
-                                                          Icons
-                                                              .edit_calendar_sharp,
-                                                          color: Colors.green,
+                                                      subtitle: Text(
+                                                        user.role.toUpperCase(),
+                                                        style: const TextStyle(
+                                                          fontSize: 15,
                                                         ),
-                                                        title: const Text(
-                                                          "Modifier",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.green,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      UpdateUtilisateur(
-                                                                          utilisateurs:
-                                                                              user)));
-                                                        },
                                                       ),
-                                                    ),
-                                                    const PopupMenuDivider(),
-                                                    PopupMenuItem<String>(
-                                                      // value: localizations
-                                                      //     .demoMenuRemove,
-                                                      child: ListTile(
-                                                        leading: const Icon(
-                                                          Icons.delete,
-                                                          color: d_red,
-                                                        ),
-                                                        title: const Text(
-                                                          "Supprimer",
-                                                          style: TextStyle(
-                                                              color: d_red,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                        onTap: () async {
-                                                          await Provider
-                                                                  .of<UtilisateurService>(
+                                                      trailing: PopupMenuButton<
+                                                          String>(
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        itemBuilder:
+                                                            (context) =>
+                                                                <PopupMenuEntry<
+                                                                    String>>[
+                                                          PopupMenuItem<String>(
+                                                            child: ListTile(
+                                                                leading: const Icon(
+                                                                    Icons
+                                                                        .remove_red_eye_outlined),
+                                                                title:
+                                                                    const Text(
+                                                                  "Apercu",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                                onTap: () {
+                                                                  Navigator.push(
                                                                       context,
-                                                                      listen:
-                                                                          false)
-                                                              .deleteUser(user
-                                                                  .idUtilisateur!)
-                                                              .then(
-                                                                  (value) => {
-                                                                        Navigator.of(context)
-                                                                            .pop()
-                                                                      })
-                                                              .catchError(
-                                                                  (onError) => {
-                                                                        showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return AlertDialog(
-                                                                                title: const Text("Erreur de suppression"),
-                                                                                content: const Text(
-                                                                                  "Impossible de supprimer l'employer car il est déjà associé  à un salaire",
-                                                                                ),
-                                                                                actions: [
-                                                                                  TextButton(
-                                                                                      onPressed: () {
-                                                                                        Navigator.of(context).pop();
-                                                                                      },
-                                                                                      child: const Text('OK'))
-                                                                                ],
-                                                                              );
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              UtilisateurDetail(utilisateur: user)));
+                                                                }),
+                                                          ),
+                                                          PopupMenuItem<String>(
+                                                            child: ListTile(
+                                                              leading:
+                                                                  const Icon(
+                                                                Icons
+                                                                    .edit_calendar_sharp,
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                              title: const Text(
+                                                                "Modifier",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            UpdaterUtilisateur(
+                                                                              utilisateurs: user,
+                                                                            )));
+                                                              },
+                                                            ),
+                                                          ),
+                                                          const PopupMenuDivider(),
+                                                          PopupMenuItem<String>(
+                                                            // value: localizations
+                                                            //     .demoMenuRemove,
+                                                            child: ListTile(
+                                                              leading:
+                                                                  const Icon(
+                                                                Icons.delete,
+                                                                color: d_red,
+                                                              ),
+                                                              title: const Text(
+                                                                "Supprimer",
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        d_red,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                              onTap: () async {
+                                                                await Provider.of<
+                                                                            UtilisateurService>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .deleteUser(user
+                                                                        .idUtilisateur!)
+                                                                    .then(
+                                                                        (value) =>
+                                                                            {
+                                                                              Navigator.of(context).pop()
                                                                             })
-                                                                      });
-                                                        },
+                                                                    .catchError(
+                                                                        (onError) =>
+                                                                            {
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return AlertDialog(
+                                                                                      title: const Text("Erreur de suppression"),
+                                                                                      content: const Text(
+                                                                                        "Impossible de supprimer l'employer car il est déjà associé  à un salaire",
+                                                                                      ),
+                                                                                      actions: [
+                                                                                        TextButton(
+                                                                                            onPressed: () {
+                                                                                              Navigator.of(context).pop();
+                                                                                            },
+                                                                                            child: const Text('OK'))
+                                                                                      ],
+                                                                                    );
+                                                                                  })
+                                                                            });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
+                                                    const Divider(), // Ajoute une ligne horizontale entre les ListTiles
                                                   ],
-                                                ),
-                                              ),
-                                              const Divider(), // Ajoute une ligne horizontale entre les ListTiles
-                                            ],
-                                          ))
-                                      .toList(),
-                                );
+                                                ))
+                                            .toList(),
+                                      );
                               }
                             });
                       })

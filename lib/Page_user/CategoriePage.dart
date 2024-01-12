@@ -1,6 +1,6 @@
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
-import 'package:cosit_gestion/Page_admin/SousCategorieDepensePage.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
+import 'package:cosit_gestion/Page_user/SousCategoriePage.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
@@ -41,35 +41,35 @@ class _CategoriePageState extends State<CategoriePage> {
             CustomCard(
               title: "Catégorie",
               imagePath: "assets/images/categorie.png",
-              children: Column(
-                children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.white),
-                        borderRadius: BorderRadius.circular(22.0),
-                      ),
-                      // padding: const EdgeInsets.only(top: 190, left: 20),
-                      child: TextButton(
-                        onPressed: () {
-                          openDialog();
-                        },
-                        child: const Text(
-                          "+ Ajouter une catégorie",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ))
-                ],
-              ),
+              // children: Column(
+              //   children: [
+              //     const SizedBox(
+              //       height: 50,
+              //     ),
+              //     Container(
+              //         decoration: BoxDecoration(
+              //           border: Border.all(width: 1, color: Colors.white),
+              //           borderRadius: BorderRadius.circular(22.0),
+              //         ),
+              //         // padding: const EdgeInsets.only(top: 190, left: 20),
+              //         child: TextButton(
+              //           onPressed: () {
+              //             openDialog();
+              //           },
+              //           child: const Text(
+              //             "+ Ajouter une catégorie",
+              //             style: TextStyle(color: Colors.white),
+              //           ),
+              //         ))
+              //   ],
+              // ),
             ),
             const SizedBox(
               height: 10,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Container(
+              child: Container( 
                 height: 480,
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
@@ -127,8 +127,8 @@ class _CategoriePageState extends State<CategoriePage> {
                     Consumer<CategorieService>(
                       builder: (context, categorieService, child) {
                         return FutureBuilder(
-                            future: categorieService.fetchCategorieByUser(
-                                utilisateur.idUtilisateur!),
+                            future: categorieService
+                                .fetchAllCategorie(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -172,71 +172,7 @@ class _CategoriePageState extends State<CategoriePage> {
                                                           FontWeight.bold,
                                                     ),
                                                   ),
-                                                  trailing:
-                                                      PopupMenuButton<String>(
-                                                    padding: EdgeInsets.zero,
-                                                    itemBuilder: (context) =>
-                                                        <PopupMenuEntry<
-                                                            String>>[
-                                                      const PopupMenuDivider(),
-                                                      PopupMenuItem<String>(
-                                                        // value: localizations
-                                                        //     .demoMenuRemove,
-                                                        child: ListTile(
-                                                          leading: const Icon(
-                                                            Icons.delete,
-                                                            color: d_red,
-                                                          ),
-                                                          title: const Text(
-                                                            "Supprimer",
-                                                            style: TextStyle(
-                                                                color: d_red,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          onTap: () async {
-                                                            await Provider.of<
-                                                                        CategorieService>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .deleteCategorie(
-                                                                    categories
-                                                                        .idCategoriedepense!)
-                                                                .then(
-                                                                    (value) => {
-                                                                          Navigator.of(context)
-                                                                              .pop()
-                                                                        })
-                                                                .catchError(
-                                                                    (onError) =>
-                                                                        {
-                                                                          showDialog(
-                                                                              context: context,
-                                                                              builder: (BuildContext context) {
-                                                                                return AlertDialog(
-                                                                                  title: const Text("Erreur de suppression"),
-                                                                                  content: const Text(
-                                                                                    "Ce catégorie est déjà associé à une dépense ",
-                                                                                  ),
-                                                                                  actions: [
-                                                                                    TextButton(
-                                                                                        onPressed: () {
-                                                                                          Navigator.of(context).pop();
-                                                                                        },
-                                                                                        child: const Text('OK'))
-                                                                                  ],
-                                                                                );
-                                                                              }),
-                                                                          Navigator.of(context)
-                                                                              .pop()
-                                                                        });
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                 
                                                 ),
                                               ],
                                             ))
@@ -255,149 +191,149 @@ class _CategoriePageState extends State<CategoriePage> {
     );
   }
 
-  void openDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => Dialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Image.asset(
-                    "assets/images/categorie.png",
-                    width: 40,
-                    height: 40,
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Ajouter une catégorie",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Form(
-                key: formkey,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const Text(
-                      'Libellé',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez remplir les champs";
-                          }
-                          return null;
-                        },
-                        controller: libelleController,
-                        decoration: InputDecoration(
-                          hintText: "Libellé",
-                          prefixIcon: const Icon(Icons.category),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () async {
-                            final String libelle = libelleController.text;
-                            if (formkey.currentState!.validate()) {
-                              try {
-                                await CategorieService()
-                                    .addCategorieByUser(
-                                        libelle: libelle,
-                                        utilisateur: utilisateur)
-                                    .then((value) => {
-                                          Provider.of<CategorieService>(context,
-                                                  listen: false)
-                                              .applyChange(),
-                                          libelleController.clear(),
-                                          Navigator.of(context).pop()
-                                        })
-                                    .catchError((onError) =>
-                                        {print(onError.toString())});
-                              } catch (e) {
-                                final String errorMessage = e.toString();
-                                print(errorMessage);
-                              }
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          icon: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            "Ajouter",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Ferme la boîte de dialogue
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: d_red,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            "Annuler",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // void openDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => Dialog(
+  //       backgroundColor: Colors.white,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(16),
+  //       ),
+  //       child: Container(
+  //         padding: const EdgeInsets.all(16),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Row(
+  //               children: [
+  //                 Image.asset(
+  //                   "assets/images/categorie.png",
+  //                   width: 40,
+  //                   height: 40,
+  //                 ),
+  //                 const SizedBox(width: 10),
+  //                 const Text(
+  //                   "Ajouter une catégorie",
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.black,
+  //                     fontSize: 18,
+  //                   ),
+  //                   textAlign: TextAlign.center,
+  //                   overflow: TextOverflow.visible,
+  //                 ),
+  //               ],
+  //             ),
+  //             const SizedBox(height: 20),
+  //             Form(
+  //               key: formkey,
+  //               child: Column(
+  //                 children: [
+  //                   const SizedBox(
+  //                     height: 15,
+  //                   ),
+  //                   const Text(
+  //                     'Libellé',
+  //                     style: TextStyle(
+  //                       fontWeight: FontWeight.bold,
+  //                       fontSize: 22,
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: const EdgeInsets.all(8),
+  //                     child: TextFormField(
+  //                       validator: (value) {
+  //                         if (value == null || value.isEmpty) {
+  //                           return "Veuillez remplir les champs";
+  //                         }
+  //                         return null;
+  //                       },
+  //                       controller: libelleController,
+  //                       decoration: InputDecoration(
+  //                         hintText: "Libellé",
+  //                         prefixIcon: const Icon(Icons.category),
+  //                         border: OutlineInputBorder(
+  //                           borderRadius: BorderRadius.circular(8),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 20),
+  //                   Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                     children: [
+  //                       ElevatedButton.icon(
+  //                         onPressed: () async {
+  //                           final String libelle = libelleController.text;
+  //                           if (formkey.currentState!.validate()) {
+  //                             try {
+  //                               await CategorieService()
+  //                                   .addCategorieByUser(
+  //                                       libelle: libelle,
+  //                                       utilisateur: utilisateur)
+  //                                   .then((value) => {
+  //                                         Provider.of<CategorieService>(context,
+  //                                                 listen: false)
+  //                                             .applyChange(),
+  //                                         libelleController.clear(),
+  //                                         Navigator.of(context).pop()
+  //                                       })
+  //                                   .catchError((onError) =>
+  //                                       {print(onError.toString())});
+  //                             } catch (e) {
+  //                               final String errorMessage = e.toString();
+  //                               print(errorMessage);
+  //                             }
+  //                           }
+  //                         },
+  //                         style: ElevatedButton.styleFrom(
+  //                           backgroundColor: Colors.green,
+  //                           padding: const EdgeInsets.symmetric(horizontal: 20),
+  //                         ),
+  //                         icon: const Icon(
+  //                           Icons.add,
+  //                           color: Colors.white,
+  //                         ),
+  //                         label: const Text(
+  //                           "Ajouter",
+  //                           style: TextStyle(
+  //                             fontSize: 20,
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.w700,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       ElevatedButton.icon(
+  //                         onPressed: () {
+  //                           Navigator.of(context)
+  //                               .pop(); // Ferme la boîte de dialogue
+  //                         },
+  //                         style: ElevatedButton.styleFrom(
+  //                           backgroundColor: d_red,
+  //                           padding: const EdgeInsets.symmetric(horizontal: 20),
+  //                         ),
+  //                         icon: const Icon(
+  //                           Icons.close,
+  //                           color: Colors.white,
+  //                         ),
+  //                         label: const Text(
+  //                           "Annuler",
+  //                           style: TextStyle(
+  //                             fontSize: 20,
+  //                             color: Colors.white,
+  //                             fontWeight: FontWeight.w700,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

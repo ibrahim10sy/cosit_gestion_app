@@ -1,15 +1,14 @@
-import 'package:cosit_gestion/Page_admin/AjoutDepense.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_admin/DepenseDetail.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class BudgetDetail extends StatefulWidget {
   final Budget budget;
@@ -28,6 +27,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
   late List<Depense> depenseList = [];
   late Budget budgets;
   int? budgetID;
+  int? restant;
 
   Future<List<Depense>> getDepenseByBudget() async {
     final response =
@@ -48,7 +48,10 @@ class _BudgetDetailState extends State<BudgetDetail> {
     budgets = widget.budget;
     budgetID = budgets.idBudget;
     budgets.printInfo();
-    _depenseListe = getDepenseByBudget();
+    setState(() {
+      restant = budgets.montantRestant;
+      _depenseListe = getDepenseByBudget();
+    });
     montantDepense = getMontant();
   }
 
@@ -83,7 +86,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                               ),
                             ),
                             Text(
-                              "${budgets.montantRestant!} FCFA    ",
+                              "${budgets.montantRestant} FCFA    ",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -132,26 +135,6 @@ class _BudgetDetailState extends State<BudgetDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.white),
-                          borderRadius: BorderRadius.circular(22.0),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AjoutDepense(budgets: budgets)));
-                          },
-                          child: const Text(
-                            "+ Ajouter une depense",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
                       IconButton(
                           onPressed: () {
                             openDialog();
@@ -245,6 +228,24 @@ class _BudgetDetailState extends State<BudgetDetail> {
                         return Column(
                           children: depenseList
                               .map((Depense depense) => ListTile(
+                                    onTap: () async {
+                                      try {
+                                        await DepenseService()
+                                            .marquerView(depense.idDepense!);
+                                        print(depense.idDepense);
+                                      } catch (error) {
+                                        print(error.toString());
+                                      }
+                                      setState(() {
+                                        depense.viewed = true;
+                                      });
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DepenseDetail(
+                                                depenses: depense)),
+                                      );
+                                    },
                                     leading: Image.asset(
                                       "assets/images/depense.png",
                                       width: 33,
@@ -253,9 +254,13 @@ class _BudgetDetailState extends State<BudgetDetail> {
                                     title: Text(
                                       depense.description,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
+                                        color: depense.viewed
+                                            ? Colors.black
+                                            : const Color.fromARGB(
+                                                255, 139, 138, 138),
                                       ),
                                     ),
                                     subtitle: Text(
@@ -270,31 +275,6 @@ class _BudgetDetailState extends State<BudgetDetail> {
                                       padding: EdgeInsets.zero,
                                       itemBuilder: (context) =>
                                           <PopupMenuEntry<String>>[
-                                        PopupMenuItem<String>(
-                                          child: ListTile(
-                                            leading: const Icon(
-                                              Icons.edit_calendar_sharp,
-                                              color: Colors.green,
-                                            ),
-                                            title: const Text(
-                                              "Aperçu",
-                                              style: TextStyle(
-                                                color: Colors.green,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DepenseDetail(
-                                                            depenses: depense)),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        const PopupMenuDivider(),
                                         PopupMenuItem<String>(
                                           child: ListTile(
                                             leading: const Icon(
@@ -706,7 +686,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                 ],
               ),
               const SizedBox(height: 20),
-              _buildDetailRow("Date de début", budgets.dateDebut!),
+              _buildDetailRow("Date de début", budgets.dateDebut),
               _buildDetailRow("Date de fin", budgets.dateFin ?? ""),
               _buildDetailRow("Montant", "${budgets.montant} FCFA"),
               _buildDetailRow(
@@ -717,17 +697,51 @@ class _BudgetDetailState extends State<BudgetDetail> {
                 thickness: 0.5,
               ),
               const SizedBox(height: 10),
-              const Text(
-                "Description:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              Center(
+                child: const Text(
+                  "Description:",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.black,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
               const SizedBox(height: 5),
-              Text(
-                budgets.description,
-                style: const TextStyle(fontSize: 14),
+              Center(
+                child: Text(
+                  budgets.description,
+                  style: const TextStyle(
+                      fontSize: 14,
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.black),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "Budget alloué à:",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.black,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5),
+              Center(
+                child: Text(
+                  budgets.utilisateur != null
+                      ? "${budgets.utilisateur!.nom.toUpperCase()} ${budgets.utilisateur!.prenom.toUpperCase()}"
+                      : "${budgets.admin.nom.toUpperCase()} ${budgets.admin.prenom.toUpperCase()}",
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ],
           ),
@@ -745,11 +759,15 @@ class _BudgetDetailState extends State<BudgetDetail> {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 14,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(fontSize: 14),
+          style: const TextStyle(
+            fontSize: 14,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

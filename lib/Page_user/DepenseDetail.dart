@@ -41,6 +41,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
           Text(
             label,
             style: labelStyle,
+              overflow: TextOverflow.ellipsis,
           ),
           // Afficher le bouton seulement s'il y a une justification
           label == "Justification" && depense.image != null
@@ -58,6 +59,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
               : Text(
                   value,
                   style: valueStyle,
+                    overflow: TextOverflow.ellipsis,
                 ),
         ],
       ),
@@ -151,7 +153,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                     _buildDetailRow("Montant ",
                         "${depense.montantDepense.toString()} FCFA"),
                     const SizedBox(height: 10),
-                    const Divider(
+                    const Divider( 
                       color: Colors.grey,
                       thickness: 0.5,
                     ),
@@ -161,6 +163,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                            overflow: TextOverflow.ellipsis,
                           color: Colors.black87,
                         ),
                       ),
@@ -172,6 +175,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
+                                overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(
@@ -183,6 +187,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                            overflow: TextOverflow.ellipsis,
                           color: Colors.black87,
                         ),
                       ),
@@ -193,7 +198,22 @@ class _DepenseDetailState extends State<DepenseDetail> {
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
+                                overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold)),
+                    ),
+                     const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(
+                        'Statut d\'Autorisation : ${_getStatusText(depense.autorisationAdmin)}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black87,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -203,5 +223,9 @@ class _DepenseDetailState extends State<DepenseDetail> {
         ),
       ),
     );
+  }
+
+   String _getStatusText(bool? status) {
+    return status == true ? 'Oui' : 'Non';
   }
 }

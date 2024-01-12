@@ -285,7 +285,7 @@ class _DepensePageState extends State<DepensePage> {
                           if (depenseService.depensesListe.isNotEmpty) {
                             depenseList = depenseService.depensesListe;
                             return Column(
-                              children: depenseList!
+                              children: depenseList!.where((element) => element.autorisationAdmin == true)
                                   .map((Depense depense) => ListTile(
                                         onTap: () async {
                                           try {

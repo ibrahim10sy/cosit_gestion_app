@@ -7,6 +7,7 @@ import 'package:cosit_gestion/model/Bureau.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/model/Demande.dart';
 import 'package:cosit_gestion/model/Depense.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class DepenseService extends ChangeNotifier {
   static const String baseUrl = "http://10.0.2.2:8080/Depenses";
 
   List<Depense> depensesListe = [];
+  List<ParametreDepense> parametreListe = [];
   String action = "all";
   String lastAction = "";
   String desc = "";
@@ -28,10 +30,11 @@ class DepenseService extends ChangeNotifier {
       required String montantDepense,
       required String dateDepense,
       required Utilisateur utilisateur,
-       Demande? demande,
+      Demande? demande,
       required SousCategorie sousCategorie,
       required Bureau bureau,
-      required Budget budget}) async {
+      required Budget budget,
+      required ParametreDepense parametreDepense}) async {
     try {
       var requete =
           http.MultipartRequest('POST', Uri.parse('$baseUrl/createByUser'));
@@ -51,10 +54,11 @@ class DepenseService extends ChangeNotifier {
         'montantDepense': montantDepense,
         'dateDepense': dateDepense,
         'utilisateur': utilisateur.toMap(),
-        if(demande != null) 'demande' : demande.toMap(),
+        if (demande != null) 'demande': demande.toMap(),
         'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
+        'parametreDepense': parametreDepense.toMap(),
       });
 
       var response = await requete.send();
@@ -63,7 +67,6 @@ class DepenseService extends ChangeNotifier {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final donneesResponse = json.decode(responsed.body);
         debugPrint(donneesResponse.toString());
-       
       } else {
         throw Exception(
             'Échec de la requête avec le code d\'état : ${responsed.statusCode}');
@@ -71,6 +74,29 @@ class DepenseService extends ChangeNotifier {
     } catch (e) {
       throw Exception(
           'Une erreur s\'est produite lors de l\'ajout du depense : $e');
+    }
+  }
+
+  Future<void> AddParametres({
+    required String description,
+    required String montantSeuil,
+  }) async {
+    var addparam = jsonEncode({
+      'idParametre': null,
+      'description': description,
+      'montantSeuil': montantSeuil
+    });
+
+    final response = await http.post(
+      Uri.parse("http://10.0.2.2:8080/parametre/AddParametre"),
+      headers: {'Content-Type': 'application/json'},
+      body: addparam,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      debugPrint(response.body);
+    } else {
+      throw Exception("Une erreur s'est produite' : ${response.statusCode}");
     }
   }
 
@@ -192,6 +218,26 @@ class DepenseService extends ChangeNotifier {
       print('Erreur lors de la requête : $e');
     }
   }
+
+  Future<void> approuverDepense(int id) async {
+    final String url = '$baseUrl/approuver/$id';
+
+    try {
+      final response = await http.put(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // Succès : La dépense a été marquée comme vue
+        print('Dépense marquée comme vue avec succès.');
+      } else {
+        // Gestion des erreurs
+        print('Erreur lors de la requête : ${response.statusCode}');
+      }
+    } catch (e) {
+      // Gestion des erreurs lors de la requête
+      print('Erreur lors de la requête : $e');
+    }
+  }
+
   Future<Map<String, dynamic>> getSommeDepenseTotalByBudget(
       int idBudget) async {
     print("Fetching data: $idBudget");
@@ -257,11 +303,11 @@ class DepenseService extends ChangeNotifier {
       throw Exception(e.toString());
     }
   }
- Future<List<Depense>> fetchDepensesByUser(int id) async {
+
+  Future<List<Depense>> fetchDepensesByUser(int id) async {
     print("Fetching data: $id");
     try {
-      final response = await http
-          .get(Uri.parse('$baseUrl/listByUser/$id'));
+      final response = await http.get(Uri.parse('$baseUrl/listByUser/$id'));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Fetching depense user: $id");
@@ -279,6 +325,7 @@ class DepenseService extends ChangeNotifier {
       throw Exception(e.toString());
     }
   }
+
   Future<List<Depense>> fetchDepense() async {
     final response = await http.get(Uri.parse('$baseUrl/read'));
 
@@ -293,6 +340,36 @@ class DepenseService extends ChangeNotifier {
       print(
           'Échec de la recupereration de depense avec le code d\'état: ${response.statusCode}');
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
+    }
+  }
+
+  Future<List<ParametreDepense>> fetchParametre() async {
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8080/parametre/read'));
+    print("parametre");
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
+      parametreListe = body.map((item) => ParametreDepense.fromMap(item)).toList();
+      debugPrint("Parametre recuperer ${parametreListe.toString()}");
+      // depensesListe.printInfo();
+      return parametreListe;
+    } else {
+      parametreListe = [];
+      print(
+          'Échec de la recupereration de parametre avec le code d\'état: ${response.statusCode}');
+      throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
+    }
+  }
+
+  Future<void> deleteparametre(int id) async {
+    final response = await http
+        .delete(Uri.parse('http://10.0.2.2:8080/parametre/delete/$id'));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      applyChange();
+      debugPrint(response.body.toString());
+    } else {
+      throw Exception(
+          "Erreur lors de la suppression avec le code: ${response.statusCode}");
     }
   }
 

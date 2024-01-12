@@ -8,7 +8,7 @@ import 'package:cosit_gestion/service/CategorieService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+     
 class CategorieDepensePage extends StatefulWidget {
   const CategorieDepensePage({super.key});
 

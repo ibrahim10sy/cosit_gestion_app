@@ -71,7 +71,7 @@ class _DepensePageState extends State<DepensePage> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 10, 
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
@@ -109,7 +109,8 @@ class _DepensePageState extends State<DepensePage> {
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
                                     child: Text(
-                                      "Liste des dépenses :",
+                                      "Liste des dépenses approuvé :",
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
@@ -172,7 +173,7 @@ class _DepensePageState extends State<DepensePage> {
 
                                 depenseList = snapshot.data!;
                                 return Column(
-                                  children: depenseList!
+                                  children: depenseList!.where((element) => element.autorisationAdmin == true)
                                       .map((Depense depense) => ListTile(
                                             onTap: () {
                                               Navigator.push(
@@ -193,6 +194,7 @@ class _DepensePageState extends State<DepensePage> {
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontSize: 18,
+                                                overflow: TextOverflow.ellipsis,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -279,6 +281,8 @@ class _DepensePageState extends State<DepensePage> {
                             depenseList = depenseService.depensesListe;
                             return Column(
                               children: depenseList!
+                                  .where((element) =>
+                                      element.autorisationAdmin == true)
                                   .map((Depense depense) => ListTile(
                                         onTap: () {
                                           Navigator.push(

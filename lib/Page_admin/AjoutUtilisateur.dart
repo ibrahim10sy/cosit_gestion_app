@@ -123,7 +123,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
               vertical: 10,
             ),
             child: const Text(
-              'Inscription',
+              'Ajout de l\'employé',
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 25,
@@ -241,34 +241,30 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                         ),
                       ),
                     )),
-                Padding( 
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width *
-                        0.05, // 10% padding on each side
-                    vertical: 10,
-                  ),
-                  child: DropdownMenu<String>(
-                    width: MediaQuery.of(context).size.width *
-                        0.9, // 80% of the screen width
-                    inputDecorationTheme: const InputDecorationTheme(
-                      contentPadding: EdgeInsets.all(18),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 2.0),
-                      ),
+                Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width *
+                          0.05, // 10% padding on each side
+                      vertical: 10,
                     ),
-                    initialSelection: list.first,
-                    onSelected: (String? value) {
-                      setState(() {
-                        defaultRole = value!;
-                      });
-                    },
-                    dropdownMenuEntries:
-                        list.map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(
-                          value: value, label: value);
-                    }).toList(),
-                  ),
-                ),
+                    child: TextField(
+                      controller: role_controller,
+                      style: const TextStyle(fontSize: 18.0),
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(18.0),
+                        labelText: 'Rôle ',
+                        prefixIcon: Icon(
+                          Icons.work,
+                          color: d_red,
+                          size: 30.0,
+                        ),
+                        border: OutlineInputBorder(
+                          //  borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 2.0),
+                        ),
+                      ),
+                    )),
                 Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width *
@@ -327,7 +323,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                           0.05, // 10% padding on each side
                       vertical: 10,
                     ),
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
                       onPressed: () async {
                         String nom = nom_controller.text;
                         String prenom = prenom_controller.text;
@@ -344,6 +340,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                         if (nom.isEmpty ||
                             prenom.isEmpty ||
                             email.isEmpty ||
+                            role.isEmpty ||
                             passWord.isEmpty) {
                           return showDialog(
                             context: context,
@@ -392,7 +389,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                                       prenom: prenom,
                                       email: email,
                                       phone: phone,
-                                      role: defaultRole,
+                                      role: role,
                                       passWord: passWord,
                                       image: photo as File);
                             } else {
@@ -402,7 +399,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                                 prenom: prenom,
                                 email: email,
                                 phone: phone,
-                                role: defaultRole,
+                                role: role,
                                 passWord: passWord,
                               );
                               print(nouveauUtilisateur.toString());
@@ -447,7 +444,11 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                         // shape: const StadiumBorder(),
                         padding: const EdgeInsets.all(15),
                       ),
-                      child: const Text(
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                      label: const Text(
                         'Ajouter',
                         style: TextStyle(
                             fontSize: 18,

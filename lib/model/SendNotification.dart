@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:cosit_gestion/model/Admin.dart';
-import 'package:cosit_gestion/model/Demande.dart';
+import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 
 class SendNotification {
@@ -10,15 +10,17 @@ class SendNotification {
   final String date;
   final Utilisateur utilisateur;
   final Admin admin;
-  final Demande demande;
+  final Depense depense;
+  
   SendNotification({
     this.idNotification,
     required this.message,
     required this.date,
     required this.utilisateur,
     required this.admin,
-    required this.demande,
+    required this.depense,
   });
+ 
 
   SendNotification copyWith({
     int? idNotification,
@@ -26,7 +28,7 @@ class SendNotification {
     String? date,
     Utilisateur? utilisateur,
     Admin? admin,
-    Demande? demande,
+    Depense? depense,
   }) {
     return SendNotification(
       idNotification: idNotification ?? this.idNotification,
@@ -34,7 +36,7 @@ class SendNotification {
       date: date ?? this.date,
       utilisateur: utilisateur ?? this.utilisateur,
       admin: admin ?? this.admin,
-      demande: demande ?? this.demande,
+      depense: depense ?? this.depense,
     );
   }
 
@@ -45,7 +47,7 @@ class SendNotification {
       'date': date,
       'utilisateur': utilisateur.toMap(),
       'admin': admin.toMap(),
-      'demande': demande.toMap(),
+      'depense': depense.toMap(),
     };
   }
 
@@ -56,7 +58,7 @@ class SendNotification {
       date: map['date'] as String,
       utilisateur: Utilisateur.fromMap(map['utilisateur'] as Map<String,dynamic>),
       admin: Admin.fromMap(map['admin'] as Map<String,dynamic>),
-      demande: Demande.fromMap(map['demande'] as Map<String,dynamic>),
+      depense: Depense.fromMap(map['depense'] as Map<String,dynamic>),
     );
   }
 
@@ -66,7 +68,7 @@ class SendNotification {
 
   @override
   String toString() {
-    return 'SendNotification(idNotification: $idNotification, message: $message, date: $date, utilisateur: $utilisateur, admin: $admin, demande: $demande)';
+    return 'SendNotification(idNotification: $idNotification, message: $message, date: $date, utilisateur: $utilisateur, admin: $admin, depense: $depense)';
   }
 
   @override
@@ -79,7 +81,7 @@ class SendNotification {
       other.date == date &&
       other.utilisateur == utilisateur &&
       other.admin == admin &&
-      other.demande == demande;
+      other.depense == depense;
   }
 
   @override
@@ -89,6 +91,6 @@ class SendNotification {
       date.hashCode ^
       utilisateur.hashCode ^
       admin.hashCode ^
-      demande.hashCode;
+      depense.hashCode;
   }
 }

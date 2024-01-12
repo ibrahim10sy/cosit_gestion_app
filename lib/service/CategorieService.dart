@@ -105,6 +105,21 @@ class CategorieService extends ChangeNotifier {
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
+  Future<List<CategorieDepense>> fetchAllCategorie() async {
+    final response =
+        await http.get(Uri.parse('$baseUrl/lire'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
+      categories = body.map((item) => CategorieDepense.fromMap(item)).toList();
+      debugPrint(response.body);
+      return categories;
+    } else {
+      categories = [];
+      print('Échec de la requête avec le code d\'état: ${response.statusCode}');
+      throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
+    }
+  }
 
   Future<List<CategorieDepense>> fetchCategorieByAdmin(int idAdmin) async {
     final response =

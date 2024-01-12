@@ -1,7 +1,7 @@
 import 'package:cosit_gestion/Page_user/Accueil.dart';
 import 'package:cosit_gestion/Page_user/BudgetPage.dart';
 import 'package:cosit_gestion/Page_user/CategoriePage.dart';
-import 'package:cosit_gestion/Page_user/DemandeListe.dart';
+import 'package:cosit_gestion/Page_user/DemandePage.dart';
 import 'package:cosit_gestion/Page_user/DepensePage.dart';
 import 'package:cosit_gestion/service/BottomNavigationService.dart';
 import 'package:cosit_gestion/service/BudgetService.dart';
@@ -30,7 +30,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     const Accueil(),
     const BudgetPage(),
     const DepensePage(),
-    const DemandeListe()
+    const DemandePages()
   ];
   void _changeActivePageValue(int index) {
     setState(() {
@@ -137,7 +137,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           const Accueil(),
           const BudgetPage(),
           const DepensePage(),
-          const DemandeListe()
+          const DemandePages()
         ].elementAt(index);
       },
     };

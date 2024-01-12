@@ -1,8 +1,8 @@
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
-import 'package:cosit_gestion/Page_admin/DetailDemande.dart';
-import 'package:cosit_gestion/model/Demande.dart';
-import 'package:cosit_gestion/service/DemandeService.dart';
+import 'package:cosit_gestion/Page_admin/DepenseDetail.dart';
+import 'package:cosit_gestion/model/Depense.dart';
+import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,18 +17,17 @@ class DemandeApprouve extends StatefulWidget {
 const d_red = Colors.red;
 
 class _DemandeApprouveState extends State<DemandeApprouve> {
-  late List<Demande> listDemande = [];
-  late Future<List<Demande>> futureDemande;
+  late List<Depense> listDemande = [];
+  late Future<List<Depense>> futureDemande;
 
-  Future<List<Demande>> getListDemande() async {
-    final response = await DemandeService().getDemande();
-    return response;
-  }
+  // Future<List<Demande>> getListDemande() async {
+  //   final response = await DemandeService().getDemande();
+  //   return response;
+  // }
 
   @override
   void initState() {
     super.initState();
-    futureDemande = getListDemande();
   }
 
   @override
@@ -93,16 +92,16 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                               ],
                             ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  futureDemande = DemandeService().getDemande();
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.refresh,
-                                color: d_red,
-                              ))
+                          // IconButton(
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         futureDemande = DemandeService().getDemande();
+                          //       });
+                          //     },
+                          //     icon: const Icon(
+                          //       Icons.refresh,
+                          //       color: d_red,
+                          //     ))
                         ],
                       ),
                     ),
@@ -110,10 +109,10 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                       height: 1,
                       color: d_red,
                     ),
-                    Consumer<DemandeService>(
-                      builder: (context, demandeService, child) {
+                    Consumer<DepenseService>(
+                      builder: (context, depenseService, child) {
                         return FutureBuilder(
-                            future: futureDemande,
+                            future: depenseService.fetchDepense(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -122,75 +121,145 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                       radius: 20.0, color: d_red),
                                 );
                               }
+                              if (snapshot.hasError) {
+                                return Center(
+                                  child: Text(snapshot.error
+                                      .toString()
+                                      .replaceAll("Exception", "")),
+                                );
+                              }
                               if (!snapshot.hasData) {
                                 return const Center(
                                   child: Text("Aucune demande trouvé"),
                                 );
                               } else {
                                 listDemande = snapshot.data!;
-                                return Column(
+
+                                return listDemande
+                                      .where((element) =>
+                                          element.autorisationAdmin == true &&
+                                          element.utilisateur != null).isEmpty
+                                          ?Center(
+                                        child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                          "Aucune demande approuvé  trouvé"
+                                        ),
+                                      ):
+                                Column(
                                   children: listDemande
                                       .where((element) =>
-                                          element.autorisationAdmin == true ||
-                                          element.autorisationDirecteur == true)
-                                      .map((Demande demande) => Column(
-                                            children: [
-                                              ListTile(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              DetailDemandeAdmin(
-                                                                  demande:
-                                                                      demande)));
-                                                },
-                                                leading: Image.asset(
-                                                    "assets/images/demande.png",
-                                                    width: 33,
-                                                    height: 33),
-                                                title: Text(
-                                                  demande.motif,
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
-                                                subtitle:
-                                                    Text(demande.dateDemande),
-                                                trailing: IconButton(
-                                                    onPressed: () async {
-                                                      await DemandeService()
-                                                          .deleteDemande(demande
-                                                              .idDemande!)
+                                          element.autorisationAdmin == true &&
+                                          element.utilisateur != null)
+                                      .map((Depense depense) => ListTile(
+                                            onTap: () async {
+                                              try {
+                                                await DepenseService()
+                                                    .marquerView(
+                                                        depense.idDepense!);
+                                                print(depense.idDepense);
+                                              } catch (error) {
+                                                print(error.toString());
+                                              }
+                                              setState(() {
+                                                depense.viewed = true;
+                                              });
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DepenseDetail(
+                                                            depenses: depense)),
+                                              );
+                                            },
+                                            leading: Image.asset(
+                                              "assets/images/depense.png",
+                                              width: 33,
+                                              height: 33,
+                                            ),
+                                            title: Text(
+                                              depense.description,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: depense.viewed
+                                                    ? Colors.black
+                                                    : const Color.fromARGB(
+                                                        255, 139, 138, 138),
+                                              ),
+                                            ),
+                                            subtitle: Text(
+                                              depense.dateDepense,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            trailing: PopupMenuButton<String>(
+                                              padding: EdgeInsets.zero,
+                                              itemBuilder: (context) =>
+                                                  <PopupMenuEntry<String>>[
+                                                PopupMenuItem<String>(
+                                                  child: ListTile(
+                                                    leading: const Icon(
+                                                      Icons.delete,
+                                                      color: d_red,
+                                                    ),
+                                                    title: const Text(
+                                                      "Supprimer",
+                                                      style: TextStyle(
+                                                        color: d_red,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    onTap: () async {
+                                                      await DepenseService()
+                                                          .deleteDepense(depense
+                                                              .idDepense!)
                                                           .then((value) => {
-                                                                Provider.of<DemandeService>(
+                                                                Provider.of<DepenseService>(
                                                                         context,
                                                                         listen:
                                                                             false)
                                                                     .applyChange(),
-                                                                setState(() {
-                                                                  futureDemande =
-                                                                      DemandeService()
-                                                                          .getDemande();
-                                                                })
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(),
                                                               })
                                                           .catchError(
                                                               (onError) => {
-                                                                    print(
-                                                                        onError)
+                                                                    showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return AlertDialog(
+                                                                          title:
+                                                                              const Text("Erreur de suppression"),
+                                                                          content:
+                                                                              const Text(
+                                                                            "Impossible de supprimer le depense ",
+                                                                          ),
+                                                                          actions: [
+                                                                            TextButton(
+                                                                              onPressed: () {
+                                                                                Navigator.of(context).pop();
+                                                                              },
+                                                                              child: const Text('OK'),
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      },
+                                                                    ),
                                                                   });
                                                     },
-                                                    icon: const Icon(
-                                                      Icons.delete,
-                                                      color: d_red,
-                                                    )),
-                                              ),
-                                              const Divider(),
-                                            ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ))
                                       .toList(),
                                 );

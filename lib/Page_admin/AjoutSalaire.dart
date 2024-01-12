@@ -40,7 +40,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
     super.initState();
   }
 
-   Future<List<SousCategorie>> getCategorie() async {
+  Future<List<SousCategorie>> getCategorie() async {
     return SousCategorieService().fetchAllSousCategorie();
   }
 
@@ -211,7 +211,8 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: Text(e.role),
+                                                    child: Text(
+                                                        '${e.nom} ${e.prenom}'),
                                                   ),
                                                 ))
                                             .toList(),
@@ -237,7 +238,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                         ],
                       ),
                     ),
-                     Padding(
+                    Padding(
                       padding: const EdgeInsets.only(
                           left: 15, right: 15, bottom: 15),
                       child: Row(

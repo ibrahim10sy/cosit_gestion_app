@@ -508,7 +508,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   print(formattedDate);
                                   setState(() {
                                     dateController.text = formattedDate;
-                                   });
+                                  });
                                 } else {}
                               },
                             ),
@@ -561,7 +561,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                         children: [
                           Padding(
                               padding: const EdgeInsets.all(0),
-                              child: ElevatedButton(
+                              child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder(
@@ -666,6 +666,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     descriptionController.clear();
                                     montant_control.clear();
                                     dateController.clear();
+                                    
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     print(errorMessage);
@@ -689,10 +690,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
                                 },
-                                child: const Text("Ajouter",
+                                icon: Icon(Icons.add, color: Colors.white),
+                                label: const Text("Ajouter",
                                     style: TextStyle(color: Colors.white)),
                               )),
-                          ElevatedButton(
+                          ElevatedButton.icon(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,
                                 shape: RoundedRectangleBorder(
@@ -701,7 +703,8 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text(
+                              icon: Icon(Icons.close, color: Colors.white),
+                              label: const Text(
                                 "Annuler",
                                 style: TextStyle(color: Colors.white),
                               ))

@@ -277,7 +277,7 @@ class _AddDepenseState extends State<AddDepense> {
                                           hint: Padding(
                                             padding: const EdgeInsets.all(3),
                                             child: Text(
-                                              "Choisir un budget",
+                                               "Choisir un budget",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),

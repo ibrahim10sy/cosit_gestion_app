@@ -48,7 +48,7 @@ class DetailNotifAdmin extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Demandeur:',
+              'depenseur:',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -68,30 +68,27 @@ class DetailNotifAdmin extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Demande:',
+              'depense:',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
             Text(
-              'Motif : ${notification.demande?.motif}',
+              'Motif : ${notification.depense.description}',
               style: const TextStyle(color: Colors.black, fontSize: 16),
             ),
             Text(
-              'Montant demandé: ${notification.demande?.montantDemande} FCFA',
+              'Montant demandé: ${notification.depense?.montantDepense} FCFA',
               style: const TextStyle(color: Colors.black, fontSize: 16),
              ),
             Text(
-              'Date de Demande: ${notification.demande?.dateDemande}',
+              'Date de depense: ${notification.depense?.dateDepense}',
               style: const TextStyle(color: Colors.black, fontSize: 16),
             ),
+            
             Text(
-              'Statut Autorisation Directeur: ${_getStatusText(notification.demande?.autorisationDirecteur)}',
-              style: const TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            Text(
-              'Statut Autorisation Admin: ${_getStatusText(notification.demande?.autorisationAdmin)}',
+              'Statut Autorisation Admin: ${_getStatusText(notification.depense?.autorisationAdmin)}',
               style: const TextStyle(color: Colors.black, fontSize: 16),
             ),
           ],

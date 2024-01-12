@@ -4,6 +4,7 @@ import 'package:cosit_gestion/Page_admin/CategorieDepensePage.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_admin/DepensePage.dart';
+import 'package:cosit_gestion/Page_admin/ParametrePage.dart';
 import 'package:cosit_gestion/Page_admin/StatistiquesDepense.dart';
 import 'package:cosit_gestion/Page_admin/UtilisateurPage.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -45,26 +46,43 @@ class _AccueilState extends State<Accueil> {
                 imagePath: "assets/images/wallet-budget-icon.png",
                 children: Column(
                   children: [
-                    Consumer<BudgetService>(
-                        builder: (context, budgetService, child) {
-                      return FutureBuilder(
-                          future: budgetService
-                              .getBudgetTotalByAdmin(admin.idAdmin!),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text("${snapshot.data?["Total"]} FCFA",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold));
-                            } else {
-                              return const CupertinoActivityIndicator(
-                                  radius: 20.0,
-                                  color:
-                                      d_red); //const CircularProgressIndicator();
-                            }
-                          });
-                    })
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Consumer<BudgetService>(
+                          builder: (context, budgetService, child) {
+                        return FutureBuilder(
+                            future: budgetService
+                                .getBudgetTotalByAdmin(admin.idAdmin!),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text("${snapshot.data?["Total"]} FCFA",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold));
+                              } else {
+                                return const CupertinoActivityIndicator(
+                                    radius: 20.0,
+                                    color:
+                                        d_red); //const CircularProgressIndicator();
+                              }
+                            });
+                      }),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ParametrePage()));
+                            },
+                            icon: Icon(
+                              Icons.settings_applications_sharp,
+                              color: Colors.white,
+                              size: 32,
+                            )))
                   ],
                 ),
               ),

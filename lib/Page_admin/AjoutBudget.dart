@@ -201,8 +201,15 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                         items: utilisateur
                                             .where((element) =>
                                                 element.role == "Comptable" ||
+                                                element.role == "comptable" ||
                                                 element.role == "Directeur" ||
-                                                element.role == "Scretaire")
+                                                element.role == "Directrice" ||
+                                                element.role == "directeur" ||
+                                                element.role == "directrice" ||
+                                                element.role == "Secretaire" ||
+                                                element.role == "secrétaire" ||
+                                                element.role == "Secrétaire" ||
+                                                element.role == "secretaire")
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
                                                   child: Padding(

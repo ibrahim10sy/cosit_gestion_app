@@ -1,66 +1,81 @@
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
-import 'package:cosit_gestion/model/Bureau.dart';
-import 'package:cosit_gestion/service/BureauService.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
+import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class AjoutBureau extends StatefulWidget {
-  const AjoutBureau({super.key});
+class ParametrePage extends StatefulWidget {
+  const ParametrePage({super.key});
 
   @override
-  State<AjoutBureau> createState() => _AjoutBureauState();
+  State<ParametrePage> createState() => _ParametrePageState();
 }
 
 const d_red = Colors.red;
 
-class _AjoutBureauState extends State<AjoutBureau> {
+class _ParametrePageState extends State<ParametrePage> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController nomController = TextEditingController();
-  TextEditingController adresseController = TextEditingController();
+  TextEditingController libelleController = TextEditingController();
+  TextEditingController montantController = TextEditingController();
+  late Future<List<ParametreDepense>> listFuture;
+  late List<ParametreDepense> parametreListe = [];
 
-  late List<Bureau> bureauList = [];
+  @override
+  void initState() {
+    super.initState();
+    listFuture = getData();
+  }
+
+  Future<List<ParametreDepense>> getData() async {
+    final response = await DepenseService().fetchParametre();
+
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             CustomCard(
-              title: "Bureaux",
-              imagePath: "assets/images/house.png",
+              title: "Page parametrage",
+              imagePath: "assets/images/depense.png",
               children: Column(
                 children: [
                   const SizedBox(
-                    height: 50,
+                    height: 75,
                   ),
                   Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.white),
-                        borderRadius: BorderRadius.circular(22.0),
+                    height: 45,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.white),
+                      borderRadius: BorderRadius.circular(22.0),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        openDialog();
+                      },
+                      child: const Text(
+                        "Parametrer un montant",
+                        style: TextStyle(color: Colors.white),
                       ),
-                      // padding: const EdgeInsets.only(top: 190, left: 20),
-                      child: TextButton(
-                        onPressed: () {
-                          openDialog();
-                        },
-                        child: const Text(
-                          "+ Ajouter un bureau",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ))
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            Padding( 
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: Container(
-                height: 480,
+                height: 500,
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -87,14 +102,16 @@ class _AjoutBureauState extends State<AjoutBureau> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Image.asset("assets/images/house.png",
-                                    width: 39, height: 39),
+                                Icon(
+                                  Icons.settings,
+                                  color: d_red,
+                                ),
                                 const Expanded(
                                   //flex: 4,
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
                                     child: Text(
-                                      "Liste des bureaux",
+                                      "Parametre dépense ",
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
@@ -114,10 +131,10 @@ class _AjoutBureauState extends State<AjoutBureau> {
                       height: 1,
                       color: d_red,
                     ),
-                    Consumer<BureauService>(
-                      builder: (context, bureauService, child) {
+                    Consumer<DepenseService>(
+                      builder: (context, depenseService, child) {
                         return FutureBuilder(
-                            future: bureauService.fetchBureau(),
+                            future: listFuture,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -128,19 +145,19 @@ class _AjoutBureauState extends State<AjoutBureau> {
                               }
                               if (!snapshot.hasData) {
                                 return const Center(
-                                  child: Text("Aucun bureau trouvé"),
+                                  child: Text("Aucun parametre trouvé"),
                                 );
                               } else {
-                                bureauList = snapshot.data!;
+                                parametreListe = snapshot.data!;
                                 return Column(
-                                  children: bureauList
-                                      .map((Bureau bur) => ListTile(
-                                            leading: Image.asset(
-                                                "assets/images/house.png",
-                                                width: 33,
-                                                height: 33),
+                                  children: parametreListe
+                                      .map((e) => ListTile(
+                                            leading: Icon(
+                                              Icons.settings,
+                                              color: d_red,
+                                            ),
                                             title: Text(
-                                              bur.nom,
+                                              e.description,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 color: Colors.black,
@@ -149,7 +166,7 @@ class _AjoutBureauState extends State<AjoutBureau> {
                                               ),
                                             ),
                                             subtitle: Text(
-                                              bur.adresse,
+                                              e.montantSeuil.toString(),
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   fontSize: 16,
@@ -177,12 +194,22 @@ class _AjoutBureauState extends State<AjoutBureau> {
                                                     ),
                                                     onTap: () async {
                                                       await Provider.of<
-                                                                  BureauService>(
+                                                                  DepenseService>(
                                                               context,
                                                               listen: false)
-                                                          .deleteBureau(
-                                                              bur.idBureau!)
+                                                          .deleteparametre(
+                                                              e.idParametre!)
                                                           .then((value) => {
+                                                                Provider.of<DepenseService>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .applyChange(),
+                                                                setState(() {
+                                                                  listFuture =
+                                                                      DepenseService()
+                                                                          .fetchParametre();
+                                                                }),
                                                                 Navigator.of(
                                                                         context)
                                                                     .pop()
@@ -252,14 +279,10 @@ class _AjoutBureauState extends State<AjoutBureau> {
             children: [
               Row(
                 children: [
-                  Image.asset(
-                    "assets/images/house.png",
-                    width: 40,
-                    height: 40,
-                  ),
+                  Icon(Icons.settings, color: d_red),
                   const SizedBox(width: 10),
                   const Text(
-                    "Ajouter un bureau",
+                    "Ajouter un parametre",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -280,10 +303,10 @@ class _AjoutBureauState extends State<AjoutBureau> {
                         }
                         return null;
                       },
-                      controller: nomController,
+                      controller: libelleController,
                       decoration: InputDecoration(
-                        hintText: "Nom",
-                        prefixIcon: const Icon(Icons.house),
+                        hintText: "Description",
+                        // prefixIcon: const Icon(Icons.describe),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -297,10 +320,14 @@ class _AjoutBureauState extends State<AjoutBureau> {
                         }
                         return null;
                       },
-                      controller: adresseController,
+                      controller: montantController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(
-                        hintText: "Adresse",
-                        prefixIcon: const Icon(Icons.location_on),
+                        hintText: "Montant",
+                        // prefixIcon: const Icon(Icons.describe),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -312,18 +339,24 @@ class _AjoutBureauState extends State<AjoutBureau> {
                       children: [
                         ElevatedButton.icon(
                           onPressed: () async {
-                            final String nom = nomController.text;
-                            final String adresse = adresseController.text;
+                            final String desc = libelleController.text;
+                            final String montant = montantController.text;
                             if (formkey.currentState!.validate()) {
                               try {
-                                await BureauService()
-                                    .addBureau(nom: nom, adresse: adresse)
+                                await DepenseService()
+                                    .AddParametres(
+                                        description: desc,
+                                        montantSeuil: montant)
                                     .then((value) => {
-                                          Provider.of<BureauService>(context,
+                                          Provider.of<DepenseService>(context,
                                                   listen: false)
                                               .applyChange(),
-                                          nomController.clear(),
-                                          adresseController.clear(),
+                                          libelleController.clear(),
+                                          montantController.clear(),
+                                          setState(() {
+                                            listFuture = DepenseService()
+                                                .fetchParametre();
+                                          }),
                                           Navigator.of(context).pop()
                                         })
                                     .catchError((onError) =>
