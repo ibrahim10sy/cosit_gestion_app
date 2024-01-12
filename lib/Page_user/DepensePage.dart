@@ -71,7 +71,7 @@ class _DepensePageState extends State<DepensePage> {
               ),
             ),
             const SizedBox(
-              height: 10, 
+              height: 10,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
@@ -173,9 +173,22 @@ class _DepensePageState extends State<DepensePage> {
 
                                 depenseList = snapshot.data!;
                                 return Column(
-                                  children: depenseList!.where((element) => element.autorisationAdmin == true)
+                                  children: depenseList!
+                                      .where((element) =>
+                                          element.autorisationAdmin == true)
                                       .map((Depense depense) => ListTile(
-                                            onTap: () {
+                                            onTap: () async {
+                                              try {
+                                                await DepenseService()
+                                                    .marquerView(
+                                                        depense.idDepense!);
+                                                print(depense.idDepense);
+                                              } catch (error) {
+                                                print(error.toString());
+                                              }
+                                              setState(() {
+                                                depense.viewed = true;
+                                              });
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -192,8 +205,12 @@ class _DepensePageState extends State<DepensePage> {
                                             title: Text(
                                               depense.description,
                                               overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 18,
+                                                color: depense.viewed
+                                                    ? Colors.black
+                                                    : const Color.fromARGB(
+                                                        255, 139, 138, 138),
                                                 overflow: TextOverflow.ellipsis,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -284,7 +301,17 @@ class _DepensePageState extends State<DepensePage> {
                                   .where((element) =>
                                       element.autorisationAdmin == true)
                                   .map((Depense depense) => ListTile(
-                                        onTap: () {
+                                        onTap: () async {
+                                          try {
+                                            await DepenseService().marquerView(
+                                                depense.idDepense!);
+                                            print(depense.idDepense);
+                                          } catch (error) {
+                                            print(error.toString());
+                                          }
+                                          setState(() {
+                                            depense.viewed = true;
+                                          });
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -301,9 +328,13 @@ class _DepensePageState extends State<DepensePage> {
                                         title: Text(
                                           depense.description,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
+                                            color: depense.viewed
+                                                ? Colors.black
+                                                : const Color.fromARGB(
+                                                    255, 139, 138, 138),
                                           ),
                                         ),
                                         subtitle: Text(

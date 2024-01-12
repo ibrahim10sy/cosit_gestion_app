@@ -142,7 +142,7 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                 return listDemande
                                         .where((element) =>
                                             element.autorisationAdmin == true &&
-                                            element.utilisateur != null)
+                                            element.utilisateur != null && element.montantDepense >= element.parametreDepense!.montantSeuil)
                                         .isEmpty
                                     ? Center(
                                         child: Text(

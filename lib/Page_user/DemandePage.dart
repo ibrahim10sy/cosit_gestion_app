@@ -46,7 +46,7 @@ class _DemandePageState extends State<DemandePages> {
           CustomCard(
             title: "Demande ",
             imagePath: 'assets/images/demande.png',
-            subTitle: "Les demandes approuvés",
+            subTitle: "Les demandes non approuvés",
             children: Column(
               children: [
                 const SizedBox(
@@ -118,7 +118,7 @@ class _DemandePageState extends State<DemandePages> {
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
                                     child: Text(
-                                      "Les demandes approuver:",
+                                      "Les demandes non approuver:",
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
@@ -176,14 +176,17 @@ class _DemandePageState extends State<DemandePages> {
                                     ? Center(
                                         child: Text(
                                             overflow: TextOverflow.ellipsis,
-                                            "Aucune demande approuvé  trouvé"),
+                                            "Aucune demande non approuvé  trouvé"),
                                       )
                                     : Column(
                                         children: listDemande
                                             .where((element) =>
                                                 element.autorisationAdmin ==
-                                                    true &&
-                                                element.utilisateur != null)
+                                                    false &&
+                                                element.utilisateur != null &&
+                                                element.montantDepense >=
+                                                    element.parametreDepense!
+                                                        .montantSeuil)
                                             .map((Depense depense) => ListTile(
                                                   onTap: () async {
                                                     try {

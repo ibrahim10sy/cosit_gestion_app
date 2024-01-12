@@ -323,7 +323,7 @@ class _DepensePageState extends State<DepensePage> {
                                                     255, 139, 138, 138),
                                           ),
                                         ),
-                                        subtitle: Text(
+                                         subtitle: Text(
                                           depense.dateDepense,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(

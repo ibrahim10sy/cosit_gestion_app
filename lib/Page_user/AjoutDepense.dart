@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cosit_gestion/ImagePick.dart';
@@ -6,19 +5,17 @@ import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
-import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
+import 'package:cosit_gestion/service/BudgetService.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +36,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   late Utilisateur utilisateur;
   late SousCategorie sousCategorie;
   late ParametreDepense parametreDepense;
+  late ParametreDepense parametreDepense1;
   late Bureau bureau;
   late Budget budget;
   late Future<List<ParametreDepense>> _parametre;
@@ -58,8 +56,9 @@ class _AjoutDepenseState extends State<AjoutDepense> {
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     _bureau = getBureau();
     _categorie = getCategorie();
-    _budgets = fetchBudgets(utilisateur.idUtilisateur!);
+    _budgets = getBudget(utilisateur.idUtilisateur!);
     _parametre = getData();
+   fetchData();
   }
 
   void fetchData() async {
@@ -88,18 +87,21 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     return SousCategorieService().fetchAllSousCategorie();
   }
 
-  Future<List<Budget>> fetchBudgets(int id) async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:8080/Budget/listeByUser/$id'));
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      List<dynamic> data = json.decode(response.body);
-      List<Budget> budgets = data.map((item) => Budget.fromJson(item)).toList();
-      return budgets;
-    } else {
-      throw Exception('Aucun budget trouvé  ${response.statusCode}');
-    }
+  Future<List<Budget>> getBudget(int id) async {
+    return BudgetService().fetchBudgetByUser(id);
   }
+  // Future<List<Budget>> fetchBudgets(int id) async {
+  //   final response = await http
+  //       .get(Uri.parse('http://10.0.2.2:8080/Budget/listeByUser/$id'));
+
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     List<dynamic> data = json.decode(response.body);
+  //     List<Budget> budgets = data.map((item) => Budget.fromJson(item)).toList();
+  //     return budgets;
+  //   } else {
+  //     throw Exception('Aucun budget trouvé  ${response.statusCode}');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -307,8 +309,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
                                         items: budgets
-                                            .where((element) =>
-                                                element.utilisateur == null)
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idBudget,
                                                   child: Padding(
@@ -468,7 +468,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                       child: Row(
                         children: [
                           Image.asset(
-                            'assets/images/catégorie.png',
+                            'assets/images/categorie.png',
                             width: 23,
                           ),
                           const Expanded(
@@ -737,27 +737,27 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   try {
                                     if (photo != null) {
                                       await DepenseService().addDepenseByUser(
-                                          description: description,
-                                          montantDepense: montant,
-                                          dateDepense: date,
-                                          utilisateur: utilisateur,
-                                          image: photo,
-                                          sousCategorie: sousCategorie,
-                                          bureau: bureau,
-                                          budget: budget,
-                                          parametreDepense: parametreDepense,
-                                          );
+                                        description: description,
+                                        montantDepense: montant,
+                                        dateDepense: date,
+                                        utilisateur: utilisateur,
+                                        image: photo,
+                                        sousCategorie: sousCategorie,
+                                        bureau: bureau,
+                                        budget: budget,
+                                        parametreDepense: parametreDepense,
+                                      );
                                     } else {
                                       await DepenseService().addDepenseByUser(
-                                          description: description,
-                                          montantDepense: montant,
-                                          dateDepense: date,
-                                          utilisateur: utilisateur,
-                                          sousCategorie: sousCategorie,
-                                          bureau: bureau,
-                                          budget: budget,
-                                          parametreDepense: parametreDepense,
-                                          );
+                                        description: description,
+                                        montantDepense: montant,
+                                        dateDepense: date,
+                                        utilisateur: utilisateur,
+                                        sousCategorie: sousCategorie,
+                                        bureau: bureau,
+                                        budget: budget,
+                                        parametreDepense: parametreDepense,
+                                      );
                                     }
                                     showDialog(
                                       context: context,
@@ -794,8 +794,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         return AlertDialog(
                                           title: const Center(
                                               child: Text('Erreur')),
-                                          content: const Text(
-                                              "Désolé Budget epuisé ou montant inférieur"),
+                                          content: Text(errorMessage),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {
