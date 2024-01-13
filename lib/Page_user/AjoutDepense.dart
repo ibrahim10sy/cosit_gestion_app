@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cosit_gestion/ImagePick.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/model/Budget.dart';
@@ -16,7 +15,10 @@ import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class AjoutDepense extends StatefulWidget {
@@ -58,7 +60,32 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     _categorie = getCategorie();
     _budgets = getBudget(utilisateur.idUtilisateur!);
     _parametre = getData();
-   fetchData();
+    fetchData();
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        final imagePermanent = await saveImagePermanently(image.path);
+
+        setState(() {
+          photo = imagePermanent;
+          imageSrc = imagePermanent.path;
+        });
+      } else {
+        throw Exception('Image non télécharger');
+      }
+    } on PlatformException catch (e) {
+      debugPrint('erreur lors de téléchargement de l\'image : $e');
+    }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+    return File(imagePath).copy(image.path);
   }
 
   void fetchData() async {
@@ -675,17 +702,35 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: ImagePickerComponent(
-                              onImageSelected: (File selectedImage) {
-                                imageSrc = selectedImage.path;
-                                photo = selectedImage;
-                                print("Image selectionné $imageSrc");
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                elevation: 5,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 45),
+                                backgroundColor:
+                                    const Color(0xff2ffffff), // Button color
+                              ),
+                              onPressed: () {
+                                _pickImage();
                               },
+                              child: const Text(
+                                'Ajouter une piéce',
+                                style: TextStyle(
+                                  color: d_red,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
                             ),
                           )
                         ],
                       ),
-                    ),
+                    ),Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    photo.toString(),
+                    style: const TextStyle(color: d_red),
+                  ),),
                     const SizedBox(
                       height: 20,
                     ),
@@ -708,7 +753,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  // double? montant = double.tryParse(montants);
+                                  int? mt = int.tryParse(montant);
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -734,44 +779,36 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
 
-                                  try {
-                                    if (photo != null) {
-                                      await DepenseService().addDepenseByUser(
-                                        description: description,
-                                        montantDepense: montant,
-                                        dateDepense: date,
-                                        utilisateur: utilisateur,
-                                        image: photo,
-                                        sousCategorie: sousCategorie,
-                                        bureau: bureau,
-                                        budget: budget,
-                                        parametreDepense: parametreDepense,
-                                      );
-                                    } else {
-                                      await DepenseService().addDepenseByUser(
-                                        description: description,
-                                        montantDepense: montant,
-                                        dateDepense: date,
-                                        utilisateur: utilisateur,
-                                        sousCategorie: sousCategorie,
-                                        bureau: bureau,
-                                        budget: budget,
-                                        parametreDepense: parametreDepense,
-                                      );
-                                    }
-                                    showDialog(
+                                  if (mt! >= parametreDepense.montantSeuil) {
+                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Center(
-                                              child: Text('Succès')),
+                                              child: Text('Alert')),
                                           content: const Text(
-                                              "Depense ajoutée avec succès sans image"),
+                                              "Pour les dépenses dont le montant est supérieur ou égale au montant seuil une demande doit être envoyée"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
+                                                // Fermer le AlertDialog
+                                                Navigator.of(context).pop();
+
+                                                // Afficher le SnackBar
+                                                final snack = SnackBar(
+                                                  backgroundColor: d_red,
+                                                  showCloseIcon: true,
+                                                  content: Text(
+                                                    "Envoi de la demande...",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  duration:
+                                                      Duration(seconds: 8),
+                                                );
+
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snack);
                                               },
                                               child: const Text('OK'),
                                             )
@@ -779,33 +816,158 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         );
                                       },
                                     );
-                                    Provider.of<DepenseService>(context,
-                                            listen: false)
-                                        .applyChange();
-                                    descriptionController.clear();
-                                    montant_control.clear();
-                                    dateController.clear();
-                                  } catch (e) {
-                                    final String errorMessage = e.toString();
-                                    print(errorMessage);
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Erreur')),
-                                          content: Text('Budget epuisé ou montant inférieur'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
+
+
+                                    try {
+                                      if (photo != null) {
+                                        await DepenseService().addDepenseByUser(
+                                          description: description,
+                                          montantDepense: montant,
+                                          dateDepense: date,
+                                          utilisateur: utilisateur,
+                                          image: photo as File,
+                                          sousCategorie: sousCategorie,
+                                          bureau: bureau,
+                                          budget: budget,
+                                          parametreDepense: parametreDepense,
                                         );
-                                      },
-                                    );
+                                      } else {
+                                        await DepenseService().addDepenseByUser(
+                                          description: description,
+                                          montantDepense: montant,
+                                          dateDepense: date,
+                                          utilisateur: utilisateur,
+                                          sousCategorie: sousCategorie,
+                                          bureau: bureau,
+                                          budget: budget,
+                                          parametreDepense: parametreDepense,
+                                        );
+                                      }
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                                child: Text('Succès')),
+                                            content: const Text(
+                                                "Demande envoyé avec succèss"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(context);
+                                                },
+                                                child: const Text('OK'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      Provider.of<DepenseService>(context,
+                                              listen: false)
+                                          .applyChange();
+                                      descriptionController.clear();
+                                      montant_control.clear();
+                                      dateController.clear();
+                                    } catch (e) {
+                                      final String errorMessage = e.toString();
+                                      print(errorMessage);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                                child: Text('Erreur')),
+                                            content: Text(
+                                                'Budget epuisé ou montant inférieur'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  } else {
+                                    try {
+                                      if (photo != null) {
+                                        await DepenseService().addDepenseByUser(
+                                          description: description,
+                                          montantDepense: montant,
+                                          dateDepense: date,
+                                          utilisateur: utilisateur,
+                                          image: photo as File,
+                                          sousCategorie: sousCategorie,
+                                          bureau: bureau,
+                                          budget: budget,
+                                          parametreDepense: parametreDepense,
+                                        );
+                                      } else {
+                                        await DepenseService().addDepenseByUser(
+                                          description: description,
+                                          montantDepense: montant,
+                                          dateDepense: date,
+                                          utilisateur: utilisateur,
+                                          sousCategorie: sousCategorie,
+                                          bureau: bureau,
+                                          budget: budget,
+                                          parametreDepense: parametreDepense,
+                                        );
+                                      }
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                                child: Text('Succès')),
+                                            content: const Text(
+                                                "Depense ajoutée avec succès"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(context);
+                                                },
+                                                child: const Text('OK'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      Provider.of<DepenseService>(context,
+                                              listen: false)
+                                          .applyChange();
+                                      descriptionController.clear();
+                                      montant_control.clear();
+                                      dateController.clear();
+                                    } catch (e) {
+                                      final String errorMessage = e.toString();
+                                      print(errorMessage);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                                child: Text('Erreur')),
+                                            content: Text(
+                                                'Budget epuisé ou montant inférieur'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   }
                                 },
                                 icon: const Icon(

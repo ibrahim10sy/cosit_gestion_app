@@ -6,6 +6,7 @@ import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
@@ -619,6 +620,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       },
                                     );
                                   }
+                                  
                                   try {
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
@@ -676,7 +678,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         return AlertDialog(
                                           title: const Center(
                                               child: Text('Erreur')),
-                                          content: Text(errorMessage),
+                                          content: Text("Le  montant du budget est epuisé ou inférieur"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {

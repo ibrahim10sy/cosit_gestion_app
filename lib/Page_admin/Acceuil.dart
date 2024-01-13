@@ -70,13 +70,17 @@ class _AccueilState extends State<Accueil> {
                       }),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 5,
                     ),
                     Container(
                         alignment: Alignment.bottomRight,
+                        padding: EdgeInsets.all(10),
                         child: IconButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ParametrePage()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ParametrePage()));
                             },
                             icon: Icon(
                               Icons.settings_applications_sharp,

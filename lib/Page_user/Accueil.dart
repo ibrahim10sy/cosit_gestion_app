@@ -135,9 +135,11 @@ class _AccueilState extends State<Accueil> {
                 ),
                 Text(
                   titre,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
+
                   ),
                 ),
               ],

@@ -130,7 +130,9 @@ class _EmailPageState extends State<EmailPage> {
                                   } else {
                                     listeNotif = snapshot.data!;
                                     return Column(
-                                      children: listeNotif.where((element) => element.depense.autorisationAdmin == false)
+                                      children: listeNotif
+                                          .where((element) =>
+                                              element.depense.autorisationAdmin)
                                           .map(
                                               (SendNotification send) =>
                                                   ListTile(
@@ -143,7 +145,7 @@ class _EmailPageState extends State<EmailPage> {
                                                                     notification:
                                                                         send,
                                                                   )));
-                                                     },
+                                                    },
                                                     leading: Image.asset(
                                                         "assets/images/notif.png",
                                                         width: 33,

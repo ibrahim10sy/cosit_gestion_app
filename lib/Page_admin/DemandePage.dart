@@ -242,6 +242,60 @@ class _DemandePageState extends State<DemandePage> {
                                                       PopupMenuItem<String>(
                                                         child: ListTile(
                                                           leading: const Icon(
+                                                            Icons.check,
+                                                            color: Colors.green,
+                                                          ),
+                                                          title: const Text(
+                                                            "Valider",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.green,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          onTap: () async {
+                                                            final snack =
+                                                                SnackBar(
+                                                              backgroundColor:
+                                                                  d_red,
+                                                              content: Text(
+                                                                  "Démande validé",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          3),
+                                                            );
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    snack);
+                                                            try {
+                                                              await DepenseService()
+                                                                  .approuverDepense(
+                                                                      depense
+                                                                          .idDepense!);
+                                                              setState(() {
+                                                                depense.viewed =
+                                                                    true;
+                                                              });
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            } catch (e) {
+                                                              print(
+                                                                  e.toString());
+                                                            }
+                                                          },
+                                                        ),
+                                                      ),
+                                                      PopupMenuItem<String>(
+                                                        child: ListTile(
+                                                          leading: const Icon(
                                                             Icons.delete,
                                                             color: d_red,
                                                           ),

@@ -190,6 +190,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_dialog_helper:
+    dependency: "direct main"
+    description:
+      name: flutter_dialog_helper
+      sha256: d08e43770312cb50f8439d8e40cca3f88811a1f6cbbb131dd0856085b401b51c
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:

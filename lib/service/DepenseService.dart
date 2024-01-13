@@ -99,6 +99,29 @@ class DepenseService extends ChangeNotifier {
       throw Exception("Une erreur s'est produite' : ${response.statusCode}");
     }
   }
+  Future<void> UpdateParametres({
+    required int  idParametre,
+    required String description,
+    required String montantSeuil,
+  }) async {
+    var addparam = jsonEncode({
+      'idParametre': idParametre,
+      'description': description,
+      'montantSeuil': montantSeuil
+    });
+
+    final response = await http.put(
+      Uri.parse("http://10.0.2.2:8080/parametre/Update/$idParametre"),
+      headers: {'Content-Type': 'application/json'},
+      body: addparam,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      debugPrint(response.body);
+    } else {
+      throw Exception("Une erreur s'est produite' : ${response.statusCode}");
+    }
+  }
 
   Future<void> addDepenseByAdmin(
       {required String description,

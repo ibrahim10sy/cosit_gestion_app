@@ -1,5 +1,6 @@
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
+import 'package:cosit_gestion/Page_admin/UpdateParam.dart';
 import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,9 @@ class _ParametrePageState extends State<ParametrePage> {
   @override
   void initState() {
     super.initState();
-    listFuture = getData();
+    setState(() {
+      listFuture = getData();
+    });
   }
 
   Future<List<ParametreDepense>> getData() async {
@@ -166,7 +169,7 @@ class _ParametrePageState extends State<ParametrePage> {
                                               ),
                                             ),
                                             subtitle: Text(
-                                              e.montantSeuil.toString(),
+                                              "${e.montantSeuil.toString()} FCFA",
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   fontSize: 16,
@@ -176,6 +179,48 @@ class _ParametrePageState extends State<ParametrePage> {
                                               padding: EdgeInsets.zero,
                                               itemBuilder: (context) =>
                                                   <PopupMenuEntry<String>>[
+                                                PopupMenuItem<String>(
+                                                  child: ListTile(
+                                                    leading: const Icon(
+                                                      Icons.edit,
+                                                      color: Colors.green,
+                                                    ),
+                                                    title: const Text(
+                                                      "Modifier",
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onTap: () async {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              AlertDialog(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16),
+                                                                  ),
+                                                                  content: UpdateParam(
+                                                                      parametreDepense:
+                                                                          e)));
+setState(() {
+                                                        listFuture =
+                                                            DepenseService()
+                                                                .fetchParametre();
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      
+                                                    },
+                                                  ),
+                                                ),
                                                 const PopupMenuDivider(),
                                                 PopupMenuItem<String>(
                                                   // value: localizations

@@ -211,8 +211,15 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: Text(
-                                                        '${e.nom} ${e.prenom}'),
+                                                    child: Expanded(
+                                                      child: Text(
+                                                        '${e.nom} ${e.prenom}',
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ))
                                             .toList(),
