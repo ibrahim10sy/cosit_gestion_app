@@ -657,6 +657,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
                     "assets/images/budget.png",

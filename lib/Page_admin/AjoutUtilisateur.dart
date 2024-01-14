@@ -43,7 +43,13 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
   String? imageSrc;
   File? photo;
 
-  
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+    return File(imagePath).copy(image.path);
+  }
+
   Future<void> _pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -52,21 +58,16 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
 
         setState(() {
           this.photo = imagePermanent;
-          print(photo);
+
           imageSrc = imagePermanent.path;
         });
       } else {
+        // L'utilisateur a annulé la sélection d'image.
         return;
       }
     } on PlatformException catch (e) {
       debugPrint('erreur : $e');
     }
-  }
-Future<File> saveImagePermanently(String imagePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final name = basename(imagePath);
-    final image = File('${directory.path}/$name');
-    return File(imagePath).copy(image.path);
   }
 
   @override
@@ -143,6 +144,16 @@ Future<File> saveImagePermanently(String imagePath) async {
           ),
           const SizedBox(
             height: 5,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                _errorMessage,
+                style: const TextStyle(color: d_red),
+              ),
+            ),
           ),
           Form(
             key: _formKey,
@@ -391,18 +402,16 @@ Future<File> saveImagePermanently(String imagePath) async {
                           Utilisateur nouveauUtilisateur;
                           try {
                             if (photo != null) {
-                              nouveauUtilisateur = await UtilisateurService
-                                  .creerCompteUtilisateur(
-                                      nom: nom,
-                                      prenom: prenom,
-                                      email: email,
-                                      phone: phone,
-                                      role: role,
-                                      passWord: passWord,
-                                      image: photo);
+                              await UtilisateurService.creerCompteUtilisateur(
+                                  nom: nom,
+                                  prenom: prenom,
+                                  email: email,
+                                  phone: phone,
+                                  role: role,
+                                  passWord: passWord,
+                                  image: photo as File);
                             } else {
-                              nouveauUtilisateur = await UtilisateurService
-                                  .creerCompteUtilisateur(
+                              await UtilisateurService.creerCompteUtilisateur(
                                 nom: nom,
                                 prenom: prenom,
                                 email: email,
@@ -410,11 +419,11 @@ Future<File> saveImagePermanently(String imagePath) async {
                                 role: role,
                                 passWord: passWord,
                               );
-                              print(nouveauUtilisateur.toString());
+                              // print(nouveauUtilisateur.toString());
                             }
 
-                            utilisateurprovider
-                                .setUtilisateur(nouveauUtilisateur);
+                            // utilisateurprovider
+                            //     .setUtilisateur(nouveauUtilisateur);
                             Provider.of<UtilisateurService>(context,
                                     listen: false)
                                 .applyChange();
@@ -434,7 +443,7 @@ Future<File> saveImagePermanently(String imagePath) async {
                                     ],
                                   );
                                 });
-                            print(nouveauUtilisateur.toString());
+                            // print(nouveauUtilisateur.toString());
                             nom_controller.clear();
                             prenom_controller.clear();
                             email_controller.clear();
@@ -464,14 +473,6 @@ Future<File> saveImagePermanently(String imagePath) async {
                             color: Colors.white),
                       ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    _errorMessage,
-                    style: const TextStyle(color: d_red),
                   ),
                 ),
               ],

@@ -277,7 +277,7 @@ class _AddDepenseState extends State<AddDepense> {
                                           hint: Padding(
                                             padding: const EdgeInsets.all(3),
                                             child: Text(
-                                               "Choisir un budget",
+                                              "Choisir un budget",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -687,6 +687,20 @@ class _AddDepenseState extends State<AddDepense> {
                       ),
                     ),
                     const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          "Fichier choisi :${photo.toString()}",
+                           overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: d_red),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
                       height: 20,
                     ),
                     Padding(
@@ -762,7 +776,7 @@ class _AddDepenseState extends State<AddDepense> {
                                           title: const Center(
                                               child: Text('Succès')),
                                           content: const Text(
-                                              "Depense ajoutée avec succès sans image"),
+                                              "Depense ajoutée avec succèss"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {

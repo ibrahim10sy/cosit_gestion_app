@@ -69,14 +69,16 @@ class Utilisateur {
     );
   }
 
-   factory Utilisateur.fromJson(Map<String, dynamic> json) => Utilisateur(
-        idUtilisateur: json["idUtilisateur"],
-        nom: json["nom"],
-        prenom: json["prenom"],
-        email: json["email"],
-        image: json["image"],
-        role: json["role"],
-        phone: json["phone"],
-        passWord: json["passWord"],
-      );
+   factory Utilisateur.fromJson(Map<String, dynamic> json) {
+    return Utilisateur(
+      nom: json['nom'],
+      prenom: json['prenom'],
+      email: json['email'],
+      passWord: json['passWord'],
+      idUtilisateur: json['idUtilisateur'],
+      image: json['image'],
+      phone: json['phone'],
+      role: json['role'],
+    );
+  }
 }

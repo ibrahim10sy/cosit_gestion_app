@@ -702,23 +702,17 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 5,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 45),
-                                backgroundColor:
-                                    const Color(0xff2ffffff), // Button color
-                              ),
+                            child: OutlinedButton(
                               onPressed: () {
                                 _pickImage();
                               },
                               child: const Text(
                                 'Ajouter une piéce',
                                 style: TextStyle(
-                                  color: d_red,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                                    color: d_red,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    overflow: TextOverflow.ellipsis),
                               ),
                             ),
                           )
@@ -729,8 +723,9 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         textAlign: TextAlign.center,
-                        photo.toString(),
+                        "Fichier choisi : ${photo.toString()}",
                         style: const TextStyle(color: d_red),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(

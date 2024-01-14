@@ -112,7 +112,7 @@ class BudgetService extends ChangeNotifier {
     required String description,
     required String montant,
     required String dateDebut,
-    Utilisateur? utilisateur,
+    Utilisateur? utilisateur, 
     required Admin admin,
   }) async {
     var addBudget = {

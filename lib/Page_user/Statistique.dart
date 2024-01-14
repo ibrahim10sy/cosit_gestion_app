@@ -275,7 +275,7 @@ class _StatistiqueState extends State<Statistique>
           ),
           const SizedBox(width: 10),
           Text(p.libelle!,
-          overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.black)),
           const SizedBox(height: 30),
@@ -320,8 +320,8 @@ class _StatistiqueState extends State<Statistique>
           label,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            color: Colors.black, fontSize: 16,
-          
+            color: Colors.black,
+            fontSize: 16,
           ),
         ),
       ],

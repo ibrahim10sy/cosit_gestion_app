@@ -31,7 +31,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
   void initState() {
     _futureListe = getUser();
     debugPrint(_futureListe.toString());
-
+    
     super.initState();
   }
 
@@ -140,7 +140,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                                     ListTile(
                                                       splashColor: Colors.white,
                                                       leading: user.image ==
-                                                                  null || 
+                                                                  null ||
                                                               user.image
                                                                       ?.isEmpty ==
                                                                   true
@@ -166,7 +166,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                                           : CircleAvatar(
                                                               backgroundImage:
                                                                   NetworkImage(
-                                                                      user.image!),
+                                                                      "http://10.0.2.2/${user.image!}"),
                                                               radius: 30,
                                                             ),
                                                       title: Text(

@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:cosit_gestion/ImagePick.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
-import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
@@ -14,7 +12,10 @@ import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class AjoutDepense extends StatefulWidget {
@@ -44,33 +45,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   int? budgetValue;
   String? imageSrc;
   File? photo;
-  // File? photo;
-  // String _errorMessage = '';
-
-  // Future<void> _pickImage() async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if (image != null) {
-  //       final imagePermanent = await saveImagePermanently(image.path);
-
-  //       setState(() {
-  //         photo = imagePermanent;
-  //         imageSrc = imagePermanent.path;
-  //       });
-  //     } else {
-  //       throw Exception('Image non télécharger');
-  //     }
-  //   } on PlatformException catch (e) {
-  //     debugPrint('erreur lors de téléchargement de l\'image : $e');
-  //   }
-  // }
-
-  // Future<File> saveImagePermanently(String imagePath) async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final name = basename(imagePath);
-  //   final image = File('${directory.path}/$name');
-  //   return File(imagePath).copy(image.path);
-  // }
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -79,6 +54,31 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     _bureau = getBureau();
     _categorie = getCategorie();
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        final imagePermanent = await saveImagePermanently(image.path);
+
+        setState(() {
+          photo = imagePermanent;
+          imageSrc = imagePermanent.path;
+        });
+      } else {
+        throw Exception('Image non télécharger');
+      }
+    } on PlatformException catch (e) {
+      debugPrint('erreur lors de téléchargement de l\'image : $e');
+    }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+    return File(imagePath).copy(image.path);
   }
 
   Future<List<Bureau>> getBureau() async {
@@ -540,15 +540,35 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: ImagePickerComponent(
-                              onImageSelected: (File selectedImage) {
-                                imageSrc = selectedImage.path;
-                                photo = selectedImage;
-                                print("Image selectionné $imageSrc");
+                            child: OutlinedButton(
+                              onPressed: () {
+                                _pickImage();
                               },
+                              child: const Text(
+                                'Ajouter une piéce',
+                                style: TextStyle(
+                                    color: d_red,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
                             ),
                           )
                         ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          "Fichier choisi :${photo.toString()}",
+                          style: const TextStyle(color: d_red),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -620,7 +640,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       },
                                     );
                                   }
-                                  
+
                                   try {
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
@@ -668,7 +688,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     descriptionController.clear();
                                     montant_control.clear();
                                     dateController.clear();
-                                    
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     print(errorMessage);
@@ -678,7 +697,8 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         return AlertDialog(
                                           title: const Center(
                                               child: Text('Erreur')),
-                                          content: Text("Le  montant du budget est epuisé ou inférieur"),
+                                          content: Text(
+                                              "Le  montant du budget est epuisé ou inférieur"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () {

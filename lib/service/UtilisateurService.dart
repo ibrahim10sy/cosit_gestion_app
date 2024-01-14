@@ -1,17 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:path/path.dart';
 
 class UtilisateurService extends ChangeNotifier {
   static const String baseUrl = 'http://10.0.2.2:8080/utilisateur';
   List<Utilisateur> utilisateurs = [];
 
-  static Future<Utilisateur> creerCompteUtilisateur({
+  static Future<void> creerCompteUtilisateur({
     required String nom,
     required String prenom,
     required String email,
@@ -25,18 +24,17 @@ class UtilisateurService extends ChangeNotifier {
 
       if (image != null) {
         requete.files.add(http.MultipartFile(
-          'images',
-          image.readAsBytes().asStream(),
-          image.lengthSync(),
-           filename: basename(image.path)
-        ));
+            'images', image.readAsBytes().asStream(), image.lengthSync(),
+            filename: basename(image.path)));
       }
 
       requete.fields['utilisateur'] = jsonEncode({
         'nom': nom,
         'prenom': prenom,
         'email': email,
-        'image': image != null ? basename(image.path) : "", 
+        'image': "",
+        // 'image': image != null ? basename(image.path) : "",
+
         'role': role,
         'phone': phone,
         'passWord': passWord,
@@ -47,8 +45,8 @@ class UtilisateurService extends ChangeNotifier {
 
       if (response.statusCode == 200 || responsed.statusCode == 201) {
         final donneesResponse = json.decode(responsed.body);
-        debugPrint(donneesResponse.toString());
-        return Utilisateur.fromMap(donneesResponse);
+        debugPrint('user service ${donneesResponse.toString()}');
+        // return Utilisateur.fromJson(donneesResponse);
       } else {
         throw Exception(
             'Échec de la requête avec le code d\'état : ${responsed.statusCode}');
@@ -58,7 +56,8 @@ class UtilisateurService extends ChangeNotifier {
           'Une erreur s\'est produite lors de l\'ajout de l\'utilisateur : $e');
     }
   }
-   Future<Utilisateur> updateUtilisateur({
+
+  Future<Utilisateur> updateUtilisateur({
     required int idUtilisateur,
     required String nom,
     required String prenom,
@@ -69,7 +68,8 @@ class UtilisateurService extends ChangeNotifier {
     required String passWord,
   }) async {
     try {
-      var requete = http.MultipartRequest('PUT', Uri.parse('$baseUrl/update/$idUtilisateur'));
+      var requete = http.MultipartRequest(
+          'PUT', Uri.parse('$baseUrl/update/$idUtilisateur'));
 
       if (image != null) {
         requete.files.add(http.MultipartFile(
@@ -107,7 +107,6 @@ class UtilisateurService extends ChangeNotifier {
     }
   }
 
-  
   Future<List<Utilisateur>> fetchData() async {
     try {
       final response =
