@@ -256,39 +256,76 @@ class _DemandePageState extends State<DemandePage> {
                                                             ),
                                                           ),
                                                           onTap: () async {
-                                                            final snack =
-                                                                SnackBar(
-                                                              backgroundColor:
-                                                                  d_red,
-                                                              content: Text(
-                                                                  "Démande validé",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white)),
-                                                              duration:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          3),
-                                                            );
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    snack);
-                                                            try {
-                                                              await DepenseService()
-                                                                  .approuverDepense(
-                                                                      depense
-                                                                          .idDepense!);
-                                                              setState(() {
-                                                                depense.viewed =
-                                                                    true;
-                                                              });
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            } catch (e) {
-                                                              print(
-                                                                  e.toString());
+                                                            if (depense.montantDepense >
+                                                                    depense
+                                                                        .budget
+                                                                        .montantRestant ||
+                                                                depense.budget
+                                                                        .montantRestant ==
+                                                                    0) {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    title: const Center(
+                                                                        child: Text(
+                                                                            'Erreur')),
+                                                                    content:
+                                                                        const Text(
+                                                                            "Le montant du budget est epuisé ou montant inférieur"),
+                                                                    actions: <Widget>[
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: const Text(
+                                                                            'OK'),
+                                                                      )
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            } else {
+                                                              final snack =
+                                                                  SnackBar(
+                                                                backgroundColor:
+                                                                    d_red,
+                                                                content: Text(
+                                                                    "Démande validé",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white)),
+                                                                duration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            1),
+                                                              );
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      snack);
+                                                              try {
+                                                                await DepenseService()
+                                                                    .approuverDepense(
+                                                                        depense
+                                                                            .idDepense!);
+                                                                setState(() {
+                                                                  depense.viewed =
+                                                                      true;
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              } catch (e) {
+                                                                print(e
+                                                                    .toString());
+                                                              }
                                                             }
                                                           },
                                                         ),

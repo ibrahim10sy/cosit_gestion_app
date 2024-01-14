@@ -38,10 +38,12 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
   TextEditingController motDepasse_controller = TextEditingController();
   TextEditingController ConfirmerMotDePasse_controller =
       TextEditingController();
-  String? imageSrc;
-  File? photo;
   String _errorMessage = '';
   String defaultRole = "";
+  String? imageSrc;
+  File? photo;
+
+  
   Future<void> _pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -49,18 +51,18 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
         final imagePermanent = await saveImagePermanently(image.path);
 
         setState(() {
-          photo = imagePermanent;
+          this.photo = imagePermanent;
+          print(photo);
           imageSrc = imagePermanent.path;
         });
       } else {
-        throw Exception('Image non télécharger');
+        return;
       }
     } on PlatformException catch (e) {
-      debugPrint('erreur lors de téléchargement de l\'image : $e');
+      debugPrint('erreur : $e');
     }
   }
-
-  Future<File> saveImagePermanently(String imagePath) async {
+Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = basename(imagePath);
     final image = File('${directory.path}/$name');
@@ -81,8 +83,14 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                 delay: 2000,
                 child: Center(
                   child: (photo != null)
-                      ? Image.file(photo!)
-                      : Image.asset('assets/images/logo.png'),
+                      ? Image.file(
+                          photo!,
+                          scale: 0.9,
+                          width: 150,
+                        )
+                      : Image.asset(
+                          'assets/images/logo.png',
+                        ),
                 ),
               ),
             ),
@@ -391,7 +399,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                                       phone: phone,
                                       role: role,
                                       passWord: passWord,
-                                      image: photo as File);
+                                      image: photo);
                             } else {
                               nouveauUtilisateur = await UtilisateurService
                                   .creerCompteUtilisateur(
@@ -426,7 +434,7 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                                     ],
                                   );
                                 });
-
+                            print(nouveauUtilisateur.toString());
                             nom_controller.clear();
                             prenom_controller.clear();
                             email_controller.clear();

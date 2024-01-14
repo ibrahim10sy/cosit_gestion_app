@@ -28,7 +28,7 @@ class UtilisateurService extends ChangeNotifier {
           'images',
           image.readAsBytes().asStream(),
           image.lengthSync(),
-          filename: basename(image.path),
+           filename: basename(image.path)
         ));
       }
 
@@ -36,7 +36,7 @@ class UtilisateurService extends ChangeNotifier {
         'nom': nom,
         'prenom': prenom,
         'email': email,
-        'image': "",
+        'image': image != null ? basename(image.path) : "", 
         'role': role,
         'phone': phone,
         'passWord': passWord,

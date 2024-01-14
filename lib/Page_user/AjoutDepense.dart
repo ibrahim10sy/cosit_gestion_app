@@ -724,13 +724,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                           )
                         ],
                       ),
-                    ),Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    photo.toString(),
-                    style: const TextStyle(color: d_red),
-                  ),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        photo.toString(),
+                        style: const TextStyle(color: d_red),
+                      ),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -780,7 +782,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   }
 
                                   if (mt! >= parametreDepense.montantSeuil) {
-                                   showDialog(
+                                    showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
@@ -804,7 +806,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                         color: Colors.white),
                                                   ),
                                                   duration:
-                                                      Duration(seconds: 8),
+                                                      Duration(seconds: 5),
                                                 );
 
                                                 ScaffoldMessenger.of(context)
@@ -816,7 +818,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         );
                                       },
                                     );
-
 
                                     try {
                                       if (photo != null) {
@@ -873,25 +874,25 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Center(
-                                                child: Text('Erreur')),
-                                            content: Text(
-                                                'Budget epuisé ou montant inférieur'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('OK'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (BuildContext context) {
+                                      //     return AlertDialog(
+                                      //       title: const Center(
+                                      //           child: Text('Erreur')),
+                                      //       content: Text(
+                                      //           'Budget epuisé ou montant inférieur'),
+                                      //       actions: <Widget>[
+                                      //         TextButton(
+                                      //           onPressed: () {
+                                      //             Navigator.of(context).pop();
+                                      //           },
+                                      //           child: const Text('OK'),
+                                      //         ),
+                                      //       ],
+                                      //     );
+                                      //   },
+                                      // );
                                     }
                                   } else {
                                     try {
