@@ -6,7 +6,6 @@ import 'package:cosit_gestion/service/SalaireService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
@@ -240,6 +239,13 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                     );
                                   }
                                   return DropdownButton(
+                                    hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir un employé",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                       items: const [], onChanged: (value) {});
                                 }),
                           )
@@ -362,7 +368,15 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir une catégorie",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -513,7 +527,8 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   final date = dateController.text;
                                   String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
-                                  int montants = int.parse(formattedMontant);                                  if (description.isEmpty ||
+                                  int montants = int.parse(formattedMontant);
+                                  if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
                                     const String errorMessage =
@@ -549,7 +564,15 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                     Provider.of<SalaireService>(context,
                                             listen: false)
                                         .applyChange();
-
+                                    descriptionController.clear();
+                                    montant_control.clear();
+                                    userController.clear();
+                                    dateController.clear();
+                                    // Réinitialiser les valeurs des variables de sélection
+                                    setState(() {
+                                      userValue = null;
+                                      catValue = null;
+                                    });
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -570,11 +593,6 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                         );
                                       },
                                     );
-
-                                    descriptionController.clear();
-                                    montant_control.clear();
-                                    userController.clear();
-                                    dateController.clear();
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     showDialog(

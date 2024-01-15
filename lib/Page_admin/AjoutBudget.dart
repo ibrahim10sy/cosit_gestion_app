@@ -475,6 +475,10 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                     montant_control.clear();
                                     userController.clear();
                                     dateController.clear();
+                                     // Réinitialiser les valeurs des variables de sélection
+                                    setState(() {
+                                      userValue = null;
+                                    });
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     print(errorMessage);

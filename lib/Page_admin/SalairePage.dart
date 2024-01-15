@@ -45,7 +45,9 @@ class _SalairePageState extends State<SalairePage> {
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold));
                           } else {
-                            return const CircularProgressIndicator(); //const CircularProgressIndicator();
+                            return CupertinoActivityIndicator(
+                                radius: 20.0, color: d_red);
+                            //const CircularProgressIndicator();
                           }
                         });
                   }),

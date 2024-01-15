@@ -8,7 +8,6 @@ import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BudgetService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
@@ -45,7 +44,7 @@ class _updateBudgetsState extends State<updateBudgets> {
     montant_control.text = _budget.montant.toString();
     user = _budget.utilisateur;
     dateController.text = _budget.dateDebut;
-
+    userValue = _budget.utilisateur!.idUtilisateur;
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     _utilisateur =
         http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
@@ -244,8 +243,9 @@ class _updateBudgetsState extends State<updateBudgets> {
                                                   0) //blur radius of shadow
                                         ]),
                                     child: DropdownButton(
-                                      // value: userController,
-                                        items: const [], onChanged: (value) {}),
+                                        // value: userController,
+                                        items: const [],
+                                        onChanged: (value) {}),
                                   );
                                 }),
                           )
@@ -395,7 +395,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                   String formattedMontant =
+                                  String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
                                   int montants = int.parse(formattedMontant);
                                   if (description.isEmpty ||
@@ -474,6 +474,10 @@ class _updateBudgetsState extends State<updateBudgets> {
                                     montant_control.clear();
                                     userController.clear();
                                     dateController.clear();
+                                    // Réinitialiser les valeurs des variables de sélection
+                                    setState(() {
+                                      userValue = null;
+                                    });
                                   } catch (e) {
                                     final String errorMessage = e.toString();
 

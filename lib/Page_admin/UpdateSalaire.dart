@@ -57,6 +57,9 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
     employe = salaire.utilisateur.toString();
     _utilisateur = getUser();
     _categorie = getCategorie();
+    // Initialisation les valeurs des listes déroulantes
+    userValue = salaire.utilisateur.idUtilisateur;
+    catValue = salaire.sousCategorie.idSousCategorie;
     super.initState();
   }
 
@@ -225,7 +228,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                           ]),
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
-                                        hint: Text(employe),
+                                                 value: userValue,
                                         items: utilisateur
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
@@ -237,7 +240,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                   ),
                                                 ))
                                             .toList(),
-                                        value: userValue,
+                               
                                         onChanged: (newValue) {
                                           setState(() {
                                             userValue = newValue;
@@ -348,6 +351,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                           ]),
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
+                                             value: catValue,
                                         items: sousCategories
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idSousCategorie,
@@ -359,7 +363,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                   ),
                                                 ))
                                             .toList(),
-                                        value: catValue,
+                                    
                                         onChanged: (newValue) {
                                           setState(() {
                                             catValue = newValue;
@@ -526,7 +530,8 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   final date = dateController.text;
                                   String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
-                                  int montants = int.parse(formattedMontant);                                  if (description.isEmpty ||
+                                  int montants = int.parse(formattedMontant);                                  
+                                  if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
                                     const String errorMessage =
@@ -589,6 +594,11 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                     montant_control.clear();
                                     userController.clear();
                                     dateController.clear();
+                                     // Réinitialiser les valeurs des variables de sélection
+                                    setState(() {
+                                      userValue = null;
+                                      catValue = null;
+                                    });
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     showDialog(

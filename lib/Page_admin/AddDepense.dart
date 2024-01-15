@@ -751,7 +751,7 @@ class _AddDepenseState extends State<AddDepense> {
                                       },
                                     );
                                   }
-
+ 
                                   try {
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
@@ -799,6 +799,12 @@ class _AddDepenseState extends State<AddDepense> {
                                     descriptionController.clear();
                                     montant_control.clear();
                                     dateController.clear();
+                                     // Réinitialiser les valeurs des variables de sélection
+                                    setState(() {
+                                      bureauValue = null;
+                                      budgetValue = null;
+                                      catValue = null;
+                                    });
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     print(errorMessage);
