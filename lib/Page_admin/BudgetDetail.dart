@@ -264,7 +264,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      depense.dateDepense,
+                                                                                         "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontSize: 15,

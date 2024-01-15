@@ -868,6 +868,9 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           parametreDepense: parametreDepense,
                                         );
                                       }
+                                      descriptionController.clear();
+                                      montant_control.clear();
+                                      dateController.clear();
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -892,9 +895,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
-                                      descriptionController.clear();
-                                      montant_control.clear();
-                                      dateController.clear();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
@@ -919,6 +919,19 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       // );
                                     }
                                   } else {
+                                     // Afficher le SnackBar
+                                    final snack = SnackBar(
+                                      backgroundColor: d_red,
+                                      showCloseIcon: true,
+                                      content: Text(
+                                        "En cours ...",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      duration: Duration(seconds: 5),
+                                    );
+
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snack);
                                     try {
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
@@ -944,6 +957,9 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           parametreDepense: parametreDepense,
                                         );
                                       }
+                                      descriptionController.clear();
+                                      montant_control.clear();
+                                      dateController.clear();
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -967,9 +983,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
-                                      descriptionController.clear();
-                                      montant_control.clear();
-                                      dateController.clear();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
