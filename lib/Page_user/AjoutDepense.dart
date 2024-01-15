@@ -871,6 +871,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       descriptionController.clear();
                                       montant_control.clear();
                                       dateController.clear();
+                                      setState(() {
+                                        bureauValue = null;
+                                        budgetValue = null;
+                                        catValue = null;
+                                      });
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -919,7 +924,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       // );
                                     }
                                   } else {
-                                     // Afficher le SnackBar
+                                    // Afficher le SnackBar
                                     final snack = SnackBar(
                                       backgroundColor: d_red,
                                       showCloseIcon: true,
@@ -960,6 +965,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       descriptionController.clear();
                                       montant_control.clear();
                                       dateController.clear();
+                                      setState(() {
+                                        bureauValue = null;
+                                        budgetValue = null;
+                                        catValue = null;
+                                      });
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {

@@ -1,13 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
-import 'package:provider/provider.dart';
-
 import 'package:cosit_gestion/ImagePick.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
@@ -19,6 +12,11 @@ import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:provider/provider.dart';
 
 class AddDepense extends StatefulWidget {
   const AddDepense({super.key});
@@ -80,7 +78,6 @@ class _AddDepenseState extends State<AddDepense> {
     _bureau = getBureau();
     _budgets = fetchBudgets(adminID!);
     _categorie = getCategorie();
-    
   }
 
   Future<List<Bureau>> getBureau() async {
@@ -169,8 +166,7 @@ class _AddDepenseState extends State<AddDepense> {
                       ),
                     ),
                     Padding(
-                      padding:  EdgeInsets.only(
-                          left: 15, right: 15, bottom: 15),
+                      padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -178,7 +174,7 @@ class _AddDepenseState extends State<AddDepense> {
                               'assets/images/share.png',
                               width: 23,
                             ),
-                             Expanded(
+                            Expanded(
                               child: Padding(
                                   padding: EdgeInsets.only(left: 10),
                                   child: Text(
@@ -192,8 +188,8 @@ class _AddDepenseState extends State<AddDepense> {
                             Expanded(
                                 flex: 2,
                                 child: TextField(
-                                  controller: montant_control, 
-                                 keyboardType: TextInputType.number,
+                                  controller: montant_control,
+                                  keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     ThousandsFormatter(),
                                   ],
@@ -459,7 +455,15 @@ class _AddDepenseState extends State<AddDepense> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir un budget",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -698,7 +702,7 @@ class _AddDepenseState extends State<AddDepense> {
                         child: Text(
                           textAlign: TextAlign.center,
                           "Fichier choisi :${photo.toString()}",
-                           overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(color: d_red),
                         ),
                       ),
@@ -727,7 +731,8 @@ class _AddDepenseState extends State<AddDepense> {
                                   final date = dateController.text;
                                   String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
-                                  int montants = int.parse(formattedMontant);                                  if (description.isEmpty ||
+                                  int montants = int.parse(formattedMontant);
+                                  if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
                                     const String errorMessage =
@@ -751,7 +756,7 @@ class _AddDepenseState extends State<AddDepense> {
                                       },
                                     );
                                   }
- 
+
                                   try {
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
@@ -799,7 +804,7 @@ class _AddDepenseState extends State<AddDepense> {
                                     descriptionController.clear();
                                     montant_control.clear();
                                     dateController.clear();
-                                     // Réinitialiser les valeurs des variables de sélection
+                                    // Réinitialiser les valeurs des variables de sélection
                                     setState(() {
                                       bureauValue = null;
                                       budgetValue = null;
