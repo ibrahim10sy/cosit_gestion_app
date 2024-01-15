@@ -8,6 +8,7 @@ import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AjoutSalaire extends StatefulWidget {
@@ -393,8 +394,8 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                 child: TextField(
                                   controller: montant_control,
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -510,8 +511,9 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  // double? montant = double.tryParse(montants);
-                                  if (description.isEmpty ||
+                                  String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);                                  if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
                                     const String errorMessage =
@@ -539,7 +541,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   try {
                                     await SalaireService().addSalaire(
                                         description: description,
-                                        montant: montant,
+                                        montant: montants.toString(),
                                         date: date,
                                         sousCategorie: sousCategorie,
                                         utilisateur: user);

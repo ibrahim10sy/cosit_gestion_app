@@ -19,6 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AjoutDepense extends StatefulWidget {
@@ -220,8 +221,8 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                 child: TextField(
                                   controller: montant_control,
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -362,7 +363,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir un budget",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -483,7 +492,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir un bureau",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -605,7 +622,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir une catégorie",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -751,6 +776,9 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   final montant = montant_control.text;
                                   final date = dateController.text;
                                   int? mt = int.tryParse(montant);
+                                  String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -776,7 +804,8 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
 
-                                  if (mt! >= parametreDepense.montantSeuil) {
+                                  if (montants >=
+                                      parametreDepense.montantSeuil) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -818,7 +847,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
-                                          montantDepense: montant,
+                                          montantDepense: montants.toString(),
                                           dateDepense: date,
                                           utilisateur: utilisateur,
                                           image: photo as File,
@@ -830,7 +859,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       } else {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
-                                          montantDepense: montant,
+                                          montantDepense: montants.toString(),
                                           dateDepense: date,
                                           utilisateur: utilisateur,
                                           sousCategorie: sousCategorie,
@@ -894,7 +923,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
-                                          montantDepense: montant,
+                                          montantDepense: montants.toString(),
                                           dateDepense: date,
                                           utilisateur: utilisateur,
                                           image: photo as File,
@@ -906,7 +935,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       } else {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
-                                          montantDepense: montant,
+                                          montantDepense: montants.toString(),
                                           dateDepense: date,
                                           utilisateur: utilisateur,
                                           sousCategorie: sousCategorie,

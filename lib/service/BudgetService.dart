@@ -1,4 +1,4 @@
-import 'dart:convert'; 
+import 'dart:convert';
 
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/Budget.dart';
@@ -51,6 +51,7 @@ class BudgetService extends ChangeNotifier {
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
+
   Future<List<Budget>> fetchBudgetByUser(int idUtilisateur) async {
     final response =
         await http.get(Uri.parse('$baseUrl/listeByUser/$idUtilisateur'));
@@ -66,6 +67,7 @@ class BudgetService extends ChangeNotifier {
       throw Exception(jsonDecode(utf8.decode(response.bodyBytes))["message"]);
     }
   }
+
   Future<List<Budget>> searchBudgetByDesc() async {
     final response = await http.get(Uri.parse("$baseUrl/search?desc=$desc"));
     debugPrint(response.body);
@@ -88,7 +90,7 @@ class BudgetService extends ChangeNotifier {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
       budget = body.map((dynamic item) => Budget.fromJson(item)).toList();
       debugPrint("Budgets trie ${budget.toString()}");
-     
+
       return budget;
     } else {
       budget = [];
@@ -112,7 +114,7 @@ class BudgetService extends ChangeNotifier {
     required String description,
     required String montant,
     required String dateDebut,
-    Utilisateur? utilisateur, 
+    Utilisateur? utilisateur,
     required Admin admin,
   }) async {
     var addBudget = {

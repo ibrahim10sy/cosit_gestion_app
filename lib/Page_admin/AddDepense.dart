@@ -1,6 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:provider/provider.dart';
+
 import 'package:cosit_gestion/ImagePick.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
@@ -12,11 +19,6 @@ import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class AddDepense extends StatefulWidget {
   const AddDepense({super.key});
@@ -78,6 +80,7 @@ class _AddDepenseState extends State<AddDepense> {
     _bureau = getBureau();
     _budgets = fetchBudgets(adminID!);
     _categorie = getCategorie();
+    
   }
 
   Future<List<Bureau>> getBureau() async {
@@ -166,7 +169,7 @@ class _AddDepenseState extends State<AddDepense> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
+                      padding:  EdgeInsets.only(
                           left: 15, right: 15, bottom: 15),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -175,7 +178,7 @@ class _AddDepenseState extends State<AddDepense> {
                               'assets/images/share.png',
                               width: 23,
                             ),
-                            const Expanded(
+                             Expanded(
                               child: Padding(
                                   padding: EdgeInsets.only(left: 10),
                                   child: Text(
@@ -189,10 +192,10 @@ class _AddDepenseState extends State<AddDepense> {
                             Expanded(
                                 flex: 2,
                                 child: TextField(
-                                  controller: montant_control,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                  controller: montant_control, 
+                                 keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -722,8 +725,9 @@ class _AddDepenseState extends State<AddDepense> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  // double? montant = double.tryParse(montants);
-                                  if (description.isEmpty ||
+                                  String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);                                  if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
                                     const String errorMessage =
@@ -752,7 +756,7 @@ class _AddDepenseState extends State<AddDepense> {
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
                                           description: description,
-                                          montantDepense: montant,
+                                          montantDepense: montants.toString(),
                                           dateDepense: date,
                                           admin: admin,
                                           sousCategorie: sousCategorie,
@@ -762,7 +766,7 @@ class _AddDepenseState extends State<AddDepense> {
                                     } else {
                                       await DepenseService().addDepenseByAdmin(
                                           description: description,
-                                          montantDepense: montant,
+                                          montantDepense: montants.toString(),
                                           dateDepense: date,
                                           admin: admin,
                                           sousCategorie: sousCategorie,

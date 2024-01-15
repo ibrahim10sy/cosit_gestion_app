@@ -199,7 +199,7 @@ class _DemandeListeState extends State<DemandeListe> {
                                                     ),
                                                   ),
                                                   subtitle: Text(
-                                                    depense.dateDepense,
+                                                    "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: const TextStyle(

@@ -136,133 +136,139 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                 listDemande = snapshot.data!;
 
                                 return listDemande
-                                      .where((element) =>
-                                          element.autorisationAdmin == true &&
-                                          element.utilisateur != null).isEmpty
-                                          ?Center(
+                                        .where((element) =>
+                                            element.autorisationAdmin == true &&
+                                            element.utilisateur != null)
+                                        .isEmpty
+                                    ? Center(
                                         child: Text(
                                             overflow: TextOverflow.ellipsis,
-                                          "Aucune demande approuvé  trouvé"
-                                        ),
-                                      ):
-                                Column(
-                                  children: listDemande
-                                      .where((element) =>
-                                          element.autorisationAdmin == true &&
-                                          element.utilisateur != null)
-                                      .map((Depense depense) => ListTile(
-                                            onTap: () async {
-                                              try {
-                                                await DepenseService()
-                                                    .marquerView(
-                                                        depense.idDepense!);
-                                                print(depense.idDepense);
-                                              } catch (error) {
-                                                print(error.toString());
-                                              }
-                                              setState(() {
-                                                depense.viewed = true;
-                                              });
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DepenseDetail(
-                                                            depenses: depense)),
-                                              );
-                                            },
-                                            leading: Image.asset(
-                                              "assets/images/depense.png",
-                                              width: 33,
-                                              height: 33,
-                                            ),
-                                            title: Text(
-                                              depense.description,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: depense.viewed
-                                                    ? Colors.black
-                                                    : const Color.fromARGB(
-                                                        255, 139, 138, 138),
-                                              ),
-                                            ),
-                                            subtitle: Text(
-                                              depense.dateDepense,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            trailing: PopupMenuButton<String>(
-                                              padding: EdgeInsets.zero,
-                                              itemBuilder: (context) =>
-                                                  <PopupMenuEntry<String>>[
-                                                PopupMenuItem<String>(
-                                                  child: ListTile(
-                                                    leading: const Icon(
-                                                      Icons.delete,
-                                                      color: d_red,
-                                                    ),
-                                                    title: const Text(
-                                                      "Supprimer",
-                                                      style: TextStyle(
-                                                        color: d_red,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    onTap: () async {
+                                            "Aucune demande approuvé  trouvé"),
+                                      )
+                                    : Column(
+                                        children: listDemande
+                                            .where((element) =>
+                                                element.autorisationAdmin ==
+                                                    true &&
+                                                element.utilisateur != null)
+                                            .map((Depense depense) => ListTile(
+                                                  onTap: () async {
+                                                    try {
                                                       await DepenseService()
-                                                          .deleteDepense(depense
-                                                              .idDepense!)
-                                                          .then((value) => {
-                                                                Provider.of<DepenseService>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .applyChange(),
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop(),
-                                                              })
-                                                          .catchError(
-                                                              (onError) => {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return AlertDialog(
-                                                                          title:
-                                                                              const Text("Erreur de suppression"),
-                                                                          content:
-                                                                              const Text(
-                                                                            "Impossible de supprimer le depense ",
-                                                                          ),
-                                                                          actions: [
-                                                                            TextButton(
-                                                                              onPressed: () {
-                                                                                Navigator.of(context).pop();
-                                                                              },
-                                                                              child: const Text('OK'),
-                                                                            ),
-                                                                          ],
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  });
-                                                    },
+                                                          .marquerView(depense
+                                                              .idDepense!);
+                                                      print(depense.idDepense);
+                                                    } catch (error) {
+                                                      print(error.toString());
+                                                    }
+                                                    setState(() {
+                                                      depense.viewed = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DepenseDetail(
+                                                                  depenses:
+                                                                      depense)),
+                                                    );
+                                                  },
+                                                  leading: Image.asset(
+                                                    "assets/images/depense.png",
+                                                    width: 33,
+                                                    height: 33,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ))
-                                      .toList(),
-                                );
+                                                  title: Text(
+                                                    depense.description,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: depense.viewed
+                                                          ? Colors.black
+                                                          : const Color
+                                                              .fromARGB(255,
+                                                              139, 138, 138),
+                                                    ),
+                                                  ),
+                                                  subtitle: Text(
+                                                    "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  trailing:
+                                                      PopupMenuButton<String>(
+                                                    padding: EdgeInsets.zero,
+                                                    itemBuilder: (context) =>
+                                                        <PopupMenuEntry<
+                                                            String>>[
+                                                      PopupMenuItem<String>(
+                                                        child: ListTile(
+                                                          leading: const Icon(
+                                                            Icons.delete,
+                                                            color: d_red,
+                                                          ),
+                                                          title: const Text(
+                                                            "Supprimer",
+                                                            style: TextStyle(
+                                                              color: d_red,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          onTap: () async {
+                                                            await DepenseService()
+                                                                .deleteDepense(
+                                                                    depense
+                                                                        .idDepense!)
+                                                                .then(
+                                                                    (value) => {
+                                                                          Provider.of<DepenseService>(context, listen: false)
+                                                                              .applyChange(),
+                                                                          Navigator.of(context)
+                                                                              .pop(),
+                                                                        })
+                                                                .catchError(
+                                                                    (onError) =>
+                                                                        {
+                                                                          showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (BuildContext context) {
+                                                                              return AlertDialog(
+                                                                                title: const Text("Erreur de suppression"),
+                                                                                content: const Text(
+                                                                                  "Impossible de supprimer le depense ",
+                                                                                ),
+                                                                                actions: [
+                                                                                  TextButton(
+                                                                                    onPressed: () {
+                                                                                      Navigator.of(context).pop();
+                                                                                    },
+                                                                                    child: const Text('OK'),
+                                                                                  ),
+                                                                                ],
+                                                                              );
+                                                                            },
+                                                                          ),
+                                                                        });
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ))
+                                            .toList(),
+                                      );
                               }
                             });
                       },

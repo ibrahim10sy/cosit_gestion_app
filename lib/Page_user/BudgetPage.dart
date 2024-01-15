@@ -167,7 +167,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                             ),
                                           ),
                                           subtitle: Text(
-                                            bud.dateDebut,
+                                            "Montant : ${bud.montant}-restant : ${bud.montantRestant}",
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                               fontSize: 15,

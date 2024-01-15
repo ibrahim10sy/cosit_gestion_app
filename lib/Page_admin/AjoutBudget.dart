@@ -8,6 +8,7 @@ import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AjoutBudget extends StatefulWidget {
@@ -236,7 +237,15 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir un employé",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -269,7 +278,8 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                   controller: montant_control,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    ThousandsFormatter()
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -385,7 +395,11 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  // double? montant = double.tryParse(montants);
+                                  String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);
+                                  print(montant);
+
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -419,7 +433,7 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                     if (user1 != null) {
                                       await BudgetService().addBudgets(
                                         description: description,
-                                        montant: montant,
+                                        montant: montants.toString(),
                                         utilisateur: user1,
                                         dateDebut: date,
                                         admin: admin,
@@ -427,7 +441,7 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                     } else {
                                       await BudgetService().addBudgets(
                                         description: description,
-                                        montant: montant,
+                                        montant: montants.toString(),
                                         dateDebut: date,
                                         admin: admin,
                                       );

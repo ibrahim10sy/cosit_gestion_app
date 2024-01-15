@@ -224,7 +224,7 @@ class _DemandePageState extends State<DemandePage> {
                                                     ),
                                                   ),
                                                   subtitle: Text(
-                                                    depense.dateDepense,
+                                                    "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: const TextStyle(

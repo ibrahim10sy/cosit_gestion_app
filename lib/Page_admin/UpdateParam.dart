@@ -2,6 +2,7 @@ import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class UpdateParam extends StatefulWidget {
@@ -79,10 +80,10 @@ class _UpdateParamState extends State<UpdateParam> {
                     return null;
                   },
                   controller: monController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
+                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
+                                  ],
                   decoration: InputDecoration(
                     hintText: "Montant",
                     // prefixIcon: const Icon(Icons.describe),

@@ -16,6 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class AjoutDepense extends StatefulWidget {
@@ -54,6 +55,18 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     _bureau = getBureau();
     _categorie = getCategorie();
+    montant_control.addListener(() {
+      final text = montant_control.text.replaceAll('.', '');
+      final formattedValue =
+          NumberFormat.decimalPattern().format(int.parse(text));
+
+      if (montant_control.text != formattedValue) {
+        montant_control.value = montant_control.value.copyWith(
+          text: formattedValue,
+          selection: TextSelection.collapsed(offset: formattedValue.length),
+        );
+      }
+    });
   }
 
   Future<void> _pickImage() async {
@@ -179,8 +192,8 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                 child: TextField(
                                   controller: montant_control,
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -593,7 +606,10 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  int? montants = int.tryParse(montant);
+                                   String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);
+                                  
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -619,7 +635,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
                                   }
 
-                                  if (montants! > budget.montantRestant) {
+                                  if (montants > budget.montantRestant) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {

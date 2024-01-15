@@ -285,7 +285,9 @@ class _DepensePageState extends State<DepensePage> {
                           if (depenseService.depensesListe.isNotEmpty) {
                             depenseList = depenseService.depensesListe;
                             return Column(
-                              children: depenseList!.where((element) => element.autorisationAdmin == true)
+                              children: depenseList!
+                                  .where((element) =>
+                                      element.autorisationAdmin == true)
                                   .map((Depense depense) => ListTile(
                                         onTap: () async {
                                           try {
@@ -323,8 +325,8 @@ class _DepensePageState extends State<DepensePage> {
                                                     255, 139, 138, 138),
                                           ),
                                         ),
-                                         subtitle: Text(
-                                          depense.dateDepense,
+                                        subtitle: Text(
+                                          "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontSize: 15,

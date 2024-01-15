@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class updateBudgets extends StatefulWidget {
@@ -33,6 +34,7 @@ class _updateBudgetsState extends State<updateBudgets> {
   late Future _utilisateur;
   int? userValue;
   Utilisateur? user;
+  late Utilisateur utilisateur;
   late Budget _budget;
 
   @override
@@ -41,8 +43,9 @@ class _updateBudgetsState extends State<updateBudgets> {
     _budget = widget.budget;
     descriptionController.text = _budget.description;
     montant_control.text = _budget.montant.toString();
-    userController.text = _budget.utilisateur.toString();
+    user = _budget.utilisateur;
     dateController.text = _budget.dateDebut;
+
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     _utilisateur =
         http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
@@ -241,6 +244,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                                   0) //blur radius of shadow
                                         ]),
                                     child: DropdownButton(
+                                      // value: userController,
                                         items: const [], onChanged: (value) {}),
                                   );
                                 }),
@@ -274,8 +278,8 @@ class _updateBudgetsState extends State<updateBudgets> {
                                 child: TextField(
                                   controller: montant_control,
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -391,6 +395,9 @@ class _updateBudgetsState extends State<updateBudgets> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
+                                   String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -424,7 +431,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                       await BudgetService().updateBudgets(
                                         idBudget: _budget.idBudget!,
                                         description: description,
-                                        montant: montant,
+                                        montant: montants.toString(),
                                         utilisateur: user1,
                                         dateDebut: date,
                                         admin: admin,
@@ -433,7 +440,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                       await BudgetService().updateBudgets(
                                         idBudget: _budget.idBudget!,
                                         description: description,
-                                        montant: montant,
+                                        montant: montants.toString(),
                                         dateDebut: date,
                                         admin: admin,
                                       );

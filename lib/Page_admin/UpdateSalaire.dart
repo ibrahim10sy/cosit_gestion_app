@@ -9,6 +9,7 @@ import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class UpdateSalaire extends StatefulWidget {
@@ -406,8 +407,8 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                 child: TextField(
                                   controller: montant_control,
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
+                                  inputFormatters: [
+                                    ThousandsFormatter(),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
@@ -523,8 +524,9 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  // double? montant = double.tryParse(montants);
-                                  if (description.isEmpty ||
+                                  String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);                                  if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
                                     const String errorMessage =
@@ -553,7 +555,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                     await SalaireService().updateSalaire(
                                         idSalaire: salaire.idSalaire!,
                                         description: description,
-                                        montant: montant,
+                                        montant: montants.toString(),
                                         date: date,
                                         sousCategorie: sousCategorie,
                                         utilisateur: user);

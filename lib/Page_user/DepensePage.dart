@@ -216,7 +216,7 @@ class _DepensePageState extends State<DepensePage> {
                                               ),
                                             ),
                                             subtitle: Text(
-                                              depense.dateDepense,
+                                              "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontSize: 15,
