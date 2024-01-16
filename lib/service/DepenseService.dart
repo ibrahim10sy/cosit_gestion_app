@@ -250,7 +250,7 @@ class DepenseService extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         // Succès : La dépense a été marquée comme vue
-        print('Dépense marquée comme vue avec succès.');
+        print('Dépense approuver  avec succès.');
       } else {
         // Gestion des erreurs
         print('Erreur lors de la requête : ${response.statusCode}');

@@ -23,7 +23,7 @@ class Depense {
   final Budget budget;
   final ParametreDepense? parametreDepense;
   bool viewed;
-  final bool autorisationAdmin;
+  bool autorisationAdmin;
   
   Depense({
     this.idDepense,

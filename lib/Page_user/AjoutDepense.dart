@@ -826,11 +826,16 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                   showCloseIcon: true,
                                                   content: Text(
                                                     "Envoi de la demande...",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                        color: Colors.white),
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                   duration:
-                                                      Duration(seconds: 5),
+                                                      Duration(seconds: 8),
                                                 );
 
                                                 ScaffoldMessenger.of(context)
@@ -875,6 +880,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         bureauValue = null;
                                         budgetValue = null;
                                         catValue = null;
+                                        photo = null;
                                       });
                                       showDialog(
                                         context: context,
@@ -930,9 +936,13 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       showCloseIcon: true,
                                       content: Text(
                                         "En cours ...",
-                                        style: TextStyle(color: Colors.white),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      duration: Duration(seconds: 5),
+                                      duration: Duration(seconds: 8),
                                     );
 
                                     ScaffoldMessenger.of(context)
@@ -969,6 +979,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         bureauValue = null;
                                         budgetValue = null;
                                         catValue = null;
+                                        photo = null;
                                       });
                                       showDialog(
                                         context: context,

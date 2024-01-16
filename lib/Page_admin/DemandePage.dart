@@ -6,6 +6,7 @@ import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class DemandePage extends StatefulWidget {
@@ -20,11 +21,6 @@ const d_red = Colors.red;
 class _DemandePageState extends State<DemandePage> {
   late List<Depense> listDemande = [];
   late Future<List<Depense>> futureDemande;
-
-  // Future<List<Demande>> getListDemande() async {
-  //   final response = await DemandeService().getDemande();
-  //   return response;
-  // }
 
   @override
   void initState() {
@@ -310,22 +306,20 @@ class _DemandePageState extends State<DemandePage> {
                                                                           context)
                                                                   .showSnackBar(
                                                                       snack);
-                                                              try {
+                                                               try {
                                                                 await DepenseService()
                                                                     .approuverDepense(
                                                                         depense
                                                                             .idDepense!);
-                                                                setState(() {
-                                                                  depense.viewed =
-                                                                      true;
-                                                                });
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              } catch (e) {
-                                                                print(e
+                                                                print(depense
+                                                                    .idDepense);
+                                                              } catch (error) {
+                                                                print(error
                                                                     .toString());
                                                               }
+                                                              setState(() {
+                                                                depense.autorisationAdmin = true;
+                                                              });
                                                             }
                                                           },
                                                         ),
@@ -406,31 +400,3 @@ class _DemandePageState extends State<DemandePage> {
 
   void openDialog() {}
 }
-
-//  IconButton(
-//     onPressed: () async {
-//       await DemandeService()
-//           .deleteDemande(demande
-//               .idDemande!)
-//           .then((value) => {
-//                 Provider.of<DemandeService>(
-//                         context,
-//                         listen:
-//                             false)
-//                     .applyChange(),
-//                 setState(() {
-//                   futureDemande =
-//                       DemandeService()
-//                           .getDemande();
-//                 })
-//               })
-//           .catchError(
-//               (onError) => {
-//                     print(
-//                         onError)
-//                   });
-//     },
-//     icon: const Icon(
-//       Icons.delete,
-//       color: d_red,
-//     )),
