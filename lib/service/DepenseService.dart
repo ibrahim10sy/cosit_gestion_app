@@ -75,7 +75,7 @@ class DepenseService extends ChangeNotifier {
       throw Exception(
           'Une erreur s\'est produite lors de l\'ajout du depense : $e');
     }
-  }
+  } 
 
   Future<void> AddParametres({
     required String description,

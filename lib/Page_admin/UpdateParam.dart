@@ -1,7 +1,6 @@
 import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -17,16 +16,16 @@ const d_red = Colors.red;
 
 class _UpdateParamState extends State<UpdateParam> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController descController = TextEditingController();
-  TextEditingController monController = TextEditingController();
+  TextEditingController libelleController = TextEditingController();
+  TextEditingController montantController = TextEditingController();
   late ParametreDepense paramDepense;
 
   @override
   void initState() {
     super.initState();
     paramDepense = widget.parametreDepense;
-    descController.text = paramDepense.description;
-    monController.text = paramDepense.montantSeuil.toString();
+    libelleController.text = paramDepense.description;
+    montantController.text = paramDepense.montantSeuil.toString();
   }
 
   @override
@@ -41,7 +40,7 @@ class _UpdateParamState extends State<UpdateParam> {
               Icon(Icons.settings, color: d_red),
               const SizedBox(width: 10),
               const Text(
-                "Modifier un parametre",
+                "Modifiier le  parametre",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -62,7 +61,7 @@ class _UpdateParamState extends State<UpdateParam> {
                     }
                     return null;
                   },
-                  controller: descController,
+                  controller: libelleController,
                   decoration: InputDecoration(
                     hintText: "Description",
                     // prefixIcon: const Icon(Icons.describe),
@@ -79,11 +78,11 @@ class _UpdateParamState extends State<UpdateParam> {
                     }
                     return null;
                   },
-                  controller: monController,
-                   keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    ThousandsFormatter(),
-                                  ],
+                  controller: montantController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    ThousandsFormatter(),
+                  ],
                   decoration: InputDecoration(
                     hintText: "Montant",
                     // prefixIcon: const Icon(Icons.describe),
@@ -99,21 +98,24 @@ class _UpdateParamState extends State<UpdateParam> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final String desc = descController.text;
-                          final String montant = monController.text;
+                          final String desc = libelleController.text;
+                          final String montant = montantController.text;
+                          String formattedMontant =
+                              montantController.text.replaceAll(',', '');
+                          int montants = int.parse(formattedMontant);
                           if (formkey.currentState!.validate()) {
                             try {
                               await DepenseService()
                                   .UpdateParametres(
                                       idParametre: paramDepense.idParametre!,
                                       description: desc,
-                                      montantSeuil: montant)
+                                      montantSeuil: montants.toString())
                                   .then((value) => {
+                                        libelleController.clear(),
+                                        montantController.clear(),
                                         Provider.of<DepenseService>(context,
-                                                listen: false)
-                                            .applyChange(),
-                                        descController.clear(),
-                                        monController.clear(),
+                                                  listen: false)
+                                              .applyChange(),
                                         Navigator.of(context).pop()
                                       })
                                   .catchError(
@@ -129,7 +131,7 @@ class _UpdateParamState extends State<UpdateParam> {
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                         ),
                         child: const Text(
-                          "Modifier",
+                          "Ajouter",
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
@@ -139,7 +141,7 @@ class _UpdateParamState extends State<UpdateParam> {
                       ),
                     ),
                     SizedBox(
-                      width: 10,
+                      width: 5,
                     ),
                     Expanded(
                       child: ElevatedButton(

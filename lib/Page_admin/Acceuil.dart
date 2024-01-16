@@ -111,7 +111,23 @@ class _AccueilState extends State<Accueil> {
                     // _buildAccueilCard("Statistique", "statistique_logo.png", 4)
                   ],
                 ),
-              )
+              ),
+              // Positioned(
+              //   top: MediaQuery.of(context).size.width * 0.90,
+              //   right: MediaQuery.of(context).size.width * 0.1,
+              //   child: FloatingActionButton(
+              //     onPressed: () {
+              //       // Action à effectuer lors du clic sur le bouton flottant
+              //       print('Bouton flottant cliqué !');
+              //     },
+              //     child: Icon(
+              //       Icons.settings,
+              //       color: Colors.white,
+              //       size: 22,
+              //     ),
+              //     backgroundColor: d_red,
+              //   ),
+              // ),
             ],
           ),
         ));

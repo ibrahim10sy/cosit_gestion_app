@@ -135,30 +135,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     );
   }
 
-  // Future<void> _pickImage() async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if (image != null) {
-  //       final imagePermanent = await saveImagePermanently(image.path);
-
-  //       setState(() {
-  //         photo = imagePermanent;
-  //         imageSrc = imagePermanent.path;
-  //       });
-  //     } else {
-  //       throw Exception('Image non télécharger');
-  //     }
-  //   } on PlatformException catch (e) {
-  //     debugPrint('erreur lors de téléchargement de l\'image : $e');
-  //   }
-  // }
-
-  // Future<File> saveImagePermanently(String imagePath) async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final name = path.basename(imagePath);
-  //   final image = File('${directory.path}/$name');
-  //   return File(imagePath).copy(image.path);
-  // }
 
   void fetchData() async {
     // Récupérez les données depuis l'API
@@ -189,18 +165,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   Future<List<Budget>> getBudget(int id) async {
     return BudgetService().fetchBudgetByUser(id);
   }
-  // Future<List<Budget>> fetchBudgets(int id) async {
-  //   final response = await http
-  //       .get(Uri.parse('http://10.0.2.2:8080/Budget/listeByUser/$id'));
-
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     List<dynamic> data = json.decode(response.body);
-  //     List<Budget> budgets = data.map((item) => Budget.fromJson(item)).toList();
-  //     return budgets;
-  //   } else {
-  //     throw Exception('Aucun budget trouvé  ${response.statusCode}');
-  //   }
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -723,7 +688,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       fontWeight: FontWeight.bold,
                                       color: d_red),
                                 )),
-                          ),
+                           ),
                           Expanded(
                             flex: 2,
                             child: TextField(

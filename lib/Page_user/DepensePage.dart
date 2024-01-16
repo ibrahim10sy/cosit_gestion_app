@@ -3,11 +3,13 @@ import 'package:cosit_gestion/Page_user/AjoutDepense.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/Page_user/DepenseDetail.dart';
 import 'package:cosit_gestion/model/Depense.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -23,14 +25,38 @@ const d_red = Colors.red;
 class _DepensePageState extends State<DepensePage> {
   TextEditingController inputController = TextEditingController();
   late List<Depense>? depenseList = [];
+  late Future<List<ParametreDepense>> _parametre;
+  late ParametreDepense parametreDepense;
+
   late Utilisateur utilisateur;
   int? utilisateurId;
+
+  // void fetchData() async {
+  //   // Récupérez les données depuis l'API
+  //   List<ParametreDepense> data = await getData();
+
+  //   if (data.isNotEmpty) {
+  //     parametreDepense = data[0];
+  //     parametreDepense.printInfo();
+  //   } else {
+  //     print("Aucune donnée n'a été récupérée depuis l'API.");
+  //   }
+  // }
+
+  // Future<List<ParametreDepense>> getData() async {
+  //   final response = await DepenseService().fetchParametre();
+
+  //   return response;
+  // }
 
   @override
   void initState() {
     super.initState();
     utilisateur =
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
+    // _parametre = getData();
+    // fetchData();
+    // getData();
   }
 
   @override
@@ -43,6 +69,8 @@ class _DepensePageState extends State<DepensePage> {
             CustomCard(
               title: "Dépense page",
               imagePath: "assets/images/depense.png",
+              // subTitle:
+              //     "Montant max autorisé :${parametreDepense.montantSeuil}",
               children: Column(
                 children: [
                   const SizedBox(

@@ -5,7 +5,7 @@ import 'package:cosit_gestion/model/ParametreDepense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
 class ParametrePage extends StatefulWidget {
@@ -126,7 +126,17 @@ class _ParametrePageState extends State<ParametrePage> {
                               ],
                             ),
                           ),
-                          // Expanded(child: rechercheEtTrier())
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  listFuture =
+                                      DepenseService().fetchParametre();
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.refresh,
+                                color: d_red,
+                              ))
                         ],
                       ),
                     ),
@@ -210,14 +220,17 @@ class _ParametrePageState extends State<ParametrePage> {
                                                                   content: UpdateParam(
                                                                       parametreDepense:
                                                                           e)));
-setState(() {
-                                                        listFuture =
-                                                            DepenseService()
-                                                                .fetchParametre();
-                                                      });
                                                       Navigator.of(context)
                                                           .pop();
-                                                      
+                                                      setState(() {
+                                                        setState(() {
+                                                          listFuture =
+                                                              DepenseService()
+                                                                  .fetchParametre();
+                                                        });
+                                                      });
+                                                      // Navigator.of(context)
+                                                      //     .pop();
                                                     },
                                                   ),
                                                 ),
@@ -272,7 +285,7 @@ setState(() {
                                                                                 const Text("Erreur de suppression"),
                                                                             content:
                                                                                 const Text(
-                                                                              "Impossible de supprimer le bureau ",
+                                                                              "Impossible de le supprimer car c'est déjà associer à des dépenses ",
                                                                             ),
                                                                             actions: [
                                                                               TextButton(
@@ -367,8 +380,8 @@ setState(() {
                       },
                       controller: montantController,
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
+                      inputFormatters: [
+                        ThousandsFormatter(),
                       ],
                       decoration: InputDecoration(
                         hintText: "Montant",
@@ -386,12 +399,15 @@ setState(() {
                           onPressed: () async {
                             final String desc = libelleController.text;
                             final String montant = montantController.text;
+                            String formattedMontant =
+                                montantController.text.replaceAll(',', '');
+                            int montants = int.parse(formattedMontant);
                             if (formkey.currentState!.validate()) {
                               try {
                                 await DepenseService()
                                     .AddParametres(
                                         description: desc,
-                                        montantSeuil: montant)
+                                        montantSeuil: montants.toString())
                                     .then((value) => {
                                           Provider.of<DepenseService>(context,
                                                   listen: false)
