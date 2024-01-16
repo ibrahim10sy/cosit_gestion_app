@@ -32,20 +32,19 @@ class _PageScreenState extends State<PageScreen> {
         child: Column(
           children: [
             const SizedBox(
-              height: 180,
+              height: 320,
             ),
             DelayedAnimation(
               delay: 1800,
               child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 110),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 40),
-                  child: Image.asset('assets/images/logo.png'),
+                  padding: const EdgeInsets.symmetric(vertical:10),
+                  child: Center(child: Image.asset('assets/images/logo.png')),
                 ),
               ),
             ),
             const SizedBox(
-              height: 50,
+              height: 20,
             ),
             const DelayedAnimation(
               delay: 2000,
@@ -54,7 +53,10 @@ class _PageScreenState extends State<PageScreen> {
                   textAlign: TextAlign.center,
                   "Bienvenue sur l'application gestion de dépense de COSIT",
                   style: TextStyle(
-                      color: Colors.black, fontSize: 22, fontFamily: 'Poppins', fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ),

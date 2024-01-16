@@ -11,7 +11,6 @@ import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -69,29 +68,74 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     });
   }
 
-  Future<void> _pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        final imagePermanent = await saveImagePermanently(image.path);
-
-        setState(() {
-          photo = imagePermanent;
-          imageSrc = imagePermanent.path;
-        });
-      } else {
-        throw Exception('Image non télécharger');
-      }
-    } on PlatformException catch (e) {
-      debugPrint('erreur lors de téléchargement de l\'image : $e');
-    }
-  }
-
   Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = path.basename(imagePath);
     final image = File('${directory.path}/$name');
+
     return File(imagePath).copy(image.path);
+  }
+
+  Future<File?> getImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return null;
+
+    return File(image.path);
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final image = await getImage(source);
+    if (image != null) {
+      setState(() {
+        this.photo = image;
+        imageSrc = image.path;
+      });
+    }
+  }
+
+  Future<void> _showImageSourceDialog() async {
+    final BuildContext context = this.context;
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 150,
+          child: AlertDialog(
+            title: Text('Choisir une source'),
+            content: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer le dialogue
+                    _pickImage(ImageSource.camera);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.camera_alt, size: 40),
+                      Text('Camera'),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 40),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer le dialogue
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.image, size: 40),
+                      Text('Galerie photo'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<List<Bureau>> getBureau() async {
@@ -355,7 +399,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                               child: Padding(
                                 padding: EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  "Bureau",
+                                  "Bureaux",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -555,7 +599,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                             flex: 2,
                             child: OutlinedButton(
                               onPressed: () {
-                                _pickImage();
+                                _showImageSourceDialog();
                               },
                               child: const Text(
                                 'Ajouter une piéce',
@@ -606,10 +650,10 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                   String formattedMontant =
+                                  String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
                                   int montants = int.parse(formattedMontant);
-                                  
+
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -704,7 +748,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     descriptionController.clear();
                                     montant_control.clear();
                                     dateController.clear();
-                                     // Réinitialiser les valeurs des variables de sélection
+                                    // Réinitialiser les valeurs des variables de sélection
                                     setState(() {
                                       budgetValue = null;
                                       bureauValue = null;

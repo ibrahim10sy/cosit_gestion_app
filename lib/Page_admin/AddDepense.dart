@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cosit_gestion/ImagePick.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -14,7 +13,10 @@ import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -44,32 +46,8 @@ class _AddDepenseState extends State<AddDepense> {
   int? budgetValue;
   String? imageSrc;
   File? photo;
-
-  // Future<void> _pickImage() async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     if (image != null) {
-  //       final imagePermanent = await saveImagePermanently(image.path);
-
-  //       setState(() {
-  //         photo = imagePermanent;
-  //         imageSrc = imagePermanent.path;
-  //       });
-  //     } else {
-  //       throw Exception('Image non télécharger');
-  //     }
-  //   } on PlatformException catch (e) {
-  //     debugPrint('erreur lors de téléchargement de l\'image : $e');
-  //   }
-  // }
-
-  // Future<File> saveImagePermanently(String imagePath) async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final name = basename(imagePath);
-  //   final image = File('${directory.path}/$name');
-  //   return File(imagePath).copy(image.path);
-  // }
   int? adminID;
+
   @override
   void initState() {
     super.initState();
@@ -99,6 +77,76 @@ class _AddDepenseState extends State<AddDepense> {
     } else {
       throw Exception('Aucun budget trouvé  ${response.statusCode}');
     }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
+  }
+
+  Future<File?> getImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return null;
+
+    return File(image.path);
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final image = await getImage(source);
+    if (image != null) {
+      setState(() {
+        this.photo = image;
+        imageSrc = image.path;
+      });
+    }
+  }
+
+  Future<void> _showImageSourceDialog() async {
+    final BuildContext context = this.context;
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 150,
+          child: AlertDialog(
+            title: Text('Choisir une source'),
+            content: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer le dialogue
+                    _pickImage(ImageSource.camera);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.camera_alt, size: 40),
+                      Text('Camera'),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 40),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer le dialogue
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.image, size: 40),
+                      Text('Galerie photo'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -195,11 +243,7 @@ class _AddDepenseState extends State<AddDepense> {
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
-                                    prefixIcon: const Icon(
-                                      Icons.attach_money_sharp,
-                                      color: d_red,
-                                      size: 30.0,
-                                    ),
+                                      
                                     filled: true,
                                     fillColor: Colors.white,
 
@@ -682,12 +726,18 @@ class _AddDepenseState extends State<AddDepense> {
                           ),
                           Expanded(
                             flex: 2,
-                            child: ImagePickerComponent(
-                              onImageSelected: (File selectedImage) {
-                                imageSrc = selectedImage.path;
-                                photo = selectedImage;
-                                print("Image selectionné $imageSrc");
+                            child: OutlinedButton(
+                              onPressed: () {
+                                _showImageSourceDialog();
                               },
+                              child: const Text(
+                                'Ajouter une piéce',
+                                style: TextStyle(
+                                    color: d_red,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
                             ),
                           )
                         ],

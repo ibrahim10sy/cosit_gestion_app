@@ -44,7 +44,8 @@ class _updateBudgetsState extends State<updateBudgets> {
     montant_control.text = _budget.montant.toString();
     user = _budget.utilisateur;
     dateController.text = _budget.dateDebut;
-    userValue = _budget.utilisateur!.idUtilisateur;
+    userValue = _budget.utilisateur?.idUtilisateur ?? null;
+
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     _utilisateur =
         http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));

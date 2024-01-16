@@ -12,8 +12,8 @@ import 'package:cosit_gestion/service/BudgetService.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -51,6 +51,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   int? budgetValue;
   String? imageSrc;
   File? photo;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -64,30 +65,100 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     fetchData();
   }
 
-  Future<void> _pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        final imagePermanent = await saveImagePermanently(image.path);
-
-        setState(() {
-          photo = imagePermanent;
-          imageSrc = imagePermanent.path;
-        });
-      } else {
-        throw Exception('Image non télécharger');
-      }
-    } on PlatformException catch (e) {
-      debugPrint('erreur lors de téléchargement de l\'image : $e');
-    }
-  }
-
   Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = path.basename(imagePath);
     final image = File('${directory.path}/$name');
+
     return File(imagePath).copy(image.path);
   }
+
+  Future<File?> getImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return null;
+
+    return File(image.path);
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final image = await getImage(source);
+    if (image != null) {
+      setState(() {
+        this.photo = image;
+        imageSrc = image.path;
+      });
+    }
+  }
+
+  Future<void> _showImageSourceDialog() async {
+    final BuildContext context = this.context;
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 150,
+          child: AlertDialog(
+            title: Text('Choisir une source'),
+            content: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer le dialogue
+                    _pickImage(ImageSource.camera);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.camera_alt, size: 40),
+                      Text('Camera'),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 40),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context); // Fermer le dialogue
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.image, size: 40),
+                      Text('Galerie photo'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Future<void> _pickImage() async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //     if (image != null) {
+  //       final imagePermanent = await saveImagePermanently(image.path);
+
+  //       setState(() {
+  //         photo = imagePermanent;
+  //         imageSrc = imagePermanent.path;
+  //       });
+  //     } else {
+  //       throw Exception('Image non télécharger');
+  //     }
+  //   } on PlatformException catch (e) {
+  //     debugPrint('erreur lors de téléchargement de l\'image : $e');
+  //   }
+  // }
+
+  // Future<File> saveImagePermanently(String imagePath) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final name = path.basename(imagePath);
+  //   final image = File('${directory.path}/$name');
+  //   return File(imagePath).copy(image.path);
+  // }
 
   void fetchData() async {
     // Récupérez les données depuis l'API
@@ -725,7 +796,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                             flex: 2,
                             child: OutlinedButton(
                               onPressed: () {
-                                _pickImage();
+                                _showImageSourceDialog();
                               },
                               child: const Text(
                                 'Ajouter une piéce',
@@ -812,29 +883,44 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                               "Pour les dépenses dont le montant est supérieur ou égale au montant seuil une demande doit être envoyée"),
                                           actions: <Widget>[
                                             TextButton(
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 // Fermer le AlertDialog
-                                                Navigator.of(context).pop();
+                                                // Navigator.of(context).pop();
+                                                // DateTime startTime =
+                                                //     DateTime.now();
+                                                // showDialog(
+                                                //   context: context,
+                                                //   builder:
+                                                //       (BuildContext context) {
+                                                //     return AlertDialog(
+                                                //       title: const Center(
+                                                //           child: Text(
+                                                //               'Envoie en cours...')),
+                                                //       content:
+                                                //           CupertinoActivityIndicator(
+                                                //         color: d_red,
+                                                //         radius: 22,
+                                                //       ),
+                                                //       actions: <Widget>[],
+                                                //     );
+                                                //   },
+                                                // );
 
-                                                // Afficher le SnackBar
-                                                final snack = SnackBar(
-                                                  backgroundColor: d_red,
-                                                  showCloseIcon: true,
-                                                  content: Text(
-                                                    "Envoi de la demande...",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                );
+                                                // DateTime endTime =
+                                                //     DateTime.now();
 
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snack);
+                                                // // Calculer la durée d'exécution de l'envoi des données
+                                                // int executionTimeInSeconds =
+                                                //     endTime
+                                                //         .difference(startTime)
+                                                //         .inSeconds;
+
+                                                // // Ajouter un délai avant de fermer la boîte de dialogue de progression
+                                                // await Future.delayed(Duration(
+                                                //     seconds:
+                                                //         executionTimeInSeconds));
+
+                                                // Navigator.of(context).pop();
                                               },
                                               child: const Text('OK'),
                                             )
@@ -844,7 +930,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
 
                                     try {
-                                      DateTime startTime = DateTime.now();
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
@@ -869,6 +954,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           parametreDepense: parametreDepense,
                                         );
                                       }
+
                                       descriptionController.clear();
                                       montant_control.clear();
                                       dateController.clear();
@@ -878,6 +964,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         catValue = null;
                                         photo = null;
                                       });
+
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -898,24 +985,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           );
                                         },
                                       );
-
-                                      Provider.of<DepenseService>(context,
-                                              listen: false)
-                                          .applyChange();
-                                      DateTime endTime = DateTime.now();
-
-                                      // Calculer la durée d'exécution de l'envoi des données
-                                      int executionTimeInSeconds = endTime
-                                          .difference(startTime)
-                                          .inSeconds;
-
-                                      // Afficher le SnackBar pendant la durée d'exécution
-                                      await Future.delayed(Duration(
-                                          seconds: executionTimeInSeconds));
-
-                                      // Fermer le SnackBar
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
@@ -940,27 +1009,10 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       // );
                                     }
                                   } else {
-                                    // Afficher le SnackBar
-                                    // Afficher le SnackBar
-                                    final snack = SnackBar(
-                                      backgroundColor: d_red,
-                                      showCloseIcon: true,
-                                      content: Text(
-                                        "En cours...",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    );
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snack);
+                                  
                                     try {
-                                      DateTime startTime = DateTime.now();
-
+                                    
+                                      // Vérification si une photo est fournie
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
@@ -974,6 +1026,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           parametreDepense: parametreDepense,
                                         );
                                       } else {
+                                        // Si aucune photo n'est fournie
                                         await DepenseService().addDepenseByUser(
                                           description: description,
                                           montantDepense: montants.toString(),
@@ -985,6 +1038,27 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           parametreDepense: parametreDepense,
                                         );
                                       }
+                                      // Afficher une boîte de dialogue indiquant le succès de l'opération
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Center(
+                                                  child: Text('Succès')),
+                                              content: const Text(
+                                                  "Dépense ajoutée avec succès"),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(context);
+                                                  },
+                                                  child: const Text('OK'),
+                                                )
+                                              ],
+                                            );
+                                          });
+                                      // Effacement des champs de saisie et réinitialisation des états
                                       descriptionController.clear();
                                       montant_control.clear();
                                       dateController.clear();
@@ -994,43 +1068,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         catValue = null;
                                         photo = null;
                                       });
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Center(
-                                                child: Text('Succès')),
-                                            content: const Text(
-                                                "Depense ajoutée avec succès"),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop(context);
-                                                },
-                                                child: const Text('OK'),
-                                              )
-                                            ],
-                                          );
-                                        },
-                                      );
+
+                                      // Application des changements
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
-                                      DateTime endTime = DateTime.now();
-
-                                      // Calculer la durée d'exécution de l'envoi des données
-                                      int executionTimeInSeconds = endTime
-                                          .difference(startTime)
-                                          .inSeconds;
-
-                                      // Afficher le SnackBar pendant la durée d'exécution
-                                      await Future.delayed(Duration(
-                                          seconds: executionTimeInSeconds));
-
-                                      // Fermer le SnackBar
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
