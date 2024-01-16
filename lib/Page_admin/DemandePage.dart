@@ -21,6 +21,7 @@ const d_red = Colors.red;
 class _DemandePageState extends State<DemandePage> {
   late List<Depense> listDemande = [];
   late Future<List<Depense>> futureDemande;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -307,12 +308,38 @@ class _DemandePageState extends State<DemandePage> {
                                                                   .showSnackBar(
                                                                       snack);
                                                                try {
+                                                                 DateTime
+                                                                    startTime =
+                                                                    DateTime
+                                                                        .now();
                                                                 await DepenseService()
                                                                     .approuverDepense(
                                                                         depense
                                                                             .idDepense!);
                                                                 print(depense
                                                                     .idDepense);
+
+                                                                     DateTime
+                                                                    endTime =
+                                                                    DateTime
+                                                                        .now();
+
+                                                                // Calculer la durée d'exécution de l'envoi des données
+                                                                int executionTimeInSeconds = endTime
+                                                                    .difference(
+                                                                        startTime)
+                                                                    .inSeconds;
+
+                                                                // Afficher le SnackBar pendant la durée d'exécution
+                                                                await Future.delayed(
+                                                                    Duration(
+                                                                        seconds:
+                                                                            executionTimeInSeconds));
+
+                                                                // Fermer le SnackBar
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .hideCurrentSnackBar();
                                                               } catch (error) {
                                                                 print(error
                                                                     .toString());

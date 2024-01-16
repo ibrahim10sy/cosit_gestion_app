@@ -71,6 +71,26 @@ class _ConnexionState extends State<Connexion> {
       );
 
       if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Center(child: Text('Connexion en cours')),
+              content: CupertinoActivityIndicator(
+                color: d_red,
+                radius: 22,
+              ),
+              actions: <Widget>[
+                // Pas besoin de bouton ici
+              ],
+            );
+          },
+        );
+
+        await Future.delayed(Duration(seconds: 1));
+
+        Navigator.of(context).pop();
+
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         emailController.clear();
         motDePasseController.clear();
@@ -121,13 +141,14 @@ class _ConnexionState extends State<Connexion> {
         );
       }
     } catch (e) {
+      // Fermer le AlertDialog avec la barre de progression
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(child: Text('Connexion en cours')),
+            title: const Center(child: Text('Erreur')),
             content:
-                const CupertinoActivityIndicator(radius: 20.0, color: d_red),
+                const Text("Une erreur s'est produite. Veuillez réessayer."),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

@@ -37,7 +37,7 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
         Provider.of<UtilisateurProvider>(context, listen: false);
 
     if (email.isEmpty || passWord.isEmpty) {
-      const String errorMessage = "Veillez remplir tout les champs ";
+      const String errorMessage = "Veuillez remplir tous les champs ";
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -69,6 +69,25 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
       );
 
       if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Center(child: Text('Connexion en cours')),
+              content: CupertinoActivityIndicator(
+                color: d_red,
+                radius: 22,
+              ),
+              actions: <Widget>[
+                // Pas besoin de bouton ici
+              ],
+            );
+          },
+        );
+
+        await Future.delayed(Duration(seconds: 1));
+
+        Navigator.of(context).pop();
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         emailController.clear();
         motDePasseController.clear();
@@ -85,26 +104,6 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
         );
 
         utilisateurProvider.setUtilisateur(utilisateur);
-        // final snackBar = SnackBar(
-        //   content: const Text(
-        //     'Connexion en cours ...',
-        //     style: TextStyle(color: Colors.white, fontSize: 20),
-        //   ),
-        //   backgroundColor: d_red, // Couleur de fond du SnackBar
-        //   elevation: 5, // Élévation du SnackBar
-        //   shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.circular(10), // Contour arrondi
-        //   ),
-        //   duration: const Duration(seconds: 2),
-        //   padding: const EdgeInsets.all(20),
-        //   action: SnackBarAction(
-        //     label: 'Connexion',
-        //     textColor: Colors.white,
-        //     onPressed: () {},
-        //   ),
-        // );
-
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -131,13 +130,15 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
         );
       }
     } catch (e) {
+      Navigator.of(context)
+          .pop(); // Fermer le AlertDialog avec la barre de progression
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(child: Text('Connexion en cours')),
+            title: const Center(child: Text('Erreur')),
             content:
-                const CupertinoActivityIndicator(radius: 20.0, color: d_red),
+                const Text("Une erreur s'est produite. Veuillez réessayer."),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

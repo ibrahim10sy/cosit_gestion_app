@@ -226,11 +226,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
-                                    prefixIcon: const Icon(
-                                      Icons.attach_money_sharp,
-                                      color: d_red,
-                                      size: 30.0,
-                                    ),
+
                                     filled: true,
                                     fillColor: Colors.white,
 
@@ -829,13 +825,12 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                  duration:
-                                                      Duration(seconds: 8),
                                                 );
 
                                                 ScaffoldMessenger.of(context)
@@ -849,6 +844,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
 
                                     try {
+                                      DateTime startTime = DateTime.now();
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
@@ -906,6 +902,20 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
+                                      DateTime endTime = DateTime.now();
+
+                                      // Calculer la durée d'exécution de l'envoi des données
+                                      int executionTimeInSeconds = endTime
+                                          .difference(startTime)
+                                          .inSeconds;
+
+                                      // Afficher le SnackBar pendant la durée d'exécution
+                                      await Future.delayed(Duration(
+                                          seconds: executionTimeInSeconds));
+
+                                      // Fermer le SnackBar
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
@@ -931,23 +941,26 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     }
                                   } else {
                                     // Afficher le SnackBar
+                                    // Afficher le SnackBar
                                     final snack = SnackBar(
                                       backgroundColor: d_red,
                                       showCloseIcon: true,
                                       content: Text(
-                                        "En cours ...",
+                                        "En cours...",
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      duration: Duration(seconds: 8),
                                     );
 
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snack);
                                     try {
+                                      DateTime startTime = DateTime.now();
+
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
@@ -1004,6 +1017,20 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
+                                      DateTime endTime = DateTime.now();
+
+                                      // Calculer la durée d'exécution de l'envoi des données
+                                      int executionTimeInSeconds = endTime
+                                          .difference(startTime)
+                                          .inSeconds;
+
+                                      // Afficher le SnackBar pendant la durée d'exécution
+                                      await Future.delayed(Duration(
+                                          seconds: executionTimeInSeconds));
+
+                                      // Fermer le SnackBar
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
