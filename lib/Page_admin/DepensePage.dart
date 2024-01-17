@@ -202,9 +202,9 @@ class _DepensePageState extends State<DepensePage> {
                                                     : const Color.fromARGB(
                                                         255, 139, 138, 138),
                                               ),
-                                            ), 
+                                            ),
                                             subtitle: Text(
-                                              "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                              "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontSize: 15,
@@ -326,7 +326,7 @@ class _DepensePageState extends State<DepensePage> {
                                           ),
                                         ),
                                         subtitle: Text(
-                                          "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                          "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontSize: 15,

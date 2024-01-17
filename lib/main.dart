@@ -16,6 +16,7 @@ import 'package:cosit_gestion/service/SendNotifService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/BottomNavigationPage': (context) => const BottomNavigationPage()
       },
       home: PageScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }

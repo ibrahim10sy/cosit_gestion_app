@@ -283,11 +283,6 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
-                                    prefixIcon: const Icon(
-                                      Icons.attach_money_sharp,
-                                      color: d_red,
-                                      size: 30.0,
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
 
@@ -475,7 +470,7 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                     montant_control.clear();
                                     userController.clear();
                                     dateController.clear();
-                                     // Réinitialiser les valeurs des variables de sélection
+                                    // Réinitialiser les valeurs des variables de sélection
                                     setState(() {
                                       userValue = null;
                                     });

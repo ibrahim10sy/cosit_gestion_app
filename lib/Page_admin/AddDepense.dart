@@ -12,6 +12,7 @@ import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -243,7 +244,7 @@ class _AddDepenseState extends State<AddDepense> {
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
-                                      
+
                                     filled: true,
                                     fillColor: Colors.white,
 
@@ -808,6 +809,7 @@ class _AddDepenseState extends State<AddDepense> {
                                   }
 
                                   try {
+                                   
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
                                           description: description,

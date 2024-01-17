@@ -87,7 +87,7 @@ class _ConnexionState extends State<Connexion> {
           },
         );
 
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(Duration(milliseconds: 60));
 
         Navigator.of(context).pop();
 

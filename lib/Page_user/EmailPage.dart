@@ -137,7 +137,7 @@ class _EmailPageUserState extends State<EmailPageUser> {
                                   } else {
                                     listeNotif = snapshot.data!;
                                     return Column(
-                                      children: listeNotif.where((element) => element.depense.autorisationAdmin == true)
+                                      children: listeNotif.where((element) => element.depense.autorisationAdmin == true && element.depense.montantDepense >= element.depense.parametreDepense!.montantSeuil)
                                           .map(
                                               (SendNotification send) =>
                                                   ListTile(

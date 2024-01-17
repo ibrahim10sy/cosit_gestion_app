@@ -245,7 +245,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                               ),
                                             ),
                                             subtitle: Text(
-                                              "Montant: ${bud.montant}-Restant: ${bud.montantRestant}",
+                                              "Montant: ${bud.montant} FCFA-Reste:${bud.montantRestant} FCFA",
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontSize: 15,
@@ -376,7 +376,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                                 )),
                                           ),
                                           subtitle: Text(
-                                            "Montant: ${bud.montant}-Restant: ${bud.montantRestant}",
+                                            "Montant: ${bud.montant} FCFA-Reste: ${bud.montantRestant} FCFA",
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                               fontSize: 15,

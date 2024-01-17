@@ -12,8 +12,8 @@ import 'package:cosit_gestion/service/BudgetService.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -135,7 +135,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     );
   }
 
-
   void fetchData() async {
     // Récupérez les données depuis l'API
     List<ParametreDepense> data = await getData();
@@ -165,7 +164,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   Future<List<Budget>> getBudget(int id) async {
     return BudgetService().fetchBudgetByUser(id);
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -688,7 +686,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       fontWeight: FontWeight.bold,
                                       color: d_red),
                                 )),
-                           ),
+                          ),
                           Expanded(
                             flex: 2,
                             child: TextField(
@@ -849,43 +847,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () async {
-                                                // Fermer le AlertDialog
-                                                // Navigator.of(context).pop();
-                                                // DateTime startTime =
-                                                //     DateTime.now();
-                                                // showDialog(
-                                                //   context: context,
-                                                //   builder:
-                                                //       (BuildContext context) {
-                                                //     return AlertDialog(
-                                                //       title: const Center(
-                                                //           child: Text(
-                                                //               'Envoie en cours...')),
-                                                //       content:
-                                                //           CupertinoActivityIndicator(
-                                                //         color: d_red,
-                                                //         radius: 22,
-                                                //       ),
-                                                //       actions: <Widget>[],
-                                                //     );
-                                                //   },
-                                                // );
-
-                                                // DateTime endTime =
-                                                //     DateTime.now();
-
-                                                // // Calculer la durée d'exécution de l'envoi des données
-                                                // int executionTimeInSeconds =
-                                                //     endTime
-                                                //         .difference(startTime)
-                                                //         .inSeconds;
-
-                                                // // Ajouter un délai avant de fermer la boîte de dialogue de progression
-                                                // await Future.delayed(Duration(
-                                                //     seconds:
-                                                //         executionTimeInSeconds));
-
-                                                // Navigator.of(context).pop();
+                                               
                                               },
                                               child: const Text('OK'),
                                             )
@@ -974,9 +936,10 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       // );
                                     }
                                   } else {
-                                  
-                                    try {
                                     
+                                    try {
+                                      EasyLoading.show(
+                                          status: 'Envoie en cours');
                                       // Vérification si une photo est fournie
                                       if (photo != null) {
                                         await DepenseService().addDepenseByUser(
@@ -1003,26 +966,28 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           parametreDepense: parametreDepense,
                                         );
                                       }
+                                      Navigator.of(context).pop(context);
                                       // Afficher une boîte de dialogue indiquant le succès de l'opération
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Center(
-                                                  child: Text('Succès')),
-                                              content: const Text(
-                                                  "Dépense ajoutée avec succès"),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(context);
-                                                  },
-                                                  child: const Text('OK'),
-                                                )
-                                              ],
-                                            );
-                                          });
+                                      // showDialog(
+                                      //     context: context,
+                                      //     builder: (BuildContext context) {
+                                      //       return AlertDialog(
+                                      //         title: const Center(
+                                      //             child: Text('Succès')),
+                                      //         content: const Text(
+                                      //             "Dépense ajoutée avec succès"),
+                                      //         actions: <Widget>[
+                                      //           TextButton(
+                                      //             onPressed: () {
+                                      //               Navigator.of(context)
+                                      //                   .pop(context);
+                                      //             },
+                                      //             child: const Text('OK'),
+                                      //           )
+                                      //         ],
+                                      //       );
+                                      //     });
+
                                       // Effacement des champs de saisie et réinitialisation des états
                                       descriptionController.clear();
                                       montant_control.clear();

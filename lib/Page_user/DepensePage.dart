@@ -9,7 +9,6 @@ import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -244,7 +243,7 @@ class _DepensePageState extends State<DepensePage> {
                                               ),
                                             ),
                                             subtitle: Text(
-                                              "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                              "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontSize: 15,
@@ -366,7 +365,7 @@ class _DepensePageState extends State<DepensePage> {
                                           ),
                                         ),
                                         subtitle: Text(
-                                          "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                          "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontSize: 15,

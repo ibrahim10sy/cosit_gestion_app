@@ -28,10 +28,51 @@ class ProcedureService extends ChangeNotifier {
     }
   }
 
-  Future<List<Procedure>> getDepenseByUser(int userId) async {
+  
+  Future<List<Procedure>> getDepenseByUserByJour(int userId) async {
     try {
       final response =
-          await http.get(Uri.parse('$baseUrl/expensesByUser/$userId'));
+          await http.get(Uri.parse('$baseUrl/expensesByUserByJour/$userId'));
+      print("Fetching data $userId");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List data = json.decode(response.body);
+        debugPrint(data.toString());
+        return data.map((item) => Procedure.fromMap(item)).toList();
+      } else {
+        print(
+            'Échec de la requête avec le code d\'état: ${response.statusCode}');
+        throw Exception(
+            'Réponse inattendue avec le code d\'état: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération des données dans le service: $e');
+      throw Exception('Une erreur s\'est produite lors de la recuperation: $e');
+    }
+  }
+  Future<List<Procedure>> getDepenseByUserByMois(int userId) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$baseUrl/expensesByUserByMois/$userId'));
+      print("Fetching data $userId");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List data = json.decode(response.body);
+        debugPrint(data.toString());
+        return data.map((item) => Procedure.fromMap(item)).toList();
+      } else {
+        print(
+            'Échec de la requête avec le code d\'état: ${response.statusCode}');
+        throw Exception(
+            'Réponse inattendue avec le code d\'état: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération des données dans le service: $e');
+      throw Exception('Une erreur s\'est produite lors de la recuperation: $e');
+    }
+  }
+  Future<List<Procedure>> getDepenseTotalByUser(int userId) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$baseUrl/expensesTotalByUser/$userId'));
       print("Fetching data $userId");
       if (response.statusCode == 200 || response.statusCode == 201) {
         List data = json.decode(response.body);
@@ -53,6 +94,46 @@ class ProcedureService extends ChangeNotifier {
     try {
       final response =
           await http.get(Uri.parse('$baseUrl/expensesByTotal'));
+      print("Fetching data ");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List data = json.decode(response.body);
+        debugPrint(data.toString());
+        return data.map((item) => Procedure.fromMap(item)).toList();
+      } else {
+        print(
+            'Échec de la requête avec le code d\'état: ${response.statusCode}');
+        throw Exception(
+            'Réponse inattendue avec le code d\'état: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération des données dans le service: $e');
+      throw Exception('Une erreur s\'est produite lors de la recuperation: $e');
+    }
+  }
+  Future<List<Procedure>> getDepenseTotalByJour() async {
+    try {
+      final response =
+          await http.get(Uri.parse('$baseUrl/expensesByTotalByJour'));
+      print("Fetching data ");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List data = json.decode(response.body);
+        debugPrint(data.toString());
+        return data.map((item) => Procedure.fromMap(item)).toList();
+      } else {
+        print(
+            'Échec de la requête avec le code d\'état: ${response.statusCode}');
+        throw Exception(
+            'Réponse inattendue avec le code d\'état: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération des données dans le service: $e');
+      throw Exception('Une erreur s\'est produite lors de la recuperation: $e');
+    }
+  }
+  Future<List<Procedure>> getDepenseTotalByMois() async {
+    try {
+      final response =
+          await http.get(Uri.parse('$baseUrl/expensesByTotalMois'));
       print("Fetching data ");
       if (response.statusCode == 200 || response.statusCode == 201) {
         List data = json.decode(response.body);

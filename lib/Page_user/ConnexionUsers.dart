@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class ConnexionUsers extends StatefulWidget {
   const ConnexionUsers({super.key});
- 
+
   @override
   State<ConnexionUsers> createState() => _ConnexionUsersState();
 }
@@ -85,7 +85,7 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
           },
         );
 
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(Duration(milliseconds: 60));
 
         Navigator.of(context).pop();
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
