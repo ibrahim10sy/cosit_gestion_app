@@ -1,5 +1,4 @@
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
-import 'package:cosit_gestion/Page_admin/DetailNotifAdmin.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/Page_user/DetailNotification.dart';
 import 'package:cosit_gestion/model/SendNotification.dart';
@@ -103,8 +102,9 @@ class _EmailPageUserState extends State<EmailPageUser> {
                               IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      futureNotifications =
-                                          SendNotifService().fetchData(utilisateur.idUtilisateur!);
+                                      futureNotifications = SendNotifService()
+                                          .fetchData(
+                                              utilisateur.idUtilisateur!);
                                     });
                                   },
                                   icon: const Icon(
@@ -137,7 +137,16 @@ class _EmailPageUserState extends State<EmailPageUser> {
                                   } else {
                                     listeNotif = snapshot.data!;
                                     return Column(
-                                      children: listeNotif.where((element) => element.depense.autorisationAdmin == true && element.depense.montantDepense >= element.depense.parametreDepense!.montantSeuil)
+                                      children: listeNotif
+                                          .where((element) =>
+                                              element.depense
+                                                      .autorisationAdmin ==
+                                                  true &&
+                                              element.depense.montantDepense >=
+                                                  element
+                                                      .depense
+                                                      .parametreDepense!
+                                                      .montantSeuil)
                                           .map(
                                               (SendNotification send) =>
                                                   ListTile(

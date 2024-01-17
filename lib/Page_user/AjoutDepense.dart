@@ -13,7 +13,6 @@ import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +37,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   TextEditingController dateController = TextEditingController();
   late Utilisateur utilisateur;
   late SousCategorie sousCategorie;
-  late ParametreDepense parametreDepense;
+  ParametreDepense? parametreDepense;
   late ParametreDepense parametreDepense1;
   late Bureau bureau;
   late Budget budget;
@@ -139,12 +138,17 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     // Récupérez les données depuis l'API
     List<ParametreDepense> data = await getData();
 
-    if (data.isNotEmpty) {
-      parametreDepense = data[0];
+    try {
+      parametreDepense = data[0] ?? null;
       parametreDepense.printInfo();
-    } else {
-      print("Aucune donnée n'a été récupérée depuis l'API.");
+    } catch (e) {
+      print(e.toString());
     }
+    // if (data.isNotEmpty) {
+
+    // } else {
+    //   print("Aucune donnée n'a été récupérée depuis l'API.");
+    // }
   }
 
   Future<List<ParametreDepense>> getData() async {
@@ -835,19 +839,39 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   }
 
                                   if (montants >=
-                                      parametreDepense.montantSeuil) {
+                                      parametreDepense!.montantSeuil) {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Center(
-                                              child: Text('Alert')),
+                                            child: Text('Alert'),
+                                          ),
                                           content: const Text(
-                                              "Pour les dépenses dont le montant est supérieur ou égale au montant seuil une demande doit être envoyée"),
+                                            "Pour les dépenses dont le montant est supérieur ou égale au montant seuil une demande doit être envoyée",
+                                          ),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () async {
-                                               
+                                                // Afficher le SnackBar ici
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Row(
+                                                      children: [
+                                                        CircularProgressIndicator(
+                                                          color: d_red,
+                                                        ),
+                                                        SizedBox(width: 20),
+                                                        Text(
+                                                            "Envoi en cours..."),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+
+                                                Navigator.of(context)
+                                                    .pop(); // Fermer l'AlertDialog
                                               },
                                               child: const Text('OK'),
                                             )
@@ -857,7 +881,8 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                     );
 
                                     try {
-                                      if (photo != null) {
+                                      if (photo != null &&
+                                          parametreDepense != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
                                           montantDepense: montants.toString(),
@@ -867,7 +892,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
-                                          parametreDepense: parametreDepense,
+                                          parametreDepense: parametreDepense!,
                                         );
                                       } else {
                                         await DepenseService().addDepenseByUser(
@@ -878,7 +903,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
-                                          parametreDepense: parametreDepense,
+                                          parametreDepense: parametreDepense!,
                                         );
                                       }
 
@@ -892,56 +917,60 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         photo = null;
                                       });
 
+                                      // Cacher le SnackBar une fois l'envoi terminé
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+
+                                      // Afficher le message de succès
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "Demande envoyée avec succès"),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      final String errorMessage = e.toString();
+                                      print(errorMessage);
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: const Center(
-                                                child: Text('Succès')),
-                                            content: const Text(
-                                                "Demande envoyé avec succèss"),
+                                                child: Text('Erreur')),
+                                            content: Text(
+                                                'Budget epuisé ou montant inférieur'),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop(context);
+                                                  Navigator.of(context).pop();
                                                 },
                                                 child: const Text('OK'),
-                                              )
+                                              ),
                                             ],
                                           );
                                         },
                                       );
-                                    } catch (e) {
-                                      final String errorMessage = e.toString();
-                                      print(errorMessage);
-                                      // showDialog(
-                                      //   context: context,
-                                      //   builder: (BuildContext context) {
-                                      //     return AlertDialog(
-                                      //       title: const Center(
-                                      //           child: Text('Erreur')),
-                                      //       content: Text(
-                                      //           'Budget epuisé ou montant inférieur'),
-                                      //       actions: <Widget>[
-                                      //         TextButton(
-                                      //           onPressed: () {
-                                      //             Navigator.of(context).pop();
-                                      //           },
-                                      //           child: const Text('OK'),
-                                      //         ),
-                                      //       ],
-                                      //     );
-                                      //   },
-                                      // );
                                     }
                                   } else {
-                                    
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: d_red,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Envoi en cours..."),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+
                                     try {
-                                      EasyLoading.show(
-                                          status: 'Envoie en cours');
                                       // Vérification si une photo est fournie
-                                      if (photo != null) {
+                                      if (photo != null &&
+                                          parametreDepense != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
                                           montantDepense: montants.toString(),
@@ -951,7 +980,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
-                                          parametreDepense: parametreDepense,
+                                          parametreDepense: parametreDepense!,
                                         );
                                       } else {
                                         // Si aucune photo n'est fournie
@@ -963,32 +992,10 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
-                                          parametreDepense: parametreDepense,
+                                          parametreDepense: parametreDepense!,
                                         );
                                       }
-                                      Navigator.of(context).pop(context);
-                                      // Afficher une boîte de dialogue indiquant le succès de l'opération
-                                      // showDialog(
-                                      //     context: context,
-                                      //     builder: (BuildContext context) {
-                                      //       return AlertDialog(
-                                      //         title: const Center(
-                                      //             child: Text('Succès')),
-                                      //         content: const Text(
-                                      //             "Dépense ajoutée avec succès"),
-                                      //         actions: <Widget>[
-                                      //           TextButton(
-                                      //             onPressed: () {
-                                      //               Navigator.of(context)
-                                      //                   .pop(context);
-                                      //             },
-                                      //             child: const Text('OK'),
-                                      //           )
-                                      //         ],
-                                      //       );
-                                      //     });
 
-                                      // Effacement des champs de saisie et réinitialisation des états
                                       descriptionController.clear();
                                       montant_control.clear();
                                       dateController.clear();
@@ -998,6 +1005,19 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         catValue = null;
                                         photo = null;
                                       });
+                                      // Cacher le SnackBar une fois l'envoi terminé
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+
+                                      // Afficher le message de succès
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "Dépense ajouté avec succès"),
+                                        ),
+                                      );
+                                      // Effacement des champs de saisie et réinitialisation des états
 
                                       // Application des changements
                                       Provider.of<DepenseService>(context,

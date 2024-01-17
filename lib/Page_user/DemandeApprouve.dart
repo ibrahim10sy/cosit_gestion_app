@@ -154,7 +154,10 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                             .where((element) =>
                                                 element.autorisationAdmin ==
                                                     true &&
-                                                element.utilisateur != null)
+                                                element.utilisateur != null &&
+                                                element.montantDepense >=
+                                                    element.parametreDepense!
+                                                        .montantSeuil)
                                             .map((Depense depense) => ListTile(
                                                   onTap: () async {
                                                     try {

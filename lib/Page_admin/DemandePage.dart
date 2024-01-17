@@ -289,29 +289,27 @@ class _DemandePageState extends State<DemandePage> {
                                                               );
                                                             } else {
                                                               final snack =
-                                                                  SnackBar(
-                                                                backgroundColor:
-                                                                    d_red,
-                                                                content: Text(
-                                                                    "Démande validé",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white)),
-                                                                duration:
-                                                                    Duration(
-                                                                        seconds:
-                                                                            1),
-                                                              );
-                                                              ScaffoldMessenger
-                                                                      .of(
+                                                                  ScaffoldMessenger.of(
                                                                           context)
-                                                                  .showSnackBar(
-                                                                      snack);
+                                                                      .showSnackBar(
+                                                                SnackBar(
+                                                                  content: Row(
+                                                                    children: [
+                                                                      CircularProgressIndicator(
+                                                                        color:
+                                                                            d_red,
+                                                                      ),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              10),
+                                                                      Text(
+                                                                          "Validation en cours..."),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
                                                                try {
-                                                                 DateTime
-                                                                    startTime =
-                                                                    DateTime
-                                                                        .now();
+                                                                
                                                                 await DepenseService()
                                                                     .approuverDepense(
                                                                         depense
@@ -319,27 +317,19 @@ class _DemandePageState extends State<DemandePage> {
                                                                 print(depense
                                                                     .idDepense);
 
-                                                                     DateTime
-                                                                    endTime =
-                                                                    DateTime
-                                                                        .now();
-
-                                                                // Calculer la durée d'exécution de l'envoi des données
-                                                                int executionTimeInSeconds = endTime
-                                                                    .difference(
-                                                                        startTime)
-                                                                    .inSeconds;
-
-                                                                // Afficher le SnackBar pendant la durée d'exécution
-                                                                await Future.delayed(
-                                                                    Duration(
-                                                                        seconds:
-                                                                            executionTimeInSeconds));
-
-                                                                // Fermer le SnackBar
-                                                                ScaffoldMessenger.of(
+                                                                     ScaffoldMessenger.of(
                                                                         context)
                                                                     .hideCurrentSnackBar();
+
+                                                                // Afficher le message de succès
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    content: Text(
+                                                                        "Démande validé avec succès"),
+                                                                  ),
+                                                                );
                                                               } catch (error) {
                                                                 print(error
                                                                     .toString());

@@ -317,7 +317,7 @@ class _DataSource extends DataTableSource {
 
     return DataRow(cells: [
       DataCell(Text(
-        item.date!,
+        item.mois!,
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(
@@ -325,7 +325,7 @@ class _DataSource extends DataTableSource {
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(
-        item.total_depenses.toString(),
+       "${item.total_depenses.toString()} FCFA",
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(

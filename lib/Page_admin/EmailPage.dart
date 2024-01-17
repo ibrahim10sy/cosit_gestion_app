@@ -132,7 +132,9 @@ class _EmailPageState extends State<EmailPage> {
                                     return Column(
                                       children: listeNotif
                                           .where((element) =>
-                                              element.depense.autorisationAdmin)
+                                              element
+                                                  .depense.autorisationAdmin ==
+                                              false)
                                           .map(
                                               (SendNotification send) =>
                                                   ListTile(
@@ -160,7 +162,12 @@ class _EmailPageState extends State<EmailPage> {
                                                           overflow: TextOverflow
                                                               .ellipsis),
                                                     ),
-                                                    subtitle: Text(send.date),
+                                                    subtitle: Text(
+                                                      "Expediteur :${send.utilisateur.prenom} ${send.utilisateur.nom}-${send.date}",
+                                                      style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
+                                                    ),
                                                     trailing:
                                                         PopupMenuButton<String>(
                                                       padding: EdgeInsets.zero,

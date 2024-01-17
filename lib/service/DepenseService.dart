@@ -34,7 +34,7 @@ class DepenseService extends ChangeNotifier {
       required SousCategorie sousCategorie,
       required Bureau bureau,
       required Budget budget,
-      required ParametreDepense parametreDepense}) async {
+      ParametreDepense? parametreDepense}) async {
     try {
       var requete =
           http.MultipartRequest('POST', Uri.parse('$baseUrl/createByUser'));
@@ -58,7 +58,8 @@ class DepenseService extends ChangeNotifier {
         'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
-        'parametreDepense': parametreDepense.toMap(),
+        // 'parametreDepense': parametreDepense.toMap(),
+          if (parametreDepense != null) 'parametreDepense': parametreDepense.toMap(),
       });
 
       var response = await requete.send();
