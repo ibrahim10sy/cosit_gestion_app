@@ -201,7 +201,7 @@ class _DemandeApprouveState extends State<DemandeApprouve> {
                                                     ),
                                                   ),
                                                   subtitle: Text(
-                                                    "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                                    "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: const TextStyle(

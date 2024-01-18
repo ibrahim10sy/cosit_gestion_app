@@ -328,7 +328,7 @@ class _DataSource extends DataTableSource {
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(
-        "${item.total_depenses.toString()} FCFA",
+         "${item.total_depenses.toString()} FCFA",
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(

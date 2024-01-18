@@ -10,6 +10,9 @@ class Procedure {
   String? date;
   String? mois;
   String? nom_bureau;
+  int? id_sous_categorie;
+  String? sous_categorie;
+  
   Procedure({
     this.total_depenses,
     this.libelle,
@@ -20,6 +23,8 @@ class Procedure {
     this.date,
     this.mois,
     this.nom_bureau,
+    this.id_sous_categorie,
+    this.sous_categorie,
   });
 
   Procedure copyWith({
@@ -32,6 +37,8 @@ class Procedure {
     String? date,
     String? mois,
     String? nom_bureau,
+    int? id_sous_categorie,
+    String? sous_categorie,
   }) {
     return Procedure(
       total_depenses: total_depenses ?? this.total_depenses,
@@ -43,6 +50,8 @@ class Procedure {
       date: date ?? this.date,
       mois: mois ?? this.mois,
       nom_bureau: nom_bureau ?? this.nom_bureau,
+      id_sous_categorie: id_sous_categorie ?? this.id_sous_categorie,
+      sous_categorie: sous_categorie ?? this.sous_categorie,
     );
   }
 
@@ -57,6 +66,8 @@ class Procedure {
       'date': date,
       'mois': mois,
       'nom_bureau': nom_bureau,
+      'id_sous_categorie': id_sous_categorie,
+      'sous_categorie': sous_categorie,
     };
   }
 
@@ -71,6 +82,8 @@ class Procedure {
       date: map['date'] != null ? map['date'] as String : null,
       mois: map['mois'] != null ? map['mois'] as String : null,
       nom_bureau: map['nom_bureau'] != null ? map['nom_bureau'] as String : null,
+      id_sous_categorie: map['id_sous_categorie'] != null ? map['id_sous_categorie'] as int : null,
+      sous_categorie: map['sous_categorie'] != null ? map['sous_categorie'] as String : null,
     );
   }
 
@@ -80,7 +93,7 @@ class Procedure {
 
   @override
   String toString() {
-    return 'Procedure(total_depenses: $total_depenses, libelle: $libelle, id_categoriedepense: $id_categoriedepense, id_depense: $id_depense, admin_id: $admin_id, utilisateur_id: $utilisateur_id, date: $date, mois: $mois, nom_bureau: $nom_bureau)';
+    return 'Procedure(total_depenses: $total_depenses, libelle: $libelle, id_categoriedepense: $id_categoriedepense, id_depense: $id_depense, admin_id: $admin_id, utilisateur_id: $utilisateur_id, date: $date, mois: $mois, nom_bureau: $nom_bureau, id_sous_categorie: $id_sous_categorie, sous_categorie: $sous_categorie)';
   }
 
   @override
@@ -96,7 +109,9 @@ class Procedure {
       other.utilisateur_id == utilisateur_id &&
       other.date == date &&
       other.mois == mois &&
-      other.nom_bureau == nom_bureau;
+      other.nom_bureau == nom_bureau &&
+      other.id_sous_categorie == id_sous_categorie &&
+      other.sous_categorie == sous_categorie;
   }
 
   @override
@@ -109,6 +124,8 @@ class Procedure {
       utilisateur_id.hashCode ^
       date.hashCode ^
       mois.hashCode ^
-      nom_bureau.hashCode;
+      nom_bureau.hashCode ^
+      id_sous_categorie.hashCode ^
+      sous_categorie.hashCode;
   }
 }

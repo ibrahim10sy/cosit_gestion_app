@@ -1,10 +1,13 @@
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
+import 'package:cosit_gestion/model/Procedure.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
+import 'package:cosit_gestion/service/ProcedureService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class SousCategoriePage extends StatefulWidget {
@@ -21,9 +24,14 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
   late CategorieDepense categorieDepenses;
   late List<SousCategorie> categorieList;
   late Future<List<SousCategorie>> listFuture;
+  List<Procedure> data = [];
+  bool _isLoading = false;
+  int index = 0;
+  var procedureService = ProcedureService();
   final formkey = GlobalKey<FormState>();
   TextEditingController libelleController = TextEditingController();
   int? idCate;
+  late Procedure item;
 
   @override
   void initState() {
@@ -31,12 +39,50 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
     categorieDepenses = widget.categorieDepense;
     idCate = categorieDepenses.idCategoriedepense;
     listFuture = getSousCategorie(categorieDepenses.idCategoriedepense!);
+    getProcedure();
+    getItem();
+    // loadMoraData();
   }
 
   Future<List<SousCategorie>> getSousCategorie(int idCategoriedepense) async {
     final response = SousCategorieService().fetchData(idCategoriedepense);
 
     return response;
+  }
+
+  Future<List<Procedure>> getProcedure() async {
+    final response = await procedureService
+        .getDepenseTotalBySousCategorie(categorieDepenses.idCategoriedepense!);
+    return response;
+  }
+
+  getItem() async {
+    data = await getProcedure();
+
+    try {
+      if (data.isNotEmpty) {
+        setState(() {
+          item = data[index];
+        });
+        item.printInfo();
+      } else {
+        print("La liste de données est vide.");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void loadMoraData() {
+    setState(() {
+      if (index < data.length - 1) {
+        index++;
+        print(index);
+        item = data[index];
+      } else {
+        print("La fin de la liste est atteint");
+      }
+    });
   }
 
   @override
@@ -62,7 +108,7 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                       // padding: const EdgeInsets.only(top: 190, left: 20),
                       child: TextButton(
                         onPressed: () {
-                          openDialog();
+                          // openDialog();
                         },
                         child: const Text(
                           "+ Ajouter une sous catégorie",
@@ -112,12 +158,12 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 5),
                                     child: Text(
-                                       "Liste des sous catégories :",
+                                      "Liste des sous catégories :",
                                       style: TextStyle(
                                           fontSize: 19,
                                           fontWeight: FontWeight.bold,
                                           color: d_red),
-                                       overflow: TextOverflow.ellipsis,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 )
@@ -176,6 +222,12 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
                                                   ),
+                                                ),
+                                                subtitle: Text(
+                                                  "Total depensé ${item.total_depenses.toString()} FCFA",
+                                                  style: const TextStyle(
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
                                                 ),
                                                 trailing:
                                                     PopupMenuButton<String>(
