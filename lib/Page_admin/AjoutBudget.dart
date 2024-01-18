@@ -198,7 +198,7 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                        // padding: const EdgeInsets.all(12),
+                                      
                                         items: utilisateur
                                             .where((element) =>
                                                 element.role == "Comptable" ||
@@ -230,7 +230,7 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                                     element.idUtilisateur ==
                                                     newValue);
                                             debugPrint(
-                                                "User categorie sélectionnée ${user.toString()}");
+                                                "User  sélectionnée ${user.toString()}");
                                           });
                                         },
                                       ),

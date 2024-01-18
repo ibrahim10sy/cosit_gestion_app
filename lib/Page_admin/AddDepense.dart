@@ -371,8 +371,6 @@ class _AddDepenseState extends State<AddDepense> {
                                                 (element) =>
                                                     element.idBudget ==
                                                     newValue);
-                                            debugPrint(
-                                                "Budget sélectionnée ${budget.toString()}");
                                           });
                                         },
                                       ),
@@ -492,8 +490,7 @@ class _AddDepenseState extends State<AddDepense> {
                                                 (element) =>
                                                     element.idBureau ==
                                                     newValue);
-                                            debugPrint(
-                                                "Bureau sélectionnée ${budget.toString()}");
+                                            
                                           });
                                         },
                                       ),
@@ -503,7 +500,7 @@ class _AddDepenseState extends State<AddDepense> {
                                       hint: Padding(
                                         padding: const EdgeInsets.all(3),
                                         child: Text(
-                                          "Choisir un budget",
+                                          "Choisir un bureau",
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -622,8 +619,7 @@ class _AddDepenseState extends State<AddDepense> {
                                                 .firstWhere((element) =>
                                                     element.idSousCategorie ==
                                                     newValue);
-                                            debugPrint(
-                                                "Sous categorie sélectionnée ${budget.toString()}");
+                                            
                                           });
                                         },
                                       ),

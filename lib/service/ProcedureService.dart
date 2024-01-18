@@ -28,6 +28,26 @@ class ProcedureService extends ChangeNotifier {
     }
   }
 
+  Future<List<Procedure>> getTotalSousCategorieByUser(int idCategorie ,int userId) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$baseUrl/TotalBySousCategorieByUser/$idCategorie/$userId'));
+      print("Fetching data $userId");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List data = json.decode(response.body);
+        debugPrint(data.toString());
+        return data.map((item) => Procedure.fromMap(item)).toList();
+      } else {
+        print(
+            'Échec de la requête avec le code d\'état: ${response.statusCode}');
+        throw Exception(
+            'Réponse inattendue avec le code d\'état: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erreur lors de la récupération des données dans le service: $e');
+      throw Exception('Une erreur s\'est produite lors de la recuperation: $e');
+    }
+  }
   Future<List<Procedure>> getDepenseByUserByJour(int userId) async {
     try {
       final response =

@@ -389,8 +389,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                 (element) =>
                                                     element.idBudget ==
                                                     newValue);
-                                            debugPrint(
-                                                "Budget sélectionnée ${budget.toString()}");
+                                           
                                           });
                                         },
                                       ),
@@ -518,8 +517,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                 (element) =>
                                                     element.idBureau ==
                                                     newValue);
-                                            debugPrint(
-                                                "Bureau sélectionnée ${bureau.toString()}");
+                                           
                                           });
                                         },
                                       ),
@@ -648,8 +646,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                 .firstWhere((element) =>
                                                     element.idSousCategorie ==
                                                     newValue);
-                                            debugPrint(
-                                                "Sous categorie sélectionnée ${budget.toString()}");
+                                           
                                           });
                                         },
                                       ),

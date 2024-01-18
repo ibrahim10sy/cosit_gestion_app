@@ -7,12 +7,12 @@ class Procedure {
   int? id_depense;
   int? admin_id;
   int? utilisateur_id;
+  int? id_utilisateur;
   String? date;
   String? mois;
   String? nom_bureau;
   int? id_sous_categorie;
   String? sous_categorie;
-  
   Procedure({
     this.total_depenses,
     this.libelle,
@@ -20,12 +20,14 @@ class Procedure {
     this.id_depense,
     this.admin_id,
     this.utilisateur_id,
+    this.id_utilisateur,
     this.date,
     this.mois,
     this.nom_bureau,
     this.id_sous_categorie,
     this.sous_categorie,
   });
+
 
   Procedure copyWith({
     int? total_depenses,
@@ -34,6 +36,7 @@ class Procedure {
     int? id_depense,
     int? admin_id,
     int? utilisateur_id,
+    int? id_utilisateur,
     String? date,
     String? mois,
     String? nom_bureau,
@@ -47,6 +50,7 @@ class Procedure {
       id_depense: id_depense ?? this.id_depense,
       admin_id: admin_id ?? this.admin_id,
       utilisateur_id: utilisateur_id ?? this.utilisateur_id,
+      id_utilisateur: id_utilisateur ?? this.id_utilisateur,
       date: date ?? this.date,
       mois: mois ?? this.mois,
       nom_bureau: nom_bureau ?? this.nom_bureau,
@@ -63,6 +67,7 @@ class Procedure {
       'id_depense': id_depense,
       'admin_id': admin_id,
       'utilisateur_id': utilisateur_id,
+      'id_utilisateur': id_utilisateur,
       'date': date,
       'mois': mois,
       'nom_bureau': nom_bureau,
@@ -79,6 +84,7 @@ class Procedure {
       id_depense: map['id_depense'] != null ? map['id_depense'] as int : null,
       admin_id: map['admin_id'] != null ? map['admin_id'] as int : null,
       utilisateur_id: map['utilisateur_id'] != null ? map['utilisateur_id'] as int : null,
+      id_utilisateur: map['id_utilisateur'] != null ? map['id_utilisateur'] as int : null,
       date: map['date'] != null ? map['date'] as String : null,
       mois: map['mois'] != null ? map['mois'] as String : null,
       nom_bureau: map['nom_bureau'] != null ? map['nom_bureau'] as String : null,
@@ -93,7 +99,7 @@ class Procedure {
 
   @override
   String toString() {
-    return 'Procedure(total_depenses: $total_depenses, libelle: $libelle, id_categoriedepense: $id_categoriedepense, id_depense: $id_depense, admin_id: $admin_id, utilisateur_id: $utilisateur_id, date: $date, mois: $mois, nom_bureau: $nom_bureau, id_sous_categorie: $id_sous_categorie, sous_categorie: $sous_categorie)';
+    return 'Procedure(total_depenses: $total_depenses, libelle: $libelle, id_categoriedepense: $id_categoriedepense, id_depense: $id_depense, admin_id: $admin_id, utilisateur_id: $utilisateur_id, id_utilisateur: $id_utilisateur, date: $date, mois: $mois, nom_bureau: $nom_bureau, id_sous_categorie: $id_sous_categorie, sous_categorie: $sous_categorie)';
   }
 
   @override
@@ -107,6 +113,7 @@ class Procedure {
       other.id_depense == id_depense &&
       other.admin_id == admin_id &&
       other.utilisateur_id == utilisateur_id &&
+      other.id_utilisateur == id_utilisateur &&
       other.date == date &&
       other.mois == mois &&
       other.nom_bureau == nom_bureau &&
@@ -122,6 +129,7 @@ class Procedure {
       id_depense.hashCode ^
       admin_id.hashCode ^
       utilisateur_id.hashCode ^
+      id_utilisateur.hashCode ^
       date.hashCode ^
       mois.hashCode ^
       nom_bureau.hashCode ^

@@ -220,8 +220,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                                 (element) =>
                                                     element.idUtilisateur ==
                                                     newValue);
-                                            debugPrint(
-                                                "User sélectionnée ${user.toString()}");
+                                            
                                           });
                                         },
                                       ),

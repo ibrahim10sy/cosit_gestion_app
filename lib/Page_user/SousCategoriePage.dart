@@ -3,6 +3,8 @@ import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/model/Procedure.dart';
 import 'package:cosit_gestion/model/SousCategorie.dart';
+import 'package:cosit_gestion/model/Utilisateur.dart';
+import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
 import 'package:cosit_gestion/service/ProcedureService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,16 +33,20 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
   var procedureService = ProcedureService();
   List<Procedure> data = [];
   int index = 0;
-
+  late Utilisateur utilisateur;
   @override
   void initState() {
     super.initState();
+    utilisateur =
+        Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     categorieDepenses = widget.categorieDepense;
     idCate = categorieDepenses.idCategoriedepense;
     listFuture = getSousCategorie(categorieDepenses.idCategoriedepense!);
-    getItem();
-    loadMoraData();
-    getProcedure();
+    // setState(() {
+    //   getProcedure();
+    //   getItem();
+    //   loadMoraData();
+    // });
   }
 
   Future<List<SousCategorie>> getSousCategorie(int idCategoriedepense) async {
@@ -49,39 +55,39 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
     return response;
   }
 
-  Future<List<Procedure>> getProcedure() async {
-    final response = await procedureService
-        .getDepenseTotalBySousCategorie(categorieDepenses.idCategoriedepense!);
-    return response;
-  }
+  // Future<List<Procedure>> getProcedure() async {
+  //   final response = await procedureService.getTotalSousCategorieByUser(
+  //       categorieDepenses.idCategoriedepense!, utilisateur.idUtilisateur!);
+  //   return response;
+  // }
 
-  getItem() async {
-    data = await getProcedure();
-    try {
-      if (data.isNotEmpty) {
-        setState(() {
-          item = data[index];
-          item.printInfo();
-        });
-      } else {
-        print("La liste de données est vide.");
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  // getItem() async {
+  //   data = await getProcedure();
+  //   try {
+  //     if (data.isNotEmpty) {
+  //       setState(() {
+  //         item = data[index];
+  //         item.printInfo();
+  //       });
+  //     } else {
+  //       print("La liste de données est vide.");
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
-  void loadMoraData() {
-    setState(() {
-      if (index < data.length - 1) {
-        index++;
-        print(index);
-        item = data[index];
-      } else {
-        print("La fin de la liste est atteinte");
-      }
-    });
-  }
+  // void loadMoraData() {
+  //   setState(() {
+  //     if (index < data.length - 1) {
+  //       index++;
+  //       print(index);
+  //       item = data[index];
+  //     } else {
+  //       print("La fin de la liste est atteinte");
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -228,14 +234,7 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                subtitle: Text(
-                                                  (item != null)
-                                                      ? "Total dépensé ${item.total_depenses.toString()} FCFA"
-                                                      : "Chargement en cours...",
-                                                  style: const TextStyle(
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
+                                               
                                                 trailing:
                                                     PopupMenuButton<String>(
                                                   padding: EdgeInsets.zero,
