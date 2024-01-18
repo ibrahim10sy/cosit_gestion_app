@@ -6,7 +6,6 @@ import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class DemandePage extends StatefulWidget {
@@ -221,7 +220,7 @@ class _DemandePageState extends State<DemandePage> {
                                                     ),
                                                   ),
                                                   subtitle: Text(
-                                                    "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                                    "Montant: ${depense.montantDepense.toString()} FCFA ${depense.dateDepense}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: const TextStyle(
@@ -271,8 +270,19 @@ class _DemandePageState extends State<DemandePage> {
                                                                         child: Text(
                                                                             'Erreur')),
                                                                     content:
-                                                                        const Text(
-                                                                            "Le montant du budget est epuisé ou montant inférieur"),
+                                                                        Text(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .justify,
+                                                                      "Le montant du budget est epuisé ou montant inférieur",
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontSize:
+                                                                              20,
+                                                                          fontWeight:
+                                                                              FontWeight.w400),
+                                                                    ),
                                                                     actions: <Widget>[
                                                                       TextButton(
                                                                         onPressed:
@@ -308,8 +318,7 @@ class _DemandePageState extends State<DemandePage> {
                                                                   ),
                                                                 ),
                                                               );
-                                                               try {
-                                                                
+                                                              try {
                                                                 await DepenseService()
                                                                     .approuverDepense(
                                                                         depense
@@ -317,7 +326,7 @@ class _DemandePageState extends State<DemandePage> {
                                                                 print(depense
                                                                     .idDepense);
 
-                                                                     ScaffoldMessenger.of(
+                                                                ScaffoldMessenger.of(
                                                                         context)
                                                                     .hideCurrentSnackBar();
 
@@ -335,7 +344,8 @@ class _DemandePageState extends State<DemandePage> {
                                                                     .toString());
                                                               }
                                                               setState(() {
-                                                                depense.autorisationAdmin = true;
+                                                                depense.autorisationAdmin =
+                                                                    true;
                                                               });
                                                             }
                                                           },

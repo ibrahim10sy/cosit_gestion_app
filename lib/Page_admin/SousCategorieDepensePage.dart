@@ -24,14 +24,14 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
   late CategorieDepense categorieDepenses;
   late List<SousCategorie> categorieList;
   late Future<List<SousCategorie>> listFuture;
-  List<Procedure> data = [];
   bool _isLoading = false;
-  int index = 0;
-  var procedureService = ProcedureService();
   final formkey = GlobalKey<FormState>();
   TextEditingController libelleController = TextEditingController();
   int? idCate;
   late Procedure item;
+  var procedureService = ProcedureService();
+  List<Procedure> data = [];
+  int index = 0;
 
   @override
   void initState() {
@@ -39,9 +39,9 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
     categorieDepenses = widget.categorieDepense;
     idCate = categorieDepenses.idCategoriedepense;
     listFuture = getSousCategorie(categorieDepenses.idCategoriedepense!);
+    getItem();
+    loadMoraData();
     getProcedure();
-    getItem(); 
-    // loadMoraData();
   }
 
   Future<List<SousCategorie>> getSousCategorie(int idCategoriedepense) async {
@@ -58,13 +58,12 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
 
   getItem() async {
     data = await getProcedure();
-
     try {
       if (data.isNotEmpty) {
         setState(() {
           item = data[index];
+          item.printInfo();
         });
-        item.printInfo();
       } else {
         print("La liste de données est vide.");
       }
@@ -80,7 +79,7 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
         print(index);
         item = data[index];
       } else {
-        print("La fin de la liste est atteint");
+        print("La fin de la liste est atteinte");
       }
     });
   }
@@ -223,8 +222,10 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                subtitle: Text(
-                                                  "Total depensé ${item.total_depenses.toString()} FCFA",
+                                               subtitle: Text(
+                                                  (item != null)
+                                                      ? "Total dépensé ${item.total_depenses.toString()} FCFA"
+                                                      : "Chargement en cours...",
                                                   style: const TextStyle(
                                                       overflow: TextOverflow
                                                           .ellipsis),

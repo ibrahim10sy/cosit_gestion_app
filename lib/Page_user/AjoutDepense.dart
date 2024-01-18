@@ -519,7 +519,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                     element.idBureau ==
                                                     newValue);
                                             debugPrint(
-                                                "Bureau sélectionnée ${budget.toString()}");
+                                                "Bureau sélectionnée ${bureau.toString()}");
                                           });
                                         },
                                       ),

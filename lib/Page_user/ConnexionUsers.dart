@@ -85,7 +85,7 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
           },
         );
 
-        await Future.delayed(Duration(milliseconds: 60));
+        await Future.delayed(Duration(milliseconds: 100));
 
         Navigator.of(context).pop();
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -116,7 +116,11 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Center(child: Text('Connexion echouer !')),
-              content: const Text("Email ou mot de passe incorrect"),
+              content: const Text(
+                "Email ou mot de passe incorrect",
+                textAlign: TextAlign.justify,
+                style: TextStyle(color: Colors.black, fontSize: 20),
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -137,8 +141,11 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Center(child: Text('Erreur')),
-            content:
-                const Text("Une erreur s'est produite. Veuillez réessayer."),
+            content: const Text(
+              "Une erreur s'est produite. Veuillez réessayer.",
+              textAlign: TextAlign.justify,
+              style: TextStyle(color: Colors.black, fontSize: 20),
+            ),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

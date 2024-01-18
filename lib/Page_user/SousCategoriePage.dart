@@ -1,4 +1,3 @@
-import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
@@ -39,8 +38,9 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
     categorieDepenses = widget.categorieDepense;
     idCate = categorieDepenses.idCategoriedepense;
     listFuture = getSousCategorie(categorieDepenses.idCategoriedepense!);
-    getProcedure();
     getItem();
+    loadMoraData();
+    getProcedure();
   }
 
   Future<List<SousCategorie>> getSousCategorie(int idCategoriedepense) async {
@@ -61,8 +61,8 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
       if (data.isNotEmpty) {
         setState(() {
           item = data[index];
+          item.printInfo();
         });
-        item.printInfo();
       } else {
         print("La liste de données est vide.");
       }
@@ -78,7 +78,7 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
         print(index);
         item = data[index];
       } else {
-        print("La fin de la liste est atteint");
+        print("La fin de la liste est atteinte");
       }
     });
   }
@@ -228,8 +228,10 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                 subtitle: Text(
-                                                  "Total depensé ${item.total_depenses.toString()} FCFA",
+                                                subtitle: Text(
+                                                  (item != null)
+                                                      ? "Total dépensé ${item.total_depenses.toString()} FCFA"
+                                                      : "Chargement en cours...",
                                                   style: const TextStyle(
                                                       overflow: TextOverflow
                                                           .ellipsis),
