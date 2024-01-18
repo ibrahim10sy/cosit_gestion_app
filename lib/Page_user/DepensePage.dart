@@ -243,7 +243,7 @@ class _DepensePageState extends State<DepensePage> {
                                               ),
                                             ),
                                             subtitle: Text(
-                                              "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
+                                              "Montant: ${depense.montantDepense.toString()} FCFA-${depense.dateDepense}",
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontSize: 15,
@@ -365,7 +365,7 @@ class _DepensePageState extends State<DepensePage> {
                                           ),
                                         ),
                                         subtitle: Text(
-                                          "${depense.dateDepense} - montant : ${depense.montantDepense.toString()} FCFA",
+                                          "Montant: ${depense.montantDepense.toString()} FCFA-${depense.dateDepense}",
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                             fontSize: 15,

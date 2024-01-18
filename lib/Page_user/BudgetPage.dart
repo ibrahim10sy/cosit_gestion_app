@@ -115,11 +115,11 @@ class _BudgetPageState extends State<BudgetPage> {
                         ),
                       ),
                     ),
-                     const Divider(
+                    const Divider(
                       height: 1,
                       color: d_red,
                     ),
-                   Consumer<BudgetService>(
+                    Consumer<BudgetService>(
                       builder: (context, budgetService, child) {
                         return FutureBuilder(
                             future: budgetService
@@ -139,7 +139,7 @@ class _BudgetPageState extends State<BudgetPage> {
                               } else {
                                 budgets = snapshot.data!;
                                 return Column(
-                                  children: budgets!
+                                  children: budgets
                                       .map(
                                         (Budget bud) => ListTile(
                                           leading: Image.asset(
@@ -167,7 +167,7 @@ class _BudgetPageState extends State<BudgetPage> {
                                             ),
                                           ),
                                           subtitle: Text(
-                                            "Montant: ${bud.montant}-Restant: ${bud.montantRestant}",
+                                            "Montant: ${bud.montant} FCFA-Restant: ${bud.montantRestant} FCFA",
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                               fontSize: 15,

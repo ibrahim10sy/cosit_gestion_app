@@ -57,7 +57,6 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
 
   getItem() async {
     data = await getProcedure();
-
     try {
       if (data.isNotEmpty) {
         setState(() {

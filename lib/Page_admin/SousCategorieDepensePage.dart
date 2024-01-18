@@ -40,7 +40,7 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
     idCate = categorieDepenses.idCategoriedepense;
     listFuture = getSousCategorie(categorieDepenses.idCategoriedepense!);
     getProcedure();
-    getItem();
+    getItem(); 
     // loadMoraData();
   }
 
