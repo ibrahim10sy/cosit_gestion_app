@@ -239,14 +239,15 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                     );
                                   }
                                   return DropdownButton(
-                                    hint: Padding(
+                                      hint: Padding(
                                         padding: const EdgeInsets.all(3),
                                         child: Text(
                                           "Choisir un employé",
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      items: const [], onChanged: (value) {});
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -413,11 +414,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
-                                    prefixIcon: const Icon(
-                                      Icons.attach_money_sharp,
-                                      color: d_red,
-                                      size: 30.0,
-                                    ),
+
                                     filled: true,
                                     fillColor: Colors.white,
 

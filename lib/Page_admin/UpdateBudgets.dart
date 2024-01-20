@@ -45,7 +45,6 @@ class _updateBudgetsState extends State<updateBudgets> {
     user = _budget.utilisateur;
     dateController.text = _budget.dateDebut;
     userValue = _budget.utilisateur?.idUtilisateur ?? null;
-
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     _utilisateur =
         http.get(Uri.parse('http://10.0.2.2:8080/utilisateur/liste'));
@@ -220,7 +219,6 @@ class _updateBudgetsState extends State<updateBudgets> {
                                                 (element) =>
                                                     element.idUtilisateur ==
                                                     newValue);
-                                            
                                           });
                                         },
                                       ),
@@ -445,7 +443,7 @@ class _updateBudgetsState extends State<updateBudgets> {
                                         admin: admin,
                                       );
                                     }
-
+                                    Navigator.of(context).pop();
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {

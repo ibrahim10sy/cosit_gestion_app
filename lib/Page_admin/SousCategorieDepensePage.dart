@@ -40,8 +40,6 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
     idCate = categorieDepenses.idCategoriedepense;
     listFuture = getSousCategorie(categorieDepenses.idCategoriedepense!);
     getItem();
-    loadMoraData();
-    getProcedure();
   }
 
   Future<List<SousCategorie>> getSousCategorie(int idCategoriedepense) async {
@@ -107,7 +105,7 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                       // padding: const EdgeInsets.only(top: 190, left: 20),
                       child: TextButton(
                         onPressed: () {
-                          // openDialog();
+                          openDialog();
                         },
                         child: const Text(
                           "+ Ajouter une sous catégorie",
@@ -222,14 +220,14 @@ class _SousCategoriePageState extends State<SousCategoriePage> {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                               subtitle: Text(
-                                                  (item != null)
-                                                      ? "Total dépensé ${item.total_depenses.toString()} FCFA"
-                                                      : "Chargement en cours...",
-                                                  style: const TextStyle(
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
-                                                ),
+                                                // subtitle: Text(
+                                                //   (item.total_depenses == null || item.total_depenses == 0)
+                                                //       ? "Chargement en cours..."
+                                                //       : "Total dépensé ${item!.total_depenses.toString()} FCFA",
+                                                //   style: const TextStyle(
+                                                //       overflow: TextOverflow
+                                                //           .ellipsis),
+                                                // ),
                                                 trailing:
                                                     PopupMenuButton<String>(
                                                   padding: EdgeInsets.zero,

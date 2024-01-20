@@ -7,7 +7,6 @@ import 'package:cosit_gestion/service/SalaireService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
@@ -60,17 +59,20 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
     // Initialisation les valeurs des listes déroulantes
     userValue = salaire.utilisateur.idUtilisateur;
     catValue = salaire.sousCategorie.idSousCategorie;
+
+    user = salaire.utilisateur;
+    sousCategorie = salaire.sousCategorie;
     super.initState();
   }
 
-  @override
-  void dispose() {
-    descriptionController.dispose();
-    montant_control.dispose();
-    userController.dispose();
-    dateController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   descriptionController.dispose();
+  //   montant_control.dispose();
+  //   userController.dispose();
+  //   dateController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +230,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                           ]),
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
-                                                 value: userValue,
+                                        value: userValue,
                                         items: utilisateur
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idUtilisateur,
@@ -236,11 +238,12 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: Text('${e.nom} ${e.prenom}'),
+                                                    child: Text(
+                                                        '${e.nom} ${e.prenom}'),
                                                   ),
                                                 ))
                                             .toList(),
-                               
+
                                         onChanged: (newValue) {
                                           setState(() {
                                             userValue = newValue;
@@ -351,7 +354,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                           ]),
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
-                                             value: catValue,
+                                        value: catValue,
                                         items: sousCategories
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idSousCategorie,
@@ -363,7 +366,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                                   ),
                                                 ))
                                             .toList(),
-                                    
+
                                         onChanged: (newValue) {
                                           setState(() {
                                             catValue = newValue;
@@ -416,11 +419,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   ],
                                   decoration: InputDecoration(
                                     hintText: 'montant',
-                                    prefixIcon: const Icon(
-                                      Icons.attach_money_sharp,
-                                      color: d_red,
-                                      size: 30.0,
-                                    ),
+
                                     filled: true,
                                     fillColor: Colors.white,
 
@@ -530,7 +529,7 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   final date = dateController.text;
                                   String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
-                                  int montants = int.parse(formattedMontant);                                  
+                                  int montants = int.parse(formattedMontant);
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
@@ -589,18 +588,19 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                         );
                                       },
                                     );
-
+                                    Navigator.of(context).pop(context);
                                     descriptionController.clear();
                                     montant_control.clear();
                                     userController.clear();
                                     dateController.clear();
-                                     // Réinitialiser les valeurs des variables de sélection
+                                    // Réinitialiser les valeurs des variables de sélection
                                     setState(() {
                                       userValue = null;
                                       catValue = null;
                                     });
                                   } catch (e) {
                                     final String errorMessage = e.toString();
+                                    print(errorMessage);
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
