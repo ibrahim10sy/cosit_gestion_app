@@ -12,7 +12,6 @@ import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -490,7 +489,6 @@ class _AddDepenseState extends State<AddDepense> {
                                                 (element) =>
                                                     element.idBureau ==
                                                     newValue);
-                                            
                                           });
                                         },
                                       ),
@@ -619,7 +617,6 @@ class _AddDepenseState extends State<AddDepense> {
                                                 .firstWhere((element) =>
                                                     element.idSousCategorie ==
                                                     newValue);
-                                            
                                           });
                                         },
                                       ),
@@ -805,7 +802,19 @@ class _AddDepenseState extends State<AddDepense> {
                                   }
 
                                   try {
-                                   
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: d_red,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Envoi en cours..."),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
                                           description: description,
@@ -826,25 +835,15 @@ class _AddDepenseState extends State<AddDepense> {
                                           bureau: bureau,
                                           budget: budget);
                                     }
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Succès')),
-                                          content: const Text(
-                                              "Depense ajoutée avec succèss"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            )
-                                          ],
-                                        );
-                                      },
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+
+                                    // Afficher le message de succès
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Dépense ajouté avec succès"),
+                                      ),
                                     );
                                     Provider.of<DepenseService>(context,
                                             listen: false)

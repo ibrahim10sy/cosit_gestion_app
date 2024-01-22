@@ -141,7 +141,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         child:
                             depense.image != null && depense.image!.isNotEmpty
                                 ? Image.network(
-                                    'http://10.0.2.2/${depense.image}',
+                                    depense.image!,
                                     width: 200,
                                     height: 210,
                                     scale: 1,

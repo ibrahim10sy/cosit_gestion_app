@@ -165,8 +165,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                                             )
                                                           : CircleAvatar(
                                                               backgroundImage:
-                                                                  NetworkImage(
-                                                                      "http://10.0.2.2/${user.image!}"),
+                                                                  NetworkImage(user.image!),
                                                               radius: 30,
                                                             ),
                                                       title: Text(

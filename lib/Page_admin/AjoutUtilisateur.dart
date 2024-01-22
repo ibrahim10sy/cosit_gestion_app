@@ -401,6 +401,19 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                         } else {
                           Utilisateur nouveauUtilisateur;
                           try {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    CircularProgressIndicator(
+                                      color: d_red,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text("Envoi en cours..."),
+                                  ],
+                                ),
+                              ),
+                            );
                             if (photo != null) {
                               await UtilisateurService.creerCompteUtilisateur(
                                   nom: nom,
@@ -422,27 +435,17 @@ class _AjoutUtilisateurState extends State<AjoutUtilisateur> {
                               // print(nouveauUtilisateur.toString());
                             }
 
-                            // utilisateurprovider
-                            //     .setUtilisateur(nouveauUtilisateur);
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            // Afficher le message de succès
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Employé ajouté avec succès"),
+                              ),
+                            );
                             Provider.of<UtilisateurService>(context,
                                     listen: false)
                                 .applyChange();
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Succèss'),
-                                    content: const Text(
-                                        'Employé ajouter avec succèss'),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("OK"))
-                                    ],
-                                  );
-                                });
+                            
                             // print(nouveauUtilisateur.toString());
                             nom_controller.clear();
                             prenom_controller.clear();

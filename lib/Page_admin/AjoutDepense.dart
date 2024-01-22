@@ -702,6 +702,19 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   }
 
                                   try {
+                                     ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: d_red,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Envoi en cours..."),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                     if (photo != null) {
                                       await DepenseService().addDepenseByAdmin(
                                           description: description,
@@ -722,25 +735,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           bureau: bureau,
                                           budget: budget);
                                     }
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Succès')),
-                                          content: const Text(
-                                              "Depense ajoutée avec succès"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            )
-                                          ],
-                                        );
-                                      },
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+
+                                    // Afficher le message de succès
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Dépense ajouté avec succès"),
+                                      ),
                                     );
                                     Provider.of<DepenseService>(context,
                                             listen: false)

@@ -813,7 +813,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
-                                    const String errorMessage =
+                                     const String errorMessage =
                                         "Tous les champs doivent être remplis";
                                     showDialog(
                                       context: context,
@@ -950,22 +950,23 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       );
                                     }
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Row(
-                                          children: [
-                                            CircularProgressIndicator(
-                                              color: d_red,
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text("Envoi en cours..."),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    
 
                                     try {
-                                      // Vérification si une photo est fournie
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Row(
+                                            children: [
+                                              CircularProgressIndicator(
+                                                color: d_red,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text("Envoi en cours..."),
+                                            ],
+                                          ),
+                                        ),
+                                      );
                                       if (photo != null &&
                                           parametreDepense != null) {
                                         await DepenseService().addDepenseByUser(

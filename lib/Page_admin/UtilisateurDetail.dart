@@ -77,7 +77,7 @@ class _UtilisateurDetailState extends State<UtilisateurDetail> {
                                 ),
                               )
                             : Image.network(
-                                "http://10.0.2.2/${utilisateurs.image!}",
+                                utilisateurs.image!,
                                 fit: BoxFit.cover,
                               ),
                       ),

@@ -77,7 +77,7 @@ class _SalaireDetailState extends State<SalaireDetail> {
                                 ),
                               )
                             : Image.network(
-                                "http://10.0.2.2/${salaire.utilisateur.image!}",
+                                salaire.utilisateur.image!,
                                 fit: BoxFit.cover,
                               ),
                       ),

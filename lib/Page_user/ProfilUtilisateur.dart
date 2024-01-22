@@ -158,7 +158,7 @@ class _ProfilUtilisateurState extends State<ProfilUtilisateur> {
                         width: 210.0,
                         height: 210.0,
                         child: Image.network(
-                          "http://10.0.2.2/${user!.image!}",
+                          user!.image!,
                           // fit: BoxFit.fill,
                           fit: BoxFit
                               .cover, // ou BoxFit.contain, BoxFit.fill, etc.
