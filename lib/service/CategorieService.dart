@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CategorieService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:8080/Categorie";
+  static const String baseUrl = "http://10.0.2.2:5100/Categorie";
 
   List<CategorieDepense> categories = [];
 
   Future<void> addCategorieByUser({
     required String libelle,
     required Utilisateur utilisateur,
-  }) async {
+  }) async { 
     var addCategorie = jsonEncode({
       'idCategoriedepense': null,
       'libelle': libelle,

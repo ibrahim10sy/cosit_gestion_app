@@ -1,5 +1,6 @@
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
+import 'package:cosit_gestion/Page_admin/updateBureau.dart';
 import 'package:cosit_gestion/model/Bureau.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,7 @@ class AjoutBureau extends StatefulWidget {
 
   @override
   State<AjoutBureau> createState() => _AjoutBureauState();
-}
+} 
 
 const d_red = Colors.red;
 
@@ -159,10 +160,46 @@ class _AjoutBureauState extends State<AjoutBureau> {
                                               padding: EdgeInsets.zero,
                                               itemBuilder: (context) =>
                                                   <PopupMenuEntry<String>>[
+                                                PopupMenuItem<String>(
+                                                  child: ListTile(
+                                                    leading: const Icon(
+                                                      Icons.edit,
+                                                      color: Colors.green,
+                                                    ),
+                                                    title: const Text(
+                                                      "Modifier",
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onTap: () async {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              AlertDialog(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            16),
+                                                                  ),
+                                                                  content: UpdateBureau(bureau: bur)));
+                                                      Navigator.of(context)
+                                                          .pop();
+
+                                                      // Navigator.of(context)
+                                                      //     .pop();
+                                                    },
+                                                  ),
+                                                ),
                                                 const PopupMenuDivider(),
                                                 PopupMenuItem<String>(
-                                                  // value: localizations
-                                                  //     .demoMenuRemove,
+                                                  
                                                   child: ListTile(
                                                     leading: const Icon(
                                                       Icons.delete,
@@ -176,6 +213,7 @@ class _AjoutBureauState extends State<AjoutBureau> {
                                                               FontWeight.bold),
                                                     ),
                                                     onTap: () async {
+                                                      
                                                       await Provider.of<
                                                                   BureauService>(
                                                               context,

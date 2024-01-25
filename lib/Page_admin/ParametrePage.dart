@@ -172,7 +172,7 @@ class _ParametrePageState extends State<ParametrePage> {
                                             title: Text(
                                               e.description,
                                               overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
+                                             style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,

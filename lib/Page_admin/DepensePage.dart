@@ -2,6 +2,7 @@ import 'package:cosit_gestion/Page_admin/AddDepense.dart';
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_admin/DepenseDetail.dart';
+import 'package:cosit_gestion/Page_admin/updateDepense.dart';
 import 'package:cosit_gestion/model/Depense.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:flutter/cupertino.dart';
@@ -218,6 +219,31 @@ class _DepensePageState extends State<DepensePage> {
                                                 PopupMenuItem<String>(
                                                   child: ListTile(
                                                     leading: const Icon(
+                                                      Icons.edit,
+                                                      color: Colors.green,
+                                                    ),
+                                                    title: const Text(
+                                                      "Modifier",
+                                                      style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  UpdateDepense(
+                                                                      depense:
+                                                                          depense)));
+                                                    },
+                                                  ),
+                                                ),
+                                                PopupMenuItem<String>(
+                                                  child: ListTile(
+                                                    leading: const Icon(
                                                       Icons.delete,
                                                       color: d_red,
                                                     ),
@@ -337,6 +363,30 @@ class _DepensePageState extends State<DepensePage> {
                                           padding: EdgeInsets.zero,
                                           itemBuilder: (context) =>
                                               <PopupMenuEntry<String>>[
+                                            PopupMenuItem<String>(
+                                              child: ListTile(
+                                                leading: const Icon(
+                                                  Icons.edit,
+                                                  color: Colors.green,
+                                                ),
+                                                title: const Text(
+                                                  "Modifier",
+                                                  style: TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              UpdateDepense(
+                                                                  depense:
+                                                                      depense)));
+                                                },
+                                              ),
+                                            ),
                                             PopupMenuItem<String>(
                                               child: ListTile(
                                                 leading: const Icon(

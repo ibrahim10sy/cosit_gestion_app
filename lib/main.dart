@@ -18,7 +18,7 @@ import 'package:cosit_gestion/service/UtilisateurService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
- 
+
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => UtilisateurProvider()),

@@ -1,6 +1,7 @@
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_admin/SousCategorieDepensePage.dart';
+import 'package:cosit_gestion/Page_admin/updateCategorie.dart';
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/model/CategorieDepense.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
@@ -176,6 +177,47 @@ class _CategorieDepensePageState extends State<CategorieDepensePage> {
                                                     itemBuilder: (context) =>
                                                         <PopupMenuEntry<
                                                             String>>[
+                                                       PopupMenuItem<String>(
+                                                        child: ListTile(
+                                                          leading: const Icon(
+                                                            Icons.edit,
+                                                            color: Colors.green,
+                                                          ),
+                                                          title: const Text(
+                                                            "Modifier",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          onTap: () async {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    AlertDialog(
+                                                                        backgroundColor:
+                                                                            Colors
+                                                                                .white,
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(16),
+                                                                        ),
+                                                                        content:
+                                                                            updateCategorie(categorieDepense: categories)));
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                           
+                                                            // Navigator.of(context)
+                                                            //     .pop();
+                                                          },
+                                                        ),
+                                                      ),
                                                       const PopupMenuDivider(),
                                                       PopupMenuItem<String>(
                                                         // value: localizations

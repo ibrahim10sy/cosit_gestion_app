@@ -1,6 +1,14 @@
+import 'package:cosit_gestion/model/Depense.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'dart:io';
- 
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -11,25 +19,18 @@ import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/BureauService.dart';
 import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
-import 'package:pattern_formatter/pattern_formatter.dart';
-import 'package:provider/provider.dart';
 
-class AddDepense extends StatefulWidget {
-  const AddDepense({super.key});
+class UpdateDepense extends StatefulWidget {
+  final Depense depense;
+  const UpdateDepense({super.key, required this.depense});
 
   @override
-  State<AddDepense> createState() => _AddDepenseState();
+  State<UpdateDepense> createState() => _UpdateDepenseState();
 }
 
 const d_red = Colors.red;
 
-class _AddDepenseState extends State<AddDepense> {
+class _UpdateDepenseState extends State<UpdateDepense> {
   DateTime selectedDate = DateTime.now();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController montant_control = TextEditingController();
@@ -47,12 +48,24 @@ class _AddDepenseState extends State<AddDepense> {
   String? imageSrc;
   File? photo;
   int? adminID;
+  late Depense depenses;
 
   @override
   void initState() {
     super.initState();
     admin = Provider.of<AdminProvider>(context, listen: false).admin!;
     adminID = admin.idAdmin;
+    depenses = widget.depense;
+    descriptionController.text = depenses.description;
+    montant_control.text = depenses.montantDepense.toString();
+    dateController.text = depenses.dateDepense;
+    catValue = depenses.sousCategorie.idSousCategorie;
+    bureauValue = depenses.bureau.idBureau;
+    budgetValue = depenses.budget.idBudget;
+
+    bureau = depenses.bureau;
+    budget = depenses.budget;
+    sousCategorie = depenses.sousCategorie;
     _bureau = getBureau();
     _budgets = fetchBudgets(adminID!);
     _categorie = getCategorie();
@@ -157,7 +170,7 @@ class _AddDepenseState extends State<AddDepense> {
         child: Column(
           children: [
             const CustomCard(
-              title: "Ajout dépense",
+              title: "Modifier dépense",
               imagePath: "assets/images/depense.png",
             ),
             Padding(
@@ -816,21 +829,21 @@ class _AddDepenseState extends State<AddDepense> {
                                       ),
                                     );
                                     if (photo != null) {
-                                      await DepenseService().addDepenseByAdmin(
+                                      await DepenseService().updateDepense(
+                                          idDepense: depenses.idDepense!,
                                           description: description,
                                           montantDepense: montants.toString(),
                                           dateDepense: date,
-                                          admin: admin,
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
                                           image: photo as File);
                                     } else {
-                                      await DepenseService().addDepenseByAdmin(
+                                      await DepenseService().updateDepense(
+                                          idDepense: depenses.idDepense!,
                                           description: description,
                                           montantDepense: montants.toString(),
                                           dateDepense: date,
-                                          admin: admin,
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget);
@@ -842,12 +855,13 @@ class _AddDepenseState extends State<AddDepense> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content:
-                                            Text("Dépense ajouté avec succès"),
+                                            Text("Dépense modifier avec succès"),
                                       ),
                                     );
                                     Provider.of<DepenseService>(context,
                                             listen: false)
                                         .applyChange();
+                                  Navigator.of(context).pop();
                                     descriptionController.clear();
                                     montant_control.clear();
                                     dateController.clear();
@@ -885,7 +899,7 @@ class _AddDepenseState extends State<AddDepense> {
                                   Icons.add,
                                   color: Colors.white,
                                 ),
-                                label: const Text("Ajouter",
+                                label: const Text("Modifier",
                                     style: TextStyle(color: Colors.white)),
                               )),
                           ElevatedButton.icon(

@@ -60,6 +60,7 @@ class _StatistiqueState extends State<Statistique>
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             // elevation: 5,
             child: Container(
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: d_red, borderRadius: BorderRadius.circular(12)),
               child: TabBar(

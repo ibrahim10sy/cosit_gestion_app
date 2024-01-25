@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class BudgetService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:8080/Budget";
+  static const String baseUrl = "http://10.0.2.2:5100/Budget";
 
   List<Budget> budget = [];
   String action = "all";

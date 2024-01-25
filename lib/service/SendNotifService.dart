@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SendNotifService extends ChangeNotifier {
-  final String baseUrl = "http://10.0.2.2:8080/send";
+  final String baseUrl = "http://10.0.2.2:5100/send";
   late List<SendNotification> notifications = [];
 
   Future<List<SendNotification>> getNotification() async {

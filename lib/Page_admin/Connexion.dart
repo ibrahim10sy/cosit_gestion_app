@@ -33,7 +33,7 @@ class _ConnexionState extends State<Connexion> {
   Future<void> loginUser() async {
     final String email = emailController.text;
     final String passWord = motDePasseController.text;
-    const String baseUrl = 'http://10.0.2.2:8080/Admin/login';
+    const String baseUrl = 'http://10.0.2.2:5100/Admin/login';
 
     AdminProvider adminProvider =
         Provider.of<AdminProvider>(context, listen: false);
@@ -106,15 +106,7 @@ class _ConnexionState extends State<Connexion> {
         );
 
         adminProvider.setAdmin(admin);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              title: Center(child: Text('Connexion en cours')),
-              content: CupertinoActivityIndicator(radius: 20.0, color: d_red),
-            );
-          },
-        );
+       
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
-
+ 
 class updateBudgets extends StatefulWidget {
   final Budget budget;
   const updateBudgets({super.key, required this.budget});
@@ -479,25 +479,24 @@ class _updateBudgetsState extends State<updateBudgets> {
                                   } catch (e) {
                                     final String errorMessage = e.toString();
 
-                                    // showDialog(
-                                    //   context: context,
-                                    //   builder: (BuildContext context) {
-                                    //     return AlertDialog(
-                                    //       title: const Center(
-                                    //           child: Text('Erreur')),
-                                    //       content: const Text(
-                                    //           errorMessage.),
-                                    //       actions: <Widget>[
-                                    //         TextButton(
-                                    //           onPressed: () {
-                                    //             Navigator.of(context).pop();
-                                    //           },
-                                    //           child: const Text('OK'),
-                                    //         ),
-                                    //       ],
-                                    //     );
-                                    //   },
-                                    // );
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Center(
+                                              child: Text('Erreur')),
+                                          content: Text(errorMessage),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                   }
                                 },
                                 icon: const Icon(

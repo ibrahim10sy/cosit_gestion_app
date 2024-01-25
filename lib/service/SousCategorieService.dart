@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SousCategorieService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:8080/SousCategorie";
+  static const String baseUrl = "http://10.0.2.2:5100/SousCategorie";
 
   List<SousCategorie> sousCategorieListe = [];
 

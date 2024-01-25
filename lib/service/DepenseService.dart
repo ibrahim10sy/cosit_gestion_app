@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
 class DepenseService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:8080/Depenses";
+  static const String baseUrl = "http://10.0.2.2:5100/Depenses";
 
   List<Depense> depensesListe = [];
   List<ParametreDepense> parametreListe = [];
@@ -89,7 +89,7 @@ class DepenseService extends ChangeNotifier {
     });
 
     final response = await http.post(
-      Uri.parse("http://10.0.2.2:8080/parametre/AddParametre"),
+      Uri.parse("http://10.0.2.2:5100/parametre/AddParametre"),
       headers: {'Content-Type': 'application/json'},
       body: addparam,
     );
@@ -112,7 +112,7 @@ class DepenseService extends ChangeNotifier {
     });
 
     final response = await http.put(
-      Uri.parse("http://10.0.2.2:8080/parametre/Update/$idParametre"),
+      Uri.parse("http://10.0.2.2:5100/parametre/Update/$idParametre"),
       headers: {'Content-Type': 'application/json'},
       body: addparam,
     );
@@ -174,13 +174,12 @@ class DepenseService extends ChangeNotifier {
     }
   }
 
-  Future<Depense> updateDepenseByAdmin(
+  Future<Depense> updateDepense(
       {required int idDepense,
       required String description,
       File? image,
       required String montantDepense,
       required String dateDepense,
-      required Admin admin,
       required SousCategorie sousCategorie,
       required Bureau bureau,
       required Budget budget}) async {
@@ -292,7 +291,7 @@ class DepenseService extends ChangeNotifier {
 
   // Future<List<Depense>> fetchDepenseByBudget(int id) async {
   //   final response = await http
-  //       .get(Uri.parse('http://10.0.2.2:8080/Depenses/listeByBudget/$id'));
+  //       .get(Uri.parse('http://10.0.2.2:5100/Depenses/listeByBudget/$id'));
   //   print("Fetching data : $id");
   //   if (response.statusCode == 200) {
   //     List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -309,7 +308,7 @@ class DepenseService extends ChangeNotifier {
     print("Fetching data: $id");
     try {
       final response = await http
-          .get(Uri.parse('http://10.0.2.2:8080/Depenses/listeByBudget/$id'));
+          .get(Uri.parse('http://10.0.2.2:5100/Depenses/listeByBudget/$id'));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Fetching data: $id");
@@ -369,7 +368,7 @@ class DepenseService extends ChangeNotifier {
 
   Future<List<ParametreDepense>> fetchParametre() async {
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:8080/parametre/read'));
+        await http.get(Uri.parse('http://10.0.2.2:5100/parametre/read'));
     print("parametre");
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -387,7 +386,7 @@ class DepenseService extends ChangeNotifier {
 
   Future<void> deleteparametre(int id) async {
     final response = await http
-        .delete(Uri.parse('http://10.0.2.2:8080/parametre/delete/$id'));
+        .delete(Uri.parse('http://10.0.2.2:5100/parametre/delete/$id'));
     if (response.statusCode == 200 || response.statusCode == 201) {
       applyChange();
       debugPrint(response.body.toString());

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SalaireService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:8080/Salaire";
+  static const String baseUrl = "http://10.0.2.2:5100/Salaire";
 
   List<Salaire> salaires = [];
 
@@ -27,7 +27,7 @@ class SalaireService extends ChangeNotifier {
     });
 
     final response = await http.post(
-        Uri.parse("http://10.0.2.2:8080/Salaire/create"),
+        Uri.parse("http://10.0.2.2:5100/Salaire/create"),
         headers: {'Content-Type': 'application/json'},
         body: salaire);
     if (response.statusCode == 200 || response.statusCode == 201) {

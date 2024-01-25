@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 class BureauService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:8080/Bureau";
+  static const String baseUrl = "http://10.0.2.2:5100/Bureau";
 
   List<Bureau> bureau = [];
 
@@ -26,7 +26,7 @@ class BureauService extends ChangeNotifier {
     }
   }
 
-  static Future<void> updateBureau({
+   Future<void> updateBureau({
     required int idBureau,
     required String nom,
     required String adresse,
