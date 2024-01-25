@@ -13,13 +13,15 @@ class MonthPage extends StatefulWidget {
   @override
   State<MonthPage> createState() => _MonthPageState();
 }
+
 var d_red = Colors.red;
 Color hexToColor(String code) {
   return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
 }
+
 class _MonthPageState extends State<MonthPage> {
   List<Procedure> procedures = [];
-   late Future<List<Procedure>> _procedureList;
+  late Future<List<Procedure>> _procedureList;
   late Future<List<Procedure>> _procedureListe;
   int _currentPage = 1;
   int _pageSize = 5;
@@ -57,6 +59,7 @@ class _MonthPageState extends State<MonthPage> {
       getProcedure();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,13 +121,19 @@ class _MonthPageState extends State<MonthPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 30),
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.22,
+
+                /// 10% of screen width
+                vertical: MediaQuery.of(context).size.height *
+                    0.05, // 5% of screen height
+              ),
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
                     height: 150,
-                    width: 70,
+                    width: MediaQuery.of(context).size.width * 0.10,
                     child: FutureBuilder(
                       future: procedureService
                           .getDepenseByUserByMois(utilisateur.idUtilisateur!),
@@ -325,7 +334,7 @@ class _DataSource extends DataTableSource {
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(
-       "${item.total_depenses.toString()} FCFA",
+        "${item.total_depenses.toString()} FCFA",
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       DataCell(Text(

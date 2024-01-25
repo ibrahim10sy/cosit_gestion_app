@@ -30,7 +30,6 @@ class DepenseService extends ChangeNotifier {
       required String montantDepense,
       required String dateDepense,
       required Utilisateur utilisateur,
-      Demande? demande,
       required SousCategorie sousCategorie,
       required Bureau bureau,
       required Budget budget,
@@ -54,11 +53,9 @@ class DepenseService extends ChangeNotifier {
         'montantDepense': montantDepense,
         'dateDepense': dateDepense,
         'utilisateur': utilisateur.toMap(),
-        if (demande != null) 'demande': demande.toMap(),
         'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
-        // 'parametreDepense': parametreDepense.toMap(),
           if (parametreDepense != null) 'parametreDepense': parametreDepense.toMap(),
       });
 
@@ -182,7 +179,8 @@ class DepenseService extends ChangeNotifier {
       required String dateDepense,
       required SousCategorie sousCategorie,
       required Bureau bureau,
-      required Budget budget}) async {
+      required Budget budget,
+      }) async {
     try {
       var requete =
           http.MultipartRequest('PUT', Uri.parse('$baseUrl/update/$idDepense'));
@@ -204,6 +202,58 @@ class DepenseService extends ChangeNotifier {
         'sousCategorie': sousCategorie.toMap(),
         'bureau': bureau.toMap(),
         'budget': budget.toMap(),
+      });
+
+      var response = await requete.send();
+      var responsed = await http.Response.fromStream(response);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final donneesResponse = json.decode(responsed.body);
+        debugPrint(donneesResponse.toString());
+        return Depense.fromMap(donneesResponse);
+      } else {
+        throw Exception(
+            'Échec de la requête avec le code d\'état : ${responsed.statusCode}');
+      }
+    } catch (e) {
+      throw Exception(
+          'Une erreur s\'est produite lors de l\'ajout du depense : $e');
+    }
+  }
+  Future<Depense> updateDepenseByUser(
+      {required int idDepense,
+      required String description,
+      File? image,
+      required String montantDepense,
+      required String dateDepense,
+      required SousCategorie sousCategorie,
+      required Bureau bureau,
+      required Budget budget,
+      ParametreDepense? parametreDepense}) async {
+    try {
+      var requete =
+          http.MultipartRequest('PUT', Uri.parse('$baseUrl/update/$idDepense'));
+
+      if (image != null) {
+        requete.files.add(http.MultipartFile(
+          'images',
+          image.readAsBytes().asStream(),
+          image.lengthSync(),
+          filename: basename(image.path),
+        ));
+      }
+
+      requete.fields['depense'] = jsonEncode({
+        'description': description,
+        'image': "",
+        'montantDepense': montantDepense,
+        'dateDepense': dateDepense,
+        'sousCategorie': sousCategorie.toMap(),
+        'bureau': bureau.toMap(),
+        'budget': budget.toMap(),
+                  if (parametreDepense != null)
+          'parametreDepense': parametreDepense.toMap(),
+
       });
 
       var response = await requete.send();

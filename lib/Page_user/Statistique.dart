@@ -52,32 +52,42 @@ class _StatistiqueState extends State<Statistique>
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            // elevation: 5,
             child: Container(
               decoration: BoxDecoration(
-                  color: d_red, borderRadius: BorderRadius.circular(12)),
+                color: d_red,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: TabBar(
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  controller: tabController,
-                  padding: EdgeInsets.all(10),
-                  isScrollable: true,
-                  labelPadding: EdgeInsets.symmetric(horizontal: 20),
-                  tabs: [
-                    Tab(
-                        child: Text("Jour",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.black))),
-                    Tab(
-                        child: Text("Mois",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.black))),
-                    Tab(
-                        child: Text("Années",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.black))),
-                  ]),
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                controller: tabController,
+                padding: EdgeInsets.all(10),
+                isScrollable: true,
+                labelPadding: EdgeInsets.symmetric(horizontal: 20),
+                tabs: [
+                  Tab(
+                    child: Text(
+                      "Jour",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Mois",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Années",
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
             ),
           ),
           Expanded(

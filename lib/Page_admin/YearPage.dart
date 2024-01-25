@@ -119,13 +119,18 @@ class _YearPageState extends State<YearPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 30),
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.22,
+                /// 10% of screen width
+                vertical: MediaQuery.of(context).size.height *
+                    0.05, // 5% of screen height
+              ),
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
                     height: 150,
-                    width: 70,
+                    width: MediaQuery.of(context).size.width * 0.10,
                     child: FutureBuilder(
                       future: procedureService.getDepenseTotal(),
                       builder: (context, snapshot) {

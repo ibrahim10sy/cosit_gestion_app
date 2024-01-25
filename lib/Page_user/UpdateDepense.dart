@@ -1,29 +1,30 @@
+import 'dart:io';
+
+import 'package:cosit_gestion/Page_admin/CustomCard.dart';
+import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
+import 'package:cosit_gestion/model/Budget.dart';
+import 'package:cosit_gestion/model/Bureau.dart';
 import 'package:cosit_gestion/model/Depense.dart';
+import 'package:cosit_gestion/model/ParametreDepense.dart';
+import 'package:cosit_gestion/model/SousCategorie.dart';
+import 'package:cosit_gestion/model/Utilisateur.dart';
+import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
+import 'package:cosit_gestion/service/BudgetService.dart';
+import 'package:cosit_gestion/service/BureauService.dart';
+import 'package:cosit_gestion/service/DepenseService.dart';
+import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
-import 'package:provider/provider.dart'; 
-import 'dart:convert';
-import 'dart:io';
-import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
-import 'package:cosit_gestion/Page_admin/CustomCard.dart';
-import 'package:cosit_gestion/model/Admin.dart';
-import 'package:cosit_gestion/model/Budget.dart';
-import 'package:cosit_gestion/model/Bureau.dart';
-import 'package:cosit_gestion/model/SousCategorie.dart';
-import 'package:cosit_gestion/provider/AdminProvider.dart';
-import 'package:cosit_gestion/service/BureauService.dart';
-import 'package:cosit_gestion/service/DepenseService.dart';
-import 'package:cosit_gestion/service/SousCategorieService.dart';
+import 'package:provider/provider.dart';
 
 class UpdateDepense extends StatefulWidget {
   final Depense depense;
   const UpdateDepense({super.key, required this.depense});
-
   @override
   State<UpdateDepense> createState() => _UpdateDepenseState();
 }
@@ -35,10 +36,13 @@ class _UpdateDepenseState extends State<UpdateDepense> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController montant_control = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  late Admin admin;
+  late Utilisateur utilisateur;
   late SousCategorie sousCategorie;
+  late ParametreDepense parametreDepense;
+  late ParametreDepense parametreDepense1;
   late Bureau bureau;
   late Budget budget;
+  late Future<List<ParametreDepense>> _parametre;
   late Future<List<SousCategorie>> _categorie;
   late Future<List<Bureau>> _bureau;
   late Future<List<Budget>> _budgets;
@@ -47,14 +51,14 @@ class _UpdateDepenseState extends State<UpdateDepense> {
   int? budgetValue;
   String? imageSrc;
   File? photo;
-  int? adminID;
+  bool isLoading = false;
   late Depense depenses;
 
   @override
   void initState() {
     super.initState();
-    admin = Provider.of<AdminProvider>(context, listen: false).admin!;
-    adminID = admin.idAdmin;
+    utilisateur =
+        Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     depenses = widget.depense;
     descriptionController.text = depenses.description;
     montant_control.text = depenses.montantDepense.toString();
@@ -66,9 +70,15 @@ class _UpdateDepenseState extends State<UpdateDepense> {
     bureau = depenses.bureau;
     budget = depenses.budget;
     sousCategorie = depenses.sousCategorie;
+    parametreDepense = depenses.parametreDepense!;
     _bureau = getBureau();
-    _budgets = fetchBudgets(adminID!);
+    _budgets = getBudget(utilisateur.idUtilisateur!);
     _categorie = getCategorie();
+    // _parametre = getData();
+  }
+
+  Future<List<Budget>> getBudget(int id) async {
+    return BudgetService().fetchBudgetByUser(id);
   }
 
   Future<List<Bureau>> getBureau() async {
@@ -77,19 +87,6 @@ class _UpdateDepenseState extends State<UpdateDepense> {
 
   Future<List<SousCategorie>> getCategorie() async {
     return SousCategorieService().fetchAllSousCategorie();
-  }
-
-  Future<List<Budget>> fetchBudgets(int id) async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:5100/Budget/listeByAdmin/$id'));
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      List<dynamic> data = json.decode(response.body);
-      List<Budget> budgets = data.map((item) => Budget.fromJson(item)).toList();
-      return budgets;
-    } else {
-      throw Exception('Aucun budget trouvé  ${response.statusCode}');
-    }
   }
 
   Future<File> saveImagePermanently(String imagePath) async {
@@ -165,7 +162,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBars(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -227,7 +224,8 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 15),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -235,7 +233,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                               'assets/images/share.png',
                               width: 23,
                             ),
-                            Expanded(
+                            const Expanded(
                               child: Padding(
                                   padding: EdgeInsets.only(left: 10),
                                   child: Text(
@@ -333,7 +331,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                           hint: Padding(
                                             padding: const EdgeInsets.all(3),
                                             child: Text(
-                                              "Choisir un budget",
+                                              "Sélectionner un budget",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -363,8 +361,6 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                       child: DropdownButton(
                                         // padding: const EdgeInsets.all(12),
                                         items: budgets
-                                            .where((element) =>
-                                                element.utilisateur == null)
                                             .map((e) => DropdownMenuItem(
                                                   value: e.idBudget,
                                                   child: Padding(
@@ -389,7 +385,15 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir un budget",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -454,7 +458,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                           hint: Padding(
                                             padding: const EdgeInsets.all(3),
                                             child: Text(
-                                              "Choisir un bureau",
+                                              "Sélectionner un bureau",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -581,7 +585,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                           hint: Padding(
                                             padding: const EdgeInsets.all(3),
                                             child: Text(
-                                              "Choisir une catégorie",
+                                              "Sélectionner une catégorie",
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -636,7 +640,15 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                     );
                                   }
                                   return DropdownButton(
-                                      items: const [], onChanged: (value) {});
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Text(
+                                          "Choisir une catégorie",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      items: const [],
+                                      onChanged: (value) {});
                                 }),
                           )
                         ],
@@ -750,18 +762,13 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          "Fichier choisi :${photo.toString()}",
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: d_red),
-                        ),
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        "Fichier choisi : ${photo.toString()}",
+                        style: const TextStyle(color: d_red),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(
@@ -786,6 +793,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
+                                  int? mt = int.tryParse(montant);
                                   String formattedMontant =
                                       montant_control.text.replaceAll(',', '');
                                   int montants = int.parse(formattedMontant);
@@ -814,89 +822,221 @@ class _UpdateDepenseState extends State<UpdateDepense> {
                                     );
                                   }
 
-                                  try {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Row(
-                                          children: [
-                                            CircularProgressIndicator(
-                                              color: d_red,
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text("Envoi en cours..."),
+                                  if (montants >=
+                                      parametreDepense!.montantSeuil) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Center(
+                                            child: Text('Alert'),
+                                          ),
+                                          content: const Text(
+                                            "Pour les dépenses dont le montant est supérieur ou égale au montant seuil une demande doit être envoyée",
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () async {
+                                                // Afficher le SnackBar ici
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Row(
+                                                      children: [
+                                                        CircularProgressIndicator(
+                                                          color: d_red,
+                                                        ),
+                                                        SizedBox(width: 20),
+                                                        Text(
+                                                            "Envoi en cours..."),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+
+                                                Navigator.of(context)
+                                                    .pop(); // Fermer l'AlertDialog
+                                              },
+                                              child: const Text('OK'),
+                                            )
                                           ],
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     );
-                                    if (photo != null) {
-                                      await DepenseService().updateDepense(
+
+                                    try {
+                                      if (photo != null) {
+                                        await DepenseService()
+                                            .updateDepenseByUser(
+                                                idDepense: depenses.idDepense!,
+                                                description: description,
+                                                montantDepense:
+                                                    montants.toString(),
+                                                dateDepense: date,
+                                                image: photo as File,
+                                                sousCategorie: sousCategorie,
+                                                bureau: bureau,
+                                                budget: budget,
+                                                parametreDepense:
+                                                    parametreDepense);
+                                      } else {
+                                        await DepenseService()
+                                            .updateDepenseByUser(
                                           idDepense: depenses.idDepense!,
+                                          parametreDepense: parametreDepense,
                                           description: description,
                                           montantDepense: montants.toString(),
                                           dateDepense: date,
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
                                           budget: budget,
-                                          image: photo as File);
-                                    } else {
-                                      await DepenseService().updateDepense(
+                                        );
+                                      }
+
+                                      descriptionController.clear();
+                                      montant_control.clear();
+                                      dateController.clear();
+                                      setState(() {
+                                        bureauValue = null;
+                                        budgetValue = null;
+                                        catValue = null;
+                                        photo = null;
+                                      });
+
+                                      // Cacher le SnackBar une fois l'envoi terminé
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+
+                                      // Afficher le message de succès
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "Depense modifier avec succès"),
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      final String errorMessage = e.toString();
+                                      print(errorMessage);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                                child: Text('Erreur')),
+                                            content: Text(
+                                                'Budget epuisé ou montant inférieur'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  } else {
+                                    try {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Row(
+                                            children: [
+                                              CircularProgressIndicator(
+                                                color: d_red,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text("Envoi en cours..."),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                      if (photo != null &&
+                                          parametreDepense != null) {
+                                        await DepenseService()
+                                            .updateDepenseByUser(
                                           idDepense: depenses.idDepense!,
+                                          parametreDepense: parametreDepense!,
+                                          description: description,
+                                          montantDepense: montants.toString(),
+                                          dateDepense: date,
+                                          image: photo as File,
+                                          sousCategorie: sousCategorie,
+                                          bureau: bureau,
+                                          budget: budget,
+                                        );
+                                      } else {
+                                        // Si aucune photo n'est fournie
+                                        await DepenseService()
+                                            .updateDepenseByUser(
+                                          idDepense: depenses.idDepense!,
+                                          parametreDepense: parametreDepense!,
                                           description: description,
                                           montantDepense: montants.toString(),
                                           dateDepense: date,
                                           sousCategorie: sousCategorie,
                                           bureau: bureau,
-                                          budget: budget);
-                                    }
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-
-                                    // Afficher le message de succès
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text("Dépense modifier avec succès"),
-                                      ),
-                                    );
-                                    Provider.of<DepenseService>(context,
-                                            listen: false)
-                                        .applyChange();
-                                  Navigator.of(context).pop();
-                                    descriptionController.clear();
-                                    montant_control.clear();
-                                    dateController.clear();
-                                    // Réinitialiser les valeurs des variables de sélection
-                                    setState(() {
-                                      bureauValue = null;
-                                      budgetValue = null;
-                                      catValue = null;
-                                    });
-                                  } catch (e) {
-                                    final String errorMessage = e.toString();
-                                    print(errorMessage);
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Erreur')),
-                                          content: const Text(
-                                              "Désolé Budget epuisé ou montant inférieur"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
+                                          budget: budget,
                                         );
-                                      },
-                                    );
+                                      }
+
+                                      descriptionController.clear();
+                                      montant_control.clear();
+                                      dateController.clear();
+                                      setState(() {
+                                        bureauValue = null;
+                                        budgetValue = null;
+                                        catValue = null;
+                                        photo = null;
+                                      });
+                                      // Cacher le SnackBar une fois l'envoi terminé
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+
+                                      // Afficher le message de succès
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "Dépense modifié avec succès"),
+                                        ),
+                                      );
+                                      // Effacement des champs de saisie et réinitialisation des états
+                                      Navigator.of(context).pop();
+                                      // Application des changements
+                                      Provider.of<DepenseService>(context,
+                                              listen: false)
+                                          .applyChange();
+                                    } catch (e) {
+                                      final String errorMessage = e.toString();
+                                      print(errorMessage);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Center(
+                                                child: Text('Erreur')),
+                                            content: Text(
+                                                'Budget epuisé ou montant inférieur'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   }
                                 },
                                 icon: const Icon(
-                                  Icons.add,
+                                  Icons.edit,
                                   color: Colors.white,
                                 ),
                                 label: const Text("Modifier",

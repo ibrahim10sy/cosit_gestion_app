@@ -85,7 +85,7 @@ class _ConnexionUsersState extends State<ConnexionUsers> {
           },
         );
 
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(Duration(milliseconds: 500));
 
         Navigator.of(context).pop();
         final responseBody = json.decode(utf8.decode(response.bodyBytes));

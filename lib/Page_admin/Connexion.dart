@@ -87,7 +87,7 @@ class _ConnexionState extends State<Connexion> {
           },
         );
 
-        await Future.delayed(Duration(milliseconds: 60));
+        await Future.delayed(Duration(milliseconds: 500));
 
         Navigator.of(context).pop();
 
@@ -106,7 +106,7 @@ class _ConnexionState extends State<Connexion> {
         );
 
         adminProvider.setAdmin(admin);
-       
+
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
