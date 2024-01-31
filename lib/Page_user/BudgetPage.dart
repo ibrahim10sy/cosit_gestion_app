@@ -90,31 +90,28 @@ class _BudgetPageState extends State<BudgetPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Expanded(
-                        //flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset("assets/images/budget.png",
-                                width: 39, height: 39),
-                            const Expanded(
-                              //flex: 4,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  "Liste des budgets :",
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: d_red),
-                                  //overflow: TextOverflow.visible,
-                                ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset("assets/images/budget.png",
+                              width: 39, height: 39),
+                          const SizedBox(
+                              width:
+                                  5), // Ajout d'un SizedBox pour l'espacement
+                          Expanded(
+                            child: Text(
+                              "Liste des budgets :",
+                              style: TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold,
+                                color: d_red,
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
                     const Divider(
                       height: 1,
                       color: d_red,

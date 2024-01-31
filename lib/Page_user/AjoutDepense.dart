@@ -389,7 +389,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                 (element) =>
                                                     element.idBudget ==
                                                     newValue);
-                                           
                                           });
                                         },
                                       ),
@@ -517,7 +516,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                 (element) =>
                                                     element.idBureau ==
                                                     newValue);
-                                           
                                           });
                                         },
                                       ),
@@ -646,7 +644,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                                 .firstWhere((element) =>
                                                     element.idSousCategorie ==
                                                     newValue);
-                                           
                                           });
                                         },
                                       ),
@@ -813,7 +810,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
-                                     const String errorMessage =
+                                    const String errorMessage =
                                         "Tous les champs doivent être remplis";
                                     showDialog(
                                       context: context,
@@ -950,8 +947,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       );
                                     }
                                   } else {
-                                    
-
                                     try {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -967,7 +962,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                           ),
                                         ),
                                       );
-                                      
+
                                       if (photo != null &&
                                           parametreDepense != null) {
                                         await DepenseService().addDepenseByUser(

@@ -25,253 +25,253 @@ class _AjoutBureauState extends State<AjoutBureau> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomCard(
-              title: "Bureaux",
-              imagePath: "assets/images/house.png",
-              children: Column(
-                children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.white),
-                        borderRadius: BorderRadius.circular(22.0),
-                      ),
-                      // padding: const EdgeInsets.only(top: 190, left: 20),
-                      child: TextButton(
-                        onPressed: () {
-                          openDialog();
-                        },
-                        child: const Text(
-                          "+ Ajouter un bureau",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ))
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding( 
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Container(
-                height: 480,
-                width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(40, 15, 15, 15),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: ListView(
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, right: 20, top: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            //flex: 2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Image.asset("assets/images/house.png",
-                                    width: 39, height: 39),
-                                const Expanded(
-                                  //flex: 4,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      "Liste des bureaux",
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.bold,
-                                          color: d_red),
-                                      //overflow: TextOverflow.visible,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          // Expanded(child: rechercheEtTrier())
-                        ],
-                      ),
-                    ),
-                    const Divider(
-                      height: 1,
-                      color: d_red,
-                    ),
-                    Consumer<BureauService>(
-                      builder: (context, bureauService, child) {
-                        return FutureBuilder(
-                            future: bureauService.fetchBureau(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CupertinoActivityIndicator(
-                                      radius: 20.0, color: d_red),
-                                );
-                              }
-                              if (!snapshot.hasData) {
-                                return const Center(
-                                  child: Text("Aucun bureau trouvé"),
-                                );
-                              } else {
-                                bureauList = snapshot.data!;
-                                return Column(
-                                  children: bureauList
-                                      .map((Bureau bur) => ListTile(
-                                            leading: Image.asset(
-                                                "assets/images/house.png",
-                                                width: 33,
-                                                height: 33),
-                                            title: Text(
-                                              bur.nom,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                            subtitle: Text(
-                                              bur.adresse,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            trailing: PopupMenuButton<String>(
-                                              padding: EdgeInsets.zero,
-                                              itemBuilder: (context) =>
-                                                  <PopupMenuEntry<String>>[
-                                                PopupMenuItem<String>(
-                                                  child: ListTile(
-                                                    leading: const Icon(
-                                                      Icons.edit,
-                                                      color: Colors.green,
-                                                    ),
-                                                    title: const Text(
-                                                      "Modifier",
-                                                      style: TextStyle(
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    onTap: () async {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                                  context) =>
-                                                              AlertDialog(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            16),
-                                                                  ),
-                                                                  content: UpdateBureau(bureau: bur)));
-                                                      Navigator.of(context)
-                                                          .pop();
+      // appBar: const CustomAppBar(),
+      // body: SingleChildScrollView(
+      //   child: Column(
+      //     children: [
+      //       CustomCard(
+      //         title: "Bureaux",
+      //         imagePath: "assets/images/house.png",
+      //         children: Column(
+      //           children: [
+      //             const SizedBox(
+      //               height: 50,
+      //             ),
+      //             Container(
+      //                 decoration: BoxDecoration(
+      //                   border: Border.all(width: 1, color: Colors.white),
+      //                   borderRadius: BorderRadius.circular(22.0),
+      //                 ),
+      //                 // padding: const EdgeInsets.only(top: 190, left: 20),
+      //                 child: TextButton(
+      //                   onPressed: () {
+      //                     openDialog();
+      //                   },
+      //                   child: const Text(
+      //                     "+ Ajouter un bureau",
+      //                     style: TextStyle(color: Colors.white),
+      //                   ),
+      //                 ))
+      //           ],
+      //         ),
+      //       ),
+      //       const SizedBox(
+      //         height: 10,
+      //       ),
+      //       Padding( 
+      //         padding: const EdgeInsets.symmetric(vertical: 15),
+      //         child: Container(
+      //           height: 480,
+      //           width: MediaQuery.of(context).size.width * 0.9,
+      //           decoration: BoxDecoration(
+      //             color: Colors.white,
+      //             borderRadius: BorderRadius.circular(15),
+      //             boxShadow: const [
+      //               BoxShadow(
+      //                 color: Color.fromARGB(40, 15, 15, 15),
+      //                 spreadRadius: 5,
+      //                 blurRadius: 7,
+      //                 offset: Offset(0, 3),
+      //               ),
+      //             ],
+      //           ),
+      //           child: ListView(
+      //             children: [
+      //               Padding(
+      //                 padding:
+      //                     const EdgeInsets.only(left: 10, right: 20, top: 20),
+      //                 child: Row(
+      //                   mainAxisAlignment: MainAxisAlignment.start,
+      //                   children: [
+      //                     Expanded(
+      //                       //flex: 2,
+      //                       child: Row(
+      //                         mainAxisAlignment: MainAxisAlignment.start,
+      //                         children: [
+      //                           Image.asset("assets/images/house.png",
+      //                               width: 39, height: 39),
+      //                           const Expanded(
+      //                             //flex: 4,
+      //                             child: Padding(
+      //                               padding: EdgeInsets.only(left: 5),
+      //                               child: Text(
+      //                                 "Liste des bureaux",
+      //                                 style: TextStyle(
+      //                                     fontSize: 19,
+      //                                     fontWeight: FontWeight.bold,
+      //                                     color: d_red),
+      //                                 //overflow: TextOverflow.visible,
+      //                               ),
+      //                             ),
+      //                           )
+      //                         ],
+      //                       ),
+      //                     ),
+      //                     // Expanded(child: rechercheEtTrier())
+      //                   ],
+      //                 ),
+      //               ),
+      //               const Divider(
+      //                 height: 1,
+      //                 color: d_red,
+      //               ),
+      //               Consumer<BureauService>(
+      //                 builder: (context, bureauService, child) {
+      //                   return FutureBuilder(
+      //                       future: bureauService.fetchBureau(),
+      //                       builder: (context, snapshot) {
+      //                         if (snapshot.connectionState ==
+      //                             ConnectionState.waiting) {
+      //                           return const Center(
+      //                             child: CupertinoActivityIndicator(
+      //                                 radius: 20.0, color: d_red),
+      //                           );
+      //                         }
+      //                         if (!snapshot.hasData) {
+      //                           return const Center(
+      //                             child: Text("Aucun bureau trouvé"),
+      //                           );
+      //                         } else {
+      //                           bureauList = snapshot.data!;
+      //                           return Column(
+      //                             children: bureauList
+      //                                 .map((Bureau bur) => ListTile(
+      //                                       leading: Image.asset(
+      //                                           "assets/images/house.png",
+      //                                           width: 33,
+      //                                           height: 33),
+      //                                       title: Text(
+      //                                         bur.nom,
+      //                                         overflow: TextOverflow.ellipsis,
+      //                                         style: const TextStyle(
+      //                                           color: Colors.black,
+      //                                           fontWeight: FontWeight.bold,
+      //                                           fontSize: 20,
+      //                                         ),
+      //                                       ),
+      //                                       subtitle: Text(
+      //                                         bur.adresse,
+      //                                         overflow: TextOverflow.ellipsis,
+      //                                         style: const TextStyle(
+      //                                             fontSize: 16,
+      //                                             fontWeight: FontWeight.bold),
+      //                                       ),
+      //                                       trailing: PopupMenuButton<String>(
+      //                                         padding: EdgeInsets.zero,
+      //                                         itemBuilder: (context) =>
+      //                                             <PopupMenuEntry<String>>[
+      //                                           PopupMenuItem<String>(
+      //                                             child: ListTile(
+      //                                               leading: const Icon(
+      //                                                 Icons.edit,
+      //                                                 color: Colors.green,
+      //                                               ),
+      //                                               title: const Text(
+      //                                                 "Modifier",
+      //                                                 style: TextStyle(
+      //                                                     color: Colors.green,
+      //                                                     fontWeight:
+      //                                                         FontWeight.bold),
+      //                                               ),
+      //                                               onTap: () async {
+      //                                                 showDialog(
+      //                                                     context: context,
+      //                                                     builder: (BuildContext
+      //                                                             context) =>
+      //                                                         AlertDialog(
+      //                                                             backgroundColor:
+      //                                                                 Colors
+      //                                                                     .white,
+      //                                                             shape:
+      //                                                                 RoundedRectangleBorder(
+      //                                                               borderRadius:
+      //                                                                   BorderRadius.circular(
+      //                                                                       16),
+      //                                                             ),
+      //                                                             content: UpdateBureau(bureau: bur)));
+      //                                                 Navigator.of(context)
+      //                                                     .pop();
 
-                                                      // Navigator.of(context)
-                                                      //     .pop();
-                                                    },
-                                                  ),
-                                                ),
-                                                const PopupMenuDivider(),
-                                                PopupMenuItem<String>(
+      //                                                 // Navigator.of(context)
+      //                                                 //     .pop();
+      //                                               },
+      //                                             ),
+      //                                           ),
+      //                                           const PopupMenuDivider(),
+      //                                           PopupMenuItem<String>(
                                                   
-                                                  child: ListTile(
-                                                    leading: const Icon(
-                                                      Icons.delete,
-                                                      color: d_red,
-                                                    ),
-                                                    title: const Text(
-                                                      "Supprimer",
-                                                      style: TextStyle(
-                                                          color: d_red,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    onTap: () async {
+      //                                             child: ListTile(
+      //                                               leading: const Icon(
+      //                                                 Icons.delete,
+      //                                                 color: d_red,
+      //                                               ),
+      //                                               title: const Text(
+      //                                                 "Supprimer",
+      //                                                 style: TextStyle(
+      //                                                     color: d_red,
+      //                                                     fontWeight:
+      //                                                         FontWeight.bold),
+      //                                               ),
+      //                                               onTap: () async {
                                                       
-                                                      await Provider.of<
-                                                                  BureauService>(
-                                                              context,
-                                                              listen: false)
-                                                          .deleteBureau(
-                                                              bur.idBureau!)
-                                                          .then((value) => {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop()
-                                                              })
-                                                          .catchError(
-                                                              (onError) => {
-                                                                    showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (BuildContext
-                                                                                context) {
-                                                                          return AlertDialog(
-                                                                            title:
-                                                                                const Text("Erreur de suppression"),
-                                                                            content:
-                                                                                const Text(
-                                                                              "Impossible de supprimer le bureau ",
-                                                                            ),
-                                                                            actions: [
-                                                                              TextButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.of(context).pop();
-                                                                                  },
-                                                                                  child: const Text('OK'))
-                                                                            ],
-                                                                          );
-                                                                        }),
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop()
-                                                                  });
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ))
-                                      .toList(),
-                                );
-                              }
-                            });
-                      },
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+      //                                                 await Provider.of<
+      //                                                             BureauService>(
+      //                                                         context,
+      //                                                         listen: false)
+      //                                                     .deleteBureau(
+      //                                                         bur.idBureau!)
+      //                                                     .then((value) => {
+      //                                                           Navigator.of(
+      //                                                                   context)
+      //                                                               .pop()
+      //                                                         })
+      //                                                     .catchError(
+      //                                                         (onError) => {
+      //                                                               showDialog(
+      //                                                                   context:
+      //                                                                       context,
+      //                                                                   builder:
+      //                                                                       (BuildContext
+      //                                                                           context) {
+      //                                                                     return AlertDialog(
+      //                                                                       title:
+      //                                                                           const Text("Erreur de suppression"),
+      //                                                                       content:
+      //                                                                           const Text(
+      //                                                                         "Impossible de supprimer le bureau ",
+      //                                                                       ),
+      //                                                                       actions: [
+      //                                                                         TextButton(
+      //                                                                             onPressed: () {
+      //                                                                               Navigator.of(context).pop();
+      //                                                                             },
+      //                                                                             child: const Text('OK'))
+      //                                                                       ],
+      //                                                                     );
+      //                                                                   }),
+      //                                                               Navigator.of(
+      //                                                                       context)
+      //                                                                   .pop()
+      //                                                             });
+      //                                               },
+      //                                             ),
+      //                                           ),
+      //                                         ],
+      //                                       ),
+      //                                     ))
+      //                                 .toList(),
+      //                           );
+      //                         }
+      //                       });
+      //                 },
+      //               )
+      //             ],
+      //           ),
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // ),
     );
   }
 

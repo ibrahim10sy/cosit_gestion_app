@@ -33,17 +33,17 @@ class _DepenseDetailState extends State<DepenseDetail> {
     depense = widget.depenses;
   }
 
-  @override
-  void dispose() {
-    // TODO: implement
-    super.dispose();
-    depense = widget.depenses;
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement
+  //   super.dispose();
+  //   depense = widget.depenses;
+  // }
 
   Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: Row(
+      child: Row( 
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
@@ -134,23 +134,23 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         ),
                       ],
                     ),
-                    Container(
-                      child: Flexible(
-                          child: Visibility(
+                  Container(
+                      height: _showJustification ? 210 : 0,
+                      child: Visibility(
                         visible: _showJustification,
-                        child:
-                            depense.image != null && depense.image!.isNotEmpty
-                                ? Image.network(
-                                    depense.image!,
-                                    width: 200,
-                                    height: 210,
-                                    scale: 1,
-                                    fit: BoxFit.contain,
-                                  )
-                                : const Text(
-                                    textAlign: TextAlign.center,
-                                    "Aucune justificatif"),
-                      )),
+                        child: depense.image != null &&
+                                depense.image!.isNotEmpty
+                            ? Image.network(
+                                depense.image!,
+                                width: 200,
+                                height: 210,
+                                scale: 1,
+                                fit: BoxFit.contain,
+                              )
+                            : const Text(
+                                textAlign: TextAlign.center,
+                                "Aucune justificatif"),
+                      ),
                     ),
                     _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
@@ -219,7 +219,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                     const SizedBox(
                       height: 10,
                     ),
-                     Center(
+                    Center(
                       child: Text(
                         'Statut d\'Autorisation : ${_getStatusText(depense.autorisationAdmin)}',
                         style: TextStyle(
@@ -230,7 +230,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         ),
                       ),
                     ),
-                   
+                  
                   ],
                 ),
               ),
@@ -241,7 +241,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
     );
   }
 
-   String _getStatusText(bool? status) {
+  String _getStatusText(bool? status) {
     return status == true ? 'Oui' : 'Non';
   }
 }

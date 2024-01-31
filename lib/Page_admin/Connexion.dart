@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Connexion extends StatefulWidget {
   const Connexion({super.key});
@@ -30,6 +31,12 @@ class _ConnexionState extends State<Connexion> {
   String email = '';
   String image = '';
 
+@override
+  void initState() {
+    super.initState();
+    checkUserSession();
+  }
+  
   Future<void> loginUser() async {
     final String email = emailController.text;
     final String passWord = motDePasseController.text;
@@ -97,6 +104,10 @@ class _ConnexionState extends State<Connexion> {
         emailController.clear();
         motDePasseController.clear();
 
+      // Sauvegarder les données de l'utilisateur dans shared preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('email', email);
+        prefs.setString('passWord', passWord);
         Admin admin = Admin(
           nom: responseBody['nom'],
           prenom: responseBody['prenom'],
@@ -156,6 +167,21 @@ class _ConnexionState extends State<Connexion> {
       );
     }
   }
+
+Future<void> checkUserSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+    String? passWord = prefs.getString('passWord');
+
+    if (email != null && passWord != null) {
+      // S'il existe des données utilisateur dans shared preferences, connectez automatiquement l'utilisateur
+      emailController.text = email;
+      motDePasseController.text = passWord;
+      loginUser();
+    }
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {

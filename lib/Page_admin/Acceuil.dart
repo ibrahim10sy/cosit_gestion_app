@@ -194,7 +194,8 @@ class _AccueilState extends State<Accueil> {
                 ),
               ],
             ),
-          )),
+          )
+          ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cosit_gestion/Page_admin/BottomNavigationPage.dart';
 import 'package:cosit_gestion/Page_admin/Connexion.dart';
 import 'package:cosit_gestion/Page_screen.dart';
+import 'package:cosit_gestion/Page_user/ConnexionUsers.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
 import 'package:cosit_gestion/service/AdminService.dart';

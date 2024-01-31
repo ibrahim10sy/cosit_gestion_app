@@ -127,9 +127,9 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         ),
                       ],
                     ),
-                    Container(
-                      child: Flexible(
-                          child: Visibility(
+                     Container(
+                      height: _showJustification ? 210 : 0,
+                      child: Visibility(
                         visible: _showJustification,
                         child:
                             depense.image != null && depense.image!.isNotEmpty
@@ -143,7 +143,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                                 : const Text(
                                     textAlign: TextAlign.center,
                                     "Aucune justificatif"),
-                      )),
+                      ),
                     ),
                     _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
@@ -201,7 +201,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                                 overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold)),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Center(

@@ -92,7 +92,7 @@ class _CustomAppBarsState extends State<CustomAppBars> {
                             )
                           : CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  "http://10.0.2.2/${user!.image!}"),
+                                  user!.image!),
                               radius: 30,
                             ),
                       Padding(

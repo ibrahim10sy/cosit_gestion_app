@@ -1,4 +1,3 @@
-import 'package:cosit_gestion/Page_admin/UpdaterUtilisateur.dart';
 import 'package:cosit_gestion/Page_user/Updateprofil.dart';
 import 'package:cosit_gestion/model/Utilisateur.dart';
 import 'package:cosit_gestion/provider/UtilisateurProvider.dart.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfilUtilisateur extends StatefulWidget {
-  const ProfilUtilisateur({super.key});
+  const ProfilUtilisateur({Key? key});
 
   @override
   State<ProfilUtilisateur> createState() => _ProfilUtilisateurState();
@@ -54,27 +53,22 @@ class _ProfilUtilisateurState extends State<ProfilUtilisateur> {
               const SizedBox(
                 height: 100,
               ),
-              Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Expanded(
-                      child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(80.0),
-                        topRight: Radius.circular(
-                            80.0), // Arrondir le coin supérieur droit
-                      ),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(80.0),
+                      topRight: Radius.circular(80.0),
                     ),
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 160),
-                        Consumer<UtilisateurProvider>(
-                            builder: (context, userProvider, child) {
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 160),
+                      Consumer<UtilisateurProvider>(
+                        builder: (context, userProvider, child) {
                           final user = userProvider.utilisateur;
                           return Column(
                             children: [
@@ -83,8 +77,9 @@ class _ProfilUtilisateurState extends State<ProfilUtilisateur> {
                                 child: Text(
                                   "Nom : ${user!.nom.toUpperCase()} ${user.prenom.toUpperCase()}",
                                   style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -92,8 +87,9 @@ class _ProfilUtilisateurState extends State<ProfilUtilisateur> {
                                 child: Text(
                                   "Email : ${user.email}",
                                   style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -101,72 +97,83 @@ class _ProfilUtilisateurState extends State<ProfilUtilisateur> {
                                 child: Text(
                                   "Phone : ${user.phone}",
                                   style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: OutlinedButton.icon(
-                                      style: OutlinedButton.styleFrom(
-                                          side: const BorderSide(
-                                              color: Colors.red, width: 1)),
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: d_red,
+                                padding: const EdgeInsets.all(10.0),
+                                child: OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                      color: Colors.red,
+                                      width: 1,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: d_red,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => UpdateProfil(
+                                          utilisateurs: user,
+                                        ),
                                       ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                  UpdateProfil(utilisateurs: user)));
-                                      },
-                                      label: const Text(
-                                        "Modifier profil",
-                                        style: TextStyle(
-                                            color: d_red, fontSize: 20),
-                                      ))),
+                                    );
+                                  },
+                                  label: const Text(
+                                    "Modifier profil",
+                                    style:
+                                        TextStyle(color: d_red, fontSize: 20),
+                                  ),
+                                ),
+                              ),
                             ],
                           );
-                        })
-                      ],
-                    ),
-                  ))),
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
-          Positioned(child: Consumer<UtilisateurProvider>(
-            builder: (context, userProvider, child) {
-              final user = userProvider.utilisateur;
-              return user?.image == null || user?.image?.isEmpty == true
-                  ? CircleAvatar(
-                      backgroundColor: d_red,
-                      radius: 120,
-                      child: Text(
-                        "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
-                        style: const TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 2,
+          Positioned(
+            child: Consumer<UtilisateurProvider>(
+              builder: (context, userProvider, child) {
+                final user = userProvider.utilisateur;
+                return user?.image == null || user?.image?.isEmpty == true
+                    ? CircleAvatar(
+                        backgroundColor: d_red,
+                        radius: 120,
+                        child: Text(
+                          "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                          style: const TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 2,
+                          ),
                         ),
-                      ),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(300.0),
-                      child: SizedBox(
-                        width: 210.0,
-                        height: 210.0,
-                        child: Image.network(
-                          user!.image!,
-                          // fit: BoxFit.fill,
-                          fit: BoxFit
-                              .cover, // ou BoxFit.contain, BoxFit.fill, etc.
-                          // scale: 0.5,
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(300.0),
+                        child: SizedBox(
+                          width: 210.0,
+                          height: 210.0,
+                          child: Image.network(
+                            user!.image!,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ));
-            },
-          ))
+                      );
+              },
+            ),
+          ),
         ],
       ),
     );
