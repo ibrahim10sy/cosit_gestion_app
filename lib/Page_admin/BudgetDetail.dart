@@ -36,11 +36,11 @@ class _BudgetDetailState extends State<BudgetDetail> {
     return response;
   }
 
-  Future<Map<String, dynamic>> getMontant() async {
-    final response =
-        await DepenseService().getSommeDepenseTotalByBudget(budgetID!);
-    return response;
-  }
+  // Future<Map<String, dynamic>> getMontant() async {
+  //   final response =
+  //       await DepenseService().getSommeDepenseTotalByBudget(budgetID!);
+  //   return response;
+  // }
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
       restant = budgets.montantRestant;
       _depenseListe = getDepenseByBudget();
     });
-    montantDepense = getMontant();
+    // montantDepense = getMontant();
   }
 
   @override
@@ -122,7 +122,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                               return const Center(
                                 child: CupertinoActivityIndicator(
                                   radius: 20.0,
-                                  color: d_red,
+                                  color: Colors.white,
                                 ),
                               );
                             }
@@ -264,7 +264,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                                       ),
                                     ),
                                     subtitle: Text(
-                                                                                         "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
+                                      "${depense.dateDepense} - montant : ${depense.montantDepense.toString()}",
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontSize: 15,

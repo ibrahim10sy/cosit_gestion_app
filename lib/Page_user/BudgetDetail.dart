@@ -117,7 +117,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                               return const Center(
                                 child: CupertinoActivityIndicator(
                                   radius: 20.0,
-                                  color: d_red,
+                                  color: Colors.white,
                                 ),
                               );
                             }

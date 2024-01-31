@@ -37,7 +37,11 @@ class _DelayedAnimationState extends State<DelayedAnimation>
       _controller.forward();
     });
   }
-
+  @override
+  void dispose() {
+    _controller.dispose(); // Disposez le controller dans la méthode dispose
+    super.dispose();
+  }
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _controller,

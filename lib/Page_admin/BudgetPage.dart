@@ -61,34 +61,36 @@ class _BudgetPageState extends State<BudgetPage> {
           children: [
             CustomCard(
               title: "Budget",
-              subTitle: "Montant total alloué",
+              subTitle: "Budget total alloué",
               imagePath: "assets/images/wallet-budget-icon.png",
               children: Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Consumer<BudgetService>(
-                      builder: (context, budgetService, child) {
-                    return FutureBuilder(
-                        future:
-                            budgetService.getBudgetTotalByAdmin(admin.idAdmin!),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text("${snapshot.data?["Total"]} FCFA",
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold));
-                          } else {
-                            return const Center(
-                              child: CupertinoActivityIndicator(
-                                  radius: 20.0, color: d_red),
-                            ); //const CircularProgressIndicator();
-                          }
-                        });
-                  }),
+                  // Consumer<BudgetService>(
+                  //     builder: (context, budgetService, child) {
+                  //   return FutureBuilder(
+                  //       future:
+                  //           budgetService.getBudgetTotalByAdmin(admin.idAdmin!),
+                  //       builder: (context, snapshot) {
+                  //         if (snapshot.hasData) {
+                  //           return Text("${snapshot.data?["Total"]} FCFA",
+                  //               style: const TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontSize: 22,
+                  //                   fontWeight: FontWeight.bold));
+                  //         } else {
+                  //           return const Center(
+                  //             child: CupertinoActivityIndicator(
+                  //                 radius: 20.0, color: Colors.white),
+                  //           ); //const CircularProgressIndicator();
+                  //         }
+                  //       });
+                  // }),
                   const SizedBox(
-                    height: 15,
+                    height: 50,
                   ),
                   Container(
+                      // alignment: Alignment.bottomLeft,
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: Colors.white),
                         borderRadius: BorderRadius.circular(22.0),

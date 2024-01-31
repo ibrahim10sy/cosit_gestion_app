@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
 class UtilisateurService extends ChangeNotifier {
-  static const String baseUrl = 'http://10.0.2.2:5100/utilisateur';
+  static const String baseUrl = 'https://depenses-cosit.com/utilisateur';
   List<Utilisateur> utilisateurs = [];
 
   static Future<void> creerCompteUtilisateur({
@@ -110,7 +110,7 @@ class UtilisateurService extends ChangeNotifier {
   Future<List<Utilisateur>> fetchData() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:5100/utilisateur/liste'));
+          await http.get(Uri.parse('https://depenses-cosit.com/utilisateur/liste'));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Fetching data");

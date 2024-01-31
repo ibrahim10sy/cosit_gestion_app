@@ -63,8 +63,8 @@ class _AccueilState extends State<Accueil> {
                               } else {
                                 return const CupertinoActivityIndicator(
                                     radius: 20.0,
-                                    color:
-                                        d_red); //const CircularProgressIndicator();
+                                    color: Colors
+                                        .white); //const CircularProgressIndicator();
                               }
                             });
                       }),
@@ -178,7 +178,7 @@ class _AccueilState extends State<Accueil> {
                       0.25, // Set width to 80% of the screen width
                   child: Image.asset(
                     "assets/images/$imgLocation",
-                     fit: BoxFit
+                    fit: BoxFit
                         .cover, // You can adjust the BoxFit based on your needs
                   ),
                 ),

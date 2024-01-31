@@ -198,7 +198,6 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                                     0) //blur radius of shadow
                                           ]),
                                       child: DropdownButton(
-                                      
                                         items: utilisateur
                                             .where((element) =>
                                                 element.role == "Comptable" ||
@@ -421,6 +420,19 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                   }
 
                                   try {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: d_red,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Envoi en cours..."),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                     // Vérifiez si l'utilisateur est non null et affectez la valeur à la variable user
                                     Utilisateur? user1 = user;
 
@@ -442,25 +454,15 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                       );
                                     }
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Succès')),
-                                          content: const Text(
-                                              "Budget ajoutée avec succès"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            )
-                                          ],
-                                        );
-                                      },
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+
+                                    // Afficher le message de succès
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Budget ajouté avec succès"),
+                                      ),
                                     );
 
                                     Provider.of<BudgetService>(context,

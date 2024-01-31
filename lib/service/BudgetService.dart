@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class BudgetService extends ChangeNotifier {
-  static const String baseUrl = "http://10.0.2.2:5100/Budget";
+  static const String baseUrl = "https://depenses-cosit.com/Budget";
 
   List<Budget> budget = [];
   String action = "all";
@@ -26,7 +26,7 @@ class BudgetService extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getBudgetTotalByUser(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/sommeByUser/$id'));
+    final response = await http.get(Uri.parse('https://depenses-cosit.com/Budget/sommeByUser/$id'));
     print("Fetching budget total");
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
