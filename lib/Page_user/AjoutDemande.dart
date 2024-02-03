@@ -32,7 +32,7 @@ class _AjoutDemandeState extends State<AjoutDemande> {
   @override
   void initState() {
     super.initState();
-    _admin = http.get(Uri.parse('https://depenses-cosit.com/Admin/list'));
+    _admin = http.get(Uri.parse('http://10.0.2.2:5100/Admin/list'));
 
     utilisateur =
         Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;

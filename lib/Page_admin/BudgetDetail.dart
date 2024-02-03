@@ -62,11 +62,14 @@ class _BudgetDetailState extends State<BudgetDetail> {
         body: SingleChildScrollView(
             child: Column(children: [
           CustomCard(
-              subTitle: "${budgets.montant} FCFA,",
-              title: "Montant du budget",
+              // subTitle: "${budgets.montant} FCFA,",
+              title: "Détail du budget",
               imagePath: "assets/images/budget.png",
               children: Column(
                 children: [
+                  const SizedBox(
+                    height: 32,
+                  ),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
@@ -75,6 +78,26 @@ class _BudgetDetailState extends State<BudgetDetail> {
                       crossAxisAlignment:
                           CrossAxisAlignment.start, // Align to the start (left)
                       children: [
+                        Column(
+                          children: [
+                            const Text(
+                              "Montant Total :",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "${budgets.montant} FCFA    ",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                         Column(
                           children: [
                             const Text(
@@ -95,55 +118,52 @@ class _BudgetDetailState extends State<BudgetDetail> {
                             ),
                           ],
                         ),
-                        FutureBuilder(
-                          future: DepenseService()
-                              .getSommeDepenseTotalByBudget(budgets.idBudget!),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              debugPrint("Boucle 1");
-                              return Column(
-                                children: [
-                                  const Text(
-                                    "Total dépensé",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text("${snapshot.data?["Total"]} FCFA",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold))
-                                ],
-                              );
-                            } else {
-                              return const Center(
-                                child: CupertinoActivityIndicator(
-                                  radius: 20.0,
-                                  color: Colors.white,
-                                ),
-                              );
-                            }
-                          },
-                        ),
+                        // FutureBuilder(
+                        //   future: DepenseService()
+                        //       .getSommeDepenseTotalByBudget(budgets.idBudget!),
+                        //   builder: (context, snapshot) {
+                        //     if (snapshot.hasData) {
+                        //       debugPrint("Boucle 1");
+                        //       return Column(
+                        //         children: [
+                        //           const Text(
+                        //             "Total dépensé",
+                        //             style: TextStyle(
+                        //               color: Colors.white,
+                        //               fontSize: 15,
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           ),
+                        //           Text("${snapshot.data?["Total"]} FCFA",
+                        //               style: const TextStyle(
+                        //                   color: Colors.white,
+                        //                   fontSize: 22,
+                        //                   fontWeight: FontWeight.bold))
+                        //         ],
+                        //       );
+                        //     } else {
+                        //       return const Center(
+                        //         child: CupertinoActivityIndicator(
+                        //           radius: 20.0,
+                        //           color: Colors.white,
+                        //         ),
+                        //       );
+                        //     }
+                        //   },
+                        // ),
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            openDialog();
-                          },
-                          icon: const Icon(
-                            Icons.info_outlined,
-                            color: Colors.white,
-                          ))
-                    ],
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                        onPressed: () {
+                          openDialog();
+                        },
+                        icon: const Icon(
+                          Icons.info_outlined,
+                          color: Colors.white,
+                        )),
                   ),
                 ],
               )),

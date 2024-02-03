@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:cosit_gestion/Page_admin/EmailPage.dart';
 import 'package:cosit_gestion/Page_admin/ProfilAdmin.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -6,18 +7,18 @@ import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:cosit_gestion/service/SendNotifService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:badges/badges.dart' as badges;
 
-
-class CustomAppBar extends StatefulWidget  implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
-   @override
+  @override
   Size get preferredSize => const Size.fromHeight(150.0);
 }
+
 const d_red = Colors.red;
+
 class _CustomAppBarState extends State<CustomAppBar> {
   late Admin admin;
   late Future<List<SendNotification>> _notif;
@@ -87,11 +88,23 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                     letterSpacing: 2),
                               ),
                             )
-                          : CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  "http://10.0.2.2/${admin!.image!}"),
-                              radius: 30,
-                            ),
+                          : admin?.image != null
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(admin!.image!),
+                                  radius: 30,
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: d_red,
+                                  radius: 30,
+                                  child: Text(
+                                    "${admin!.prenom.substring(0, 1).toUpperCase()}${admin.nom.substring(0, 1).toUpperCase()}",
+                                    style: const TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        letterSpacing: 2),
+                                  ),
+                                ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: Text(

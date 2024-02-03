@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
- 
+import 'dart:typed_data';
+
 import 'package:cosit_gestion/Page_admin/CustomAppBar.dart';
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/model/Admin.dart';
@@ -13,6 +14,7 @@ import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -68,7 +70,7 @@ class _AddDepenseState extends State<AddDepense> {
 
   Future<List<Budget>> fetchBudgets(int id) async {
     final response = await http
-        .get(Uri.parse('https://depenses-cosit.com/Budget/listeByAdmin/$id'));
+        .get(Uri.parse('http://10.0.2.2:5100/Budget/listeByAdmin/$id'));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       List<dynamic> data = json.decode(response.body);
@@ -84,14 +86,10 @@ class _AddDepenseState extends State<AddDepense> {
     final name = path.basename(imagePath);
     final image = File('${directory.path}/$name');
 
-    return File(imagePath).copy(image.path);
-  }
+    // Réduisez la taille de l'image et compressez-la avant de la sauvegarder
+    await compressAndSaveImage(imagePath, image.path);
 
-  Future<File?> getImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    if (image == null) return null;
-
-    return File(image.path);
+    return image;
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -102,6 +100,29 @@ class _AddDepenseState extends State<AddDepense> {
         imageSrc = image.path;
       });
     }
+  }
+
+  Future<File?> getImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return null;
+
+    return File(image.path);
+  }
+
+  Future<void> compressAndSaveImage(String inputPath, String outputPath) async {
+    // Lisez l'image depuis le chemin d'origine
+    final File imageFile = File(inputPath);
+    final List<int> imageBytes = await imageFile.readAsBytes();
+    final img.Image originalImage =
+        img.decodeImage(Uint8List.fromList(imageBytes))!;
+
+    // Comprimez l'image avec une qualité spécifiée (0-100)
+    final List<int> compressedImageBytes =
+        img.encodeJpg(originalImage, quality: 80);
+
+    // Enregistrez l'image compressée
+    final File compressedFile = File(outputPath);
+    await compressedFile.writeAsBytes(compressedImageBytes);
   }
 
   Future<void> _showImageSourceDialog() async {
@@ -157,7 +178,7 @@ class _AddDepenseState extends State<AddDepense> {
         child: Column(
           children: [
             const CustomCard(
-              title: "Ajout dépense",
+              title: "Ajouter dépense",
               imagePath: "assets/images/depense.png",
             ),
             Padding(
@@ -845,6 +866,7 @@ class _AddDepenseState extends State<AddDepense> {
                                             Text("Dépense ajouté avec succès"),
                                       ),
                                     );
+
                                     Provider.of<DepenseService>(context,
                                             listen: false)
                                         .applyChange();

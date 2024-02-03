@@ -57,8 +57,8 @@ class _BudgetDetailState extends State<BudgetDetail> {
         child: Column(
           children: [
             CustomCard(
-              subTitle: "${budget.montant} FCFA,",
-              title: "Montant du budget",
+              // subTitle: "${budget.montant} FCFA,",
+              title: "Détail du budget",
               imagePath: "assets/images/budget.png",
               children: Column(
                 children: [
@@ -70,6 +70,26 @@ class _BudgetDetailState extends State<BudgetDetail> {
                       crossAxisAlignment:
                           CrossAxisAlignment.start, // Align to the start (left)
                       children: [
+                        Column(
+                          children: [
+                            const Text(
+                              "Montant Total :",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "${budget.montant} FCFA    ",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                         Column(
                           children: [
                             const Text(
@@ -90,39 +110,40 @@ class _BudgetDetailState extends State<BudgetDetail> {
                             ),
                           ],
                         ),
-                        FutureBuilder(
-                          future: DepenseService()
-                              .getSommeDepenseTotalByBudget(budget.idBudget!),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              debugPrint("Boucle 1");
-                              return Column(
-                                children: [
-                                  const Text(
-                                    "Total dépensé",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text("${snapshot.data?["Total"]} FCFA",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold))
-                                ],
-                              );
-                            } else {
-                              return const Center(
-                                child: CupertinoActivityIndicator(
-                                  radius: 20.0,
-                                  color: Colors.white,
-                                ),
-                              );
-                            }
-                          },
-                        ),
+
+                        // FutureBuilder(
+                        //   future: DepenseService()
+                        //       .getSommeDepenseTotalByBudget(budget.idBudget!),
+                        //   builder: (context, snapshot) {
+                        //     if (snapshot.hasData) {
+                        //       debugPrint("Boucle 1");
+                        //       return Column(
+                        //         children: [
+                        //           const Text(
+                        //             "Total dépensé",
+                        //             style: TextStyle(
+                        //               color: Colors.white,
+                        //               fontSize: 15,
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           ),
+                        //           Text("${snapshot.data?["Total"]} FCFA",
+                        //               style: const TextStyle(
+                        //                   color: Colors.white,
+                        //                   fontSize: 22,
+                        //                   fontWeight: FontWeight.bold))
+                        //         ],
+                        //       );
+                        //     } else {
+                        //       return const Center(
+                        //         child: CupertinoActivityIndicator(
+                        //           radius: 20.0,
+                        //           color: Colors.white,
+                        //         ),
+                        //       );
+                        //     }
+                        //   },
+                        // ),
                       ],
                     ),
                   ),
@@ -190,7 +211,6 @@ class _BudgetDetailState extends State<BudgetDetail> {
                             ],
                           ),
                         ),
-                     
                       ],
                     ),
                   ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CategorieService extends ChangeNotifier {
-  static const String baseUrl = "https://depenses-cosit.com/Categorie";
+  static const String baseUrl = "http://10.0.2.2:5100/Categorie";
 
   List<CategorieDepense> categories = [];
 

@@ -41,8 +41,8 @@ class _AccueilState extends State<Accueil> {
           child: Column(
             children: [
               CustomCard(
-                title: "Budget",
-                subTitle: "Budget total alloué :",
+                title: "Cosit",
+                subTitle: "Gestion de dépense",
                 imagePath: "assets/images/wallet-budget-icon.png",
                 children: Column(
                   children: [
@@ -64,7 +64,7 @@ class _AccueilState extends State<Accueil> {
                                 return const CupertinoActivityIndicator(
                                     radius: 20.0,
                                     color: Colors
-                                        .white); //const CircularProgressIndicator();
+                                        .red); //const CircularProgressIndicator();
                               }
                             });
                       }),
@@ -194,8 +194,7 @@ class _AccueilState extends State<Accueil> {
                 ),
               ],
             ),
-          )
-          ),
+          )),
     );
   }
 }

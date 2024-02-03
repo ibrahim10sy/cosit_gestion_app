@@ -146,7 +146,7 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                                                   true
                                                           ? CircleAvatar(
                                                               backgroundColor:
-                                                                  d_red,
+                                                                d_red,
                                                               radius: 30,
                                                               child: Text(
                                                                 "${user.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
@@ -163,11 +163,33 @@ class _UtilisateurPageState extends State<UtilisateurPage> {
                                                                 ),
                                                               ),
                                                             )
-                                                          : CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(user.image!),
-                                                              radius: 30,
-                                                            ),
+                                                          : user.image != null
+                                                          ? CircleAvatar(
+                                                                  backgroundImage:
+                                                                      NetworkImage(
+                                                                          user.image!),
+                                                                  radius: 30,
+                                                                )
+                                                              : CircleAvatar(
+                                                                  backgroundColor:
+                                                                      d_red,
+                                                                  radius: 30,
+                                                                  child: Text(
+                                                                    "${user.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          25,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      letterSpacing:
+                                                                          2,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                       title: Text(
                                                         "${user.prenom.toUpperCase()} ${user.nom.toUpperCase()}",
                                                         overflow: TextOverflow

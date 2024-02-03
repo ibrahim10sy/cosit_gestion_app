@@ -556,6 +556,19 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                   }
 
                                   try {
+                                     ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: d_red,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Modification en cours..."),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                     await SalaireService().updateSalaire(
                                         idSalaire: salaire.idSalaire!,
                                         description: description,
@@ -568,25 +581,15 @@ class _UpdateSalaireState extends State<UpdateSalaire> {
                                             listen: false)
                                         .applyChange();
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Succès')),
-                                          content: const Text(
-                                              "Salaire modifié avec succès"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            )
-                                          ],
-                                        );
-                                      },
+                                     ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+
+                                    // Afficher le message de succès
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Salaire modifier avec succès"),
+                                      ),
                                     );
                                     Navigator.of(context).pop(context);
                                     descriptionController.clear();

@@ -168,6 +168,22 @@ class _ProfilUtilisateurState extends State<ProfilUtilisateur> {
                           child: Image.network(
                             user!.image!,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Handle the error when the image fails to load
+                              return CircleAvatar(
+                                backgroundColor: d_red,
+                                radius: 120,
+                                child: Text(
+                                  "${user!.prenom.substring(0, 1).toUpperCase()}${user.nom.substring(0, 1).toUpperCase()}",
+                                  style: const TextStyle(
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 2,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );

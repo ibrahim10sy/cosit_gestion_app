@@ -38,10 +38,10 @@ class _AccueilState extends State<Accueil> {
         appBar: CustomAppBars(),
         body: SingleChildScrollView(
           child: Column(
-            children: [
+            children: [ 
               CustomCard(
-                title: "Budget",
-                subTitle: "Budget total alloué :",
+               title: "Cosit",
+                subTitle: "Gestion de dépense",
                 imagePath: "assets/images/wallet-budget-icon.png",
                 children: Column(
                   children: [

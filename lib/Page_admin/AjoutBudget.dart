@@ -464,7 +464,7 @@ class _AjoutBudgetState extends State<AjoutBudget> {
                                             Text("Budget ajouté avec succès"),
                                       ),
                                     );
-
+Navigator.of(context).pop();
                                     Provider.of<BudgetService>(context,
                                             listen: false)
                                         .applyChange();

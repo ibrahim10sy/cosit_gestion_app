@@ -551,6 +551,19 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                   }
 
                                   try {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: d_red,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Envoi en cours..."),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                     await SalaireService().addSalaire(
                                         description: description,
                                         montant: montants.toString(),
@@ -561,6 +574,17 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                     Provider.of<SalaireService>(context,
                                             listen: false)
                                         .applyChange();
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+
+                                    // Afficher le message de succès
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Salaire ajouté avec succès"),
+                                      ),
+                                    );
+                                    Navigator.of(context).pop();
                                     descriptionController.clear();
                                     montant_control.clear();
                                     userController.clear();
@@ -570,26 +594,7 @@ class _AjoutSalaireState extends State<AjoutSalaire> {
                                       userValue = null;
                                       catValue = null;
                                     });
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Succès')),
-                                          content: const Text(
-                                              "Salaire ajoutée avec succès"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(context);
-                                              },
-                                              child: const Text('OK'),
-                                            )
-                                          ],
-                                        );
-                                      },
-                                    );
+                                    
                                   } catch (e) {
                                     final String errorMessage = e.toString();
                                     showDialog(

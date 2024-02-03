@@ -20,6 +20,8 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:image/image.dart' as img;
+import 'dart:typed_data';
 
 class AjoutDepense extends StatefulWidget {
   const AjoutDepense({super.key});
@@ -64,19 +66,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     fetchData();
   }
 
-  Future<File> saveImagePermanently(String imagePath) async {
+ Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = path.basename(imagePath);
     final image = File('${directory.path}/$name');
 
-    return File(imagePath).copy(image.path);
-  }
+    // Réduisez la taille de l'image et compressez-la avant de la sauvegarder
+    await compressAndSaveImage(imagePath, image.path);
 
-  Future<File?> getImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    if (image == null) return null;
-
-    return File(image.path);
+    return image;
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -87,6 +85,29 @@ class _AjoutDepenseState extends State<AjoutDepense> {
         imageSrc = image.path;
       });
     }
+  }
+
+  Future<File?> getImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) return null;
+
+    return File(image.path);
+  }
+
+  Future<void> compressAndSaveImage(String inputPath, String outputPath) async {
+    // Lisez l'image depuis le chemin d'origine
+    final File imageFile = File(inputPath);
+    final List<int> imageBytes = await imageFile.readAsBytes();
+    final img.Image originalImage =
+        img.decodeImage(Uint8List.fromList(imageBytes))!;
+
+    // Comprimez l'image avec une qualité spécifiée (0-100)
+    final List<int> compressedImageBytes =
+        img.encodeJpg(originalImage, quality: 80);
+
+    // Enregistrez l'image compressée
+    final File compressedFile = File(outputPath);
+    await compressedFile.writeAsBytes(compressedImageBytes);
   }
 
   Future<void> _showImageSourceDialog() async {
@@ -923,6 +944,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                               "Demande envoyée avec succès"),
                                         ),
                                       );
+                                      Navigator.of(context).pop();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
@@ -1011,12 +1033,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                               "Dépense ajouté avec succès"),
                                         ),
                                       );
-                                      // Effacement des champs de saisie et réinitialisation des états
-
                                       // Application des changements
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
+                                      Navigator.of(context).pop();
                                     } catch (e) {
                                       final String errorMessage = e.toString();
                                       print(errorMessage);

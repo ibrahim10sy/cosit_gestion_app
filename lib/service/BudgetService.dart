@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class BudgetService extends ChangeNotifier {
-  static const String baseUrl = "https://depenses-cosit.com/Budget";
+  static const String baseUrl = "http://10.0.2.2:5100/Budget";
 
   List<Budget> budget = [];
   String action = "all";
@@ -15,18 +15,40 @@ class BudgetService extends ChangeNotifier {
   String desc = "";
   String sortValue = "";
 
-  Future<Map<String, dynamic>> getBudgetTotalByAdmin(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/sommeByAdmin/$id'));
-    print("Fetching budget total");
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception("Erreur lors de la recuperation ${response.statusCode}");
+  // Future<Map<String, dynamic>> getBudgetTotalByAdmin(int id) async {
+  //   final response = await http.get(Uri.parse('$baseUrl/sommeByAdmin/$id'));
+  //   print("Fetching budget total");
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     return jsonDecode(response.body);
+  //   } else {
+  //     throw Exception("Erreur lors de la recuperation ${response.statusCode}");
+  //   }
+  // }
+Future<Map<String, dynamic>> getBudgetTotalByAdmin(int id) async {
+    try {
+      print('id est :${id}');
+      final url = '$baseUrl/sommeByAdmin/$id';
+      print('Request URL: $url');
+
+      final response = await http.get(Uri.parse(url));
+      print("Fetching budget total");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = jsonDecode(response.body);
+        print('Response Data: $responseData');
+        return responseData;
+      } else {
+        throw Exception(
+            "Erreur lors de la récupération ${response.statusCode}");
+      }
+    } catch (error) {
+      print('Error in getBudgetTotalByAdmin: $error');
+      throw error;
     }
   }
 
   Future<Map<String, dynamic>> getBudgetTotalByUser(int id) async {
-    final response = await http.get(Uri.parse('https://depenses-cosit.com/Budget/sommeByUser/$id'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:5100/Budget/sommeByUser/$id'));
     print("Fetching budget total");
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);

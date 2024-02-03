@@ -34,14 +34,14 @@ class _ConnexionState extends State<Connexion> {
 @override
   void initState() {
     super.initState();
-    checkUserSession();
+    // checkUserSession();
   }
   
   Future<void> loginUser() async {
     final String email = emailController.text;
     final String passWord = motDePasseController.text;
-    // const String baseUrl = 'http://10.0.2.2:5100/Admin/login';
-    const String baseUrl = 'https://depenses-cosit.com/Admin/login';
+    //  const String baseUrl = 'http://10.0.2.2:5100/Admin/login';
+    const String baseUrl = 'http://10.0.2.2:5100/Admin/login';
 
 
     AdminProvider adminProvider =

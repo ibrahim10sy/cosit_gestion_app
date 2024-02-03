@@ -60,3 +60,29 @@ class _ImagePickerComponentState extends State<ImagePickerComponent> {
     );
   }
 }
+
+
+// Future<File> saveImagePermanently(String imagePath) async {
+//   final directory = await getApplicationDocumentsDirectory();
+//   final name = path.basename(imagePath);
+//   final image = File('${directory.path}/$name');
+
+//   return File(imagePath).copy(image.path);
+// }
+
+// Future<File?> getImage(ImageSource source) async {
+//   final image = await ImagePicker().pickImage(source: source);
+//   if (image == null) return null;
+
+//   return File(image.path);
+// }
+
+// Future<void> _pickImage(ImageSource source) async {
+//   final image = await getImage(source);
+//   if (image != null) {
+//     setState(() {
+//       this.photo = image;
+//       imageSrc = image.path;
+//     });
+//   }
+// }

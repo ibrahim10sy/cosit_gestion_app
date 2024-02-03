@@ -164,7 +164,7 @@ class _DepensePageState extends State<DepensePage> {
 
                                 depenseList = snapshot.data!;
 
-                                return Column(
+                                return Column( 
                                   children: depenseList!
                                       .map((Depense depense) => ListTile(
                                             onTap: () async {

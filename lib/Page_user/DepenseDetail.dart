@@ -7,7 +7,7 @@ class DepenseDetail extends StatefulWidget {
   final Depense depenses;
   const DepenseDetail({super.key, required this.depenses});
 
-  @override
+  @override 
   State<DepenseDetail> createState() => _DepenseDetailState();
 }
 
@@ -127,22 +127,30 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         ),
                       ],
                     ),
-                     Container(
+                    Container(
                       height: _showJustification ? 210 : 0,
                       child: Visibility(
                         visible: _showJustification,
                         child:
                             depense.image != null && depense.image!.isNotEmpty
-                                ? Image.network(
+                                ? Image.network( 
                                     depense.image!,
                                     width: 200,
                                     height: 210,
                                     scale: 1,
                                     fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      // Handle the error when the image fails to load
+                                      return const Text(
+                                        "Image non valide",
+                                        textAlign: TextAlign.center,
+                                      );
+                                    },
                                   )
                                 : const Text(
+                                    "Aucun justificatif",
                                     textAlign: TextAlign.center,
-                                    "Aucune justificatif"),
+                                  ),
                       ),
                     ),
                     _buildDetailRow("Description", depense.description),
