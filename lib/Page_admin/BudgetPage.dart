@@ -66,28 +66,28 @@ class _BudgetPageState extends State<BudgetPage> {
               children: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  // Consumer<BudgetService>(
-                  //     builder: (context, budgetService, child) {
-                  //   return FutureBuilder(
-                  //       future:
-                  //           budgetService.getBudgetTotalByAdmin(admin.idAdmin!),
-                  //       builder: (context, snapshot) {
-                  //         if (snapshot.hasData) {
-                  //           return Text("${snapshot.data?["Total"]} FCFA",
-                  //               style: const TextStyle(
-                  //                   color: Colors.white,
-                  //                   fontSize: 22,
-                  //                   fontWeight: FontWeight.bold));
-                  //         } else {
-                  //           return const Center(
-                  //             child: CupertinoActivityIndicator(
-                  //                 radius: 20.0, color: Colors.white),
-                  //           ); //const CircularProgressIndicator();
-                  //         }
-                  //       });
-                  // }),
+                  Consumer<BudgetService>(
+                      builder: (context, budgetService, child) {
+                    return FutureBuilder(
+                        future:
+                            budgetService.getBudgetTotalByAdmin(admin.idAdmin!),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text("${snapshot.data?["Total"]} FCFA",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold));
+                          } else {
+                            return const Center(
+                              child: CupertinoActivityIndicator(
+                                  radius: 20.0, color: Colors.red),
+                            ); //const CircularProgressIndicator();
+                          }
+                        });
+                  }),
                   const SizedBox(
-                    height: 50,
+                    height: 20,
                   ),
                   Container(
                       // alignment: Alignment.bottomLeft,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cosit_gestion/Page_admin/CustomCard.dart';
 import 'package:cosit_gestion/Page_user/CustomAppBars.dart';
@@ -14,14 +15,13 @@ import 'package:cosit_gestion/service/DepenseService.dart';
 import 'package:cosit_gestion/service/SousCategorieService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:image/image.dart' as img;
-import 'dart:typed_data';
 
 class AjoutDepense extends StatefulWidget {
   const AjoutDepense({super.key});
@@ -66,7 +66,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     fetchData();
   }
 
- Future<File> saveImagePermanently(String imagePath) async {
+  Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = path.basename(imagePath);
     final image = File('${directory.path}/$name');
@@ -197,9 +197,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CustomCard(
+            CustomCard(
               title: "Ajout dépense",
+             
               imagePath: "assets/images/depense.png",
+              
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),

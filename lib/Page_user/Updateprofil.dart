@@ -346,6 +346,19 @@ class _UpdateProfilState extends State<UpdateProfil> {
                         } else {
                           Utilisateur updateUtilisateur;
                           try {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    CircularProgressIndicator(
+                                      color: d_red,
+                                    ),
+                                    SizedBox(width: 20),
+                                    Text("Modification en cours..."),
+                                  ],
+                                ),
+                              ),
+                            );
                             if (photo != null) {
                               updateUtilisateur =
                                   await Provider.of<UtilisateurService>(context,
@@ -381,6 +394,14 @@ class _UpdateProfilState extends State<UpdateProfil> {
                             Provider.of<UtilisateurService>(context,
                                     listen: false)
                                 .applyChange();
+                                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                            // Afficher le message de succès
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Modifier  avec succès"),
+                              ),
+                            );
                             Navigator.of(context).pop();
                             nom_controller.clear();
                             prenom_controller.clear();

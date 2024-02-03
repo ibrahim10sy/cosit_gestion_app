@@ -303,6 +303,19 @@ class _UpdateProfilState extends State<UpdateProfil> {
 
                         Admin adminUpdate;
                         try {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Row(
+                                children: [
+                                  CircularProgressIndicator(
+                                    color: d_red,
+                                  ),
+                                  SizedBox(width: 20),
+                                  Text("Modification en cours..."),
+                                ],
+                              ),
+                            ),
+                          );
                           if (photo != null) {
                             adminUpdate = await Provider.of<AdminServcie>(
                                     context,
@@ -335,6 +348,14 @@ class _UpdateProfilState extends State<UpdateProfil> {
                           }
                           print(
                               'Profil admin mis à jour avec succès : ${adminUpdate.nom}');
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+                          // Afficher le message de succès
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Modifier  avec succès"),
+                            ),
+                          );
                           Navigator.of(context).pop();
                         } catch (e) {
                           // Une erreur s'est produite lors de la mise à jour du profil utilisateur, vous pouvez gérer l'erreur ici.
