@@ -62,6 +62,9 @@ class _BudgetDetailState extends State<BudgetDetail> {
               imagePath: "assets/images/budget.png",
               children: Column(
                 children: [
+                  const SizedBox(
+                    height: 32,
+                  ),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 7, horizontal: 10),

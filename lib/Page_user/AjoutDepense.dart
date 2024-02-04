@@ -53,7 +53,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
   String? imageSrc;
   File? photo;
   bool isLoading = false;
-
+  int? montant;
   @override
   void initState() {
     super.initState();
@@ -165,11 +165,6 @@ class _AjoutDepenseState extends State<AjoutDepense> {
     } catch (e) {
       print(e.toString());
     }
-    // if (data.isNotEmpty) {
-
-    // } else {
-    //   print("Aucune donnée n'a été récupérée depuis l'API.");
-    // }
   }
 
   Future<List<ParametreDepense>> getData() async {
@@ -199,9 +194,11 @@ class _AjoutDepenseState extends State<AjoutDepense> {
           children: [
             CustomCard(
               title: "Ajout dépense",
-             
               imagePath: "assets/images/depense.png",
-              
+              // subTitle: "Montant max ",
+              // children: Column(children: [
+              //   Text("${montant} FCFA")
+              // ]),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15),
@@ -819,20 +816,21 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(13)),
+                                    borderRadius: BorderRadius.circular(13),
+                                  ),
                                 ),
                                 onPressed: () async {
+                                  // Récupération des valeurs des champs
                                   final description =
                                       descriptionController.text;
                                   final montant = montant_control.text;
                                   final date = dateController.text;
-                                  int? mt = int.tryParse(montant);
-                                  String formattedMontant =
-                                      montant_control.text.replaceAll(',', '');
-                                  int montants = int.parse(formattedMontant);
+
+                                  // Validation du montant
                                   if (description.isEmpty ||
                                       montant.isEmpty ||
                                       date.isEmpty) {
+                                    // Affichage d'une alerte si des champs sont vides
                                     const String errorMessage =
                                         "Tous les champs doivent être remplis";
                                     showDialog(
@@ -853,19 +851,26 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         );
                                       },
                                     );
+                                    return; // Arrêter l'exécution si les champs ne sont pas remplis
                                   }
 
+                                  // Conversion du montant en entier
+                                  String formattedMontant =
+                                      montant_control.text.replaceAll(',', '');
+                                  int montants = int.parse(formattedMontant);
+
+                                  // Vérification du seuil de montant
                                   if (montants >=
                                       parametreDepense!.montantSeuil) {
+                                    // Affichage d'une alerte pour les dépenses dépassant le seuil
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Center(
-                                            child: Text('Alert'),
-                                          ),
+                                              child: Text('Alerte')),
                                           content: const Text(
-                                            "Pour les dépenses dont le montant est supérieur ou égale au montant seuil une demande doit être envoyée",
+                                            "Pour les dépenses dont le montant est supérieur ou égal au montant seuil, une demande doit être envoyée",
                                           ),
                                           actions: <Widget>[
                                             TextButton(
@@ -889,16 +894,17 @@ class _AjoutDepenseState extends State<AjoutDepense> {
 
                                                 Navigator.of(context)
                                                     .pop(); // Fermer l'AlertDialog
+                                                // Continuez avec le reste du code ici...
                                               },
                                               child: const Text('OK'),
-                                            )
+                                            ),
                                           ],
                                         );
                                       },
                                     );
 
                                     try {
-                                      if (photo != null &&
+                                       if (photo != null &&
                                           parametreDepense != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
@@ -946,8 +952,12 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                               "Demande envoyée avec succès"),
                                         ),
                                       );
+                                      Provider.of<DepenseService>(context,
+                                              listen: false)
+                                          .applyChange();
                                       Navigator.of(context).pop();
                                     } catch (e) {
+                                      // Gestion des erreurs liées à l'ajout de dépense
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
                                       showDialog(
@@ -957,7 +967,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                             title: const Center(
                                                 child: Text('Erreur')),
                                             content: Text(
-                                                'Budget epuisé ou montant inférieur'),
+                                                'Budget épuisé ou montant inférieur'),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {
@@ -971,7 +981,9 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                       );
                                     }
                                   } else {
+                                    // Si le montant est inférieur au seuil
                                     try {
+                                      // Affichage d'un SnackBar pendant l'envoi
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -987,7 +999,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                         ),
                                       );
 
-                                      if (photo != null &&
+                                     if (photo != null &&
                                           parametreDepense != null) {
                                         await DepenseService().addDepenseByUser(
                                           description: description,
@@ -1035,12 +1047,15 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                               "Dépense ajouté avec succès"),
                                         ),
                                       );
+                                      // Effacement des champs de saisie et réinitialisation des états
+
                                       // Application des changements
                                       Provider.of<DepenseService>(context,
                                               listen: false)
                                           .applyChange();
                                       Navigator.of(context).pop();
                                     } catch (e) {
+                                      // Gestion des erreurs liées à l'ajout de dépense
                                       final String errorMessage = e.toString();
                                       print(errorMessage);
                                       showDialog(
@@ -1050,7 +1065,7 @@ class _AjoutDepenseState extends State<AjoutDepense> {
                                             title: const Center(
                                                 child: Text('Erreur')),
                                             content: Text(
-                                                'Budget epuisé ou montant inférieur'),
+                                                'Budget épuisé ou montant inférieur'),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {

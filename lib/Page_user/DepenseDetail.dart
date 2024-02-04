@@ -7,7 +7,7 @@ class DepenseDetail extends StatefulWidget {
   final Depense depenses;
   const DepenseDetail({super.key, required this.depenses});
 
-  @override 
+  @override
   State<DepenseDetail> createState() => _DepenseDetailState();
 }
 
@@ -41,7 +41,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
           Text(
             label,
             style: labelStyle,
-              overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
           ),
           // Afficher le bouton seulement s'il y a une justification
           label == "Justification" && depense.image != null
@@ -59,7 +59,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
               : Text(
                   value,
                   style: valueStyle,
-                    overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                 ),
         ],
       ),
@@ -133,7 +133,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         visible: _showJustification,
                         child:
                             depense.image != null && depense.image!.isNotEmpty
-                                ? Image.network( 
+                                ? Image.network(
                                     depense.image!,
                                     width: 200,
                                     height: 210,
@@ -153,15 +153,14 @@ class _DepenseDetailState extends State<DepenseDetail> {
                                   ),
                       ),
                     ),
-                    _buildDetailRow("Description", depense.description),
+                    // _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
-                    _buildDetailRow(
-                        "Catégorie", depense.sousCategorie.libelle),
+                    _buildDetailRow("Catégorie", depense.sousCategorie.libelle),
                     _buildDetailRow("Bureau ", depense.bureau.adresse),
                     _buildDetailRow("Montant ",
                         "${depense.montantDepense.toString()} FCFA"),
                     const SizedBox(height: 10),
-                    const Divider( 
+                    const Divider(
                       color: Colors.grey,
                       thickness: 0.5,
                     ),
@@ -171,7 +170,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                            overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                           color: Colors.black87,
                         ),
                       ),
@@ -183,7 +182,27 @@ class _DepenseDetailState extends State<DepenseDetail> {
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
-                                overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                    const Center(
+                      child: Text(
+                        "Description",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Center(
+                      child: Text(depense.description,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(
@@ -195,7 +214,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                            overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                           color: Colors.black87,
                         ),
                       ),
@@ -206,7 +225,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
-                                overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(
@@ -233,7 +252,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
     );
   }
 
-   String _getStatusText(bool? status) {
+  String _getStatusText(bool? status) {
     return status == true ? 'Oui' : 'Non';
   }
 }

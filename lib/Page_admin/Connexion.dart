@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cosit_gestion/DelayAnimation.dart';
 import 'package:cosit_gestion/Page_admin/BottomNavigationPage.dart';
-import 'package:cosit_gestion/Page_user/ConnexionUsers.dart';
 import 'package:cosit_gestion/model/Admin.dart';
 import 'package:cosit_gestion/provider/AdminProvider.dart';
 import 'package:email_validator/email_validator.dart';
@@ -31,18 +30,17 @@ class _ConnexionState extends State<Connexion> {
   String email = '';
   String image = '';
 
-@override
+  @override
   void initState() {
     super.initState();
-    // checkUserSession();
+    checkUserSession();
   }
-  
+
   Future<void> loginUser() async {
     final String email = emailController.text;
     final String passWord = motDePasseController.text;
     //  const String baseUrl = 'http://10.0.2.2:5100/Admin/login';
     const String baseUrl = 'http://10.0.2.2:5100/Admin/login';
-
 
     AdminProvider adminProvider =
         Provider.of<AdminProvider>(context, listen: false);
@@ -104,7 +102,7 @@ class _ConnexionState extends State<Connexion> {
         emailController.clear();
         motDePasseController.clear();
 
-      // Sauvegarder les données de l'utilisateur dans shared preferences
+        // Sauvegarder les données de l'utilisateur dans shared preferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', email);
         prefs.setString('passWord', passWord);
@@ -168,7 +166,7 @@ class _ConnexionState extends State<Connexion> {
     }
   }
 
-Future<void> checkUserSession() async {
+  Future<void> checkUserSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? email = prefs.getString('email');
     String? passWord = prefs.getString('passWord');
@@ -180,8 +178,6 @@ Future<void> checkUserSession() async {
       loginUser();
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -275,22 +271,25 @@ Future<void> checkUserSession() async {
                         ),
                       ),
                     )),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ConnexionUsers()));
-                    },
-                    child: const Text(
-                      "Se connecter en tant que Employer",
-                      style: TextStyle(color: d_red),
-                    ),
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => const ConnexionUsers()));
+                //     },
+                //     child: const Text(
+                //       "Se connecter en tant que Employer",
+                //       style: TextStyle(color: d_red),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   width: double.infinity,
                   child: Padding(

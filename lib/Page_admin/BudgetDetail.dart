@@ -69,7 +69,7 @@ class _BudgetDetailState extends State<BudgetDetail> {
                 children: [
                   const SizedBox(
                     height: 32,
-                  ),
+                   ),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 7, horizontal: 10),

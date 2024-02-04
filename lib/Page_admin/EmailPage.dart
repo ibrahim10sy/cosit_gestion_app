@@ -131,10 +131,6 @@ class _EmailPageState extends State<EmailPage> {
                                     listeNotif = snapshot.data!;
                                     return Column(
                                       children: listeNotif
-                                          .where((element) =>
-                                              element
-                                                  .depense.autorisationAdmin ==
-                                              false)
                                           .map(
                                               (SendNotification send) =>
                                                   ListTile(

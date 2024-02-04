@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
 class AdminServcie extends ChangeNotifier {
-  // static const String baseUrl = "http://10.0.2.2:5100/Admin";
-  static const String baseUrl = "http://10.0.2.2:5100/Admin";
+  // static const String baseUrl = "https://depenses-cosit.com/Admin";
+  static const String baseUrl = "https://depenses-cosit.com/Admin";
 
   Future<Admin> updateAdmin({
     required int idAdmin,

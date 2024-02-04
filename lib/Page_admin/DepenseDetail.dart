@@ -43,7 +43,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
   Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: Row( 
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
@@ -134,7 +134,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         ),
                       ],
                     ),
-                  Container(
+                    Container(
                       height: _showJustification ? 210 : 0,
                       child: Visibility(
                         visible: _showJustification,
@@ -160,7 +160,7 @@ class _DepenseDetailState extends State<DepenseDetail> {
                                   ),
                       ),
                     ),
-                    _buildDetailRow("Description", depense.description),
+                    // _buildDetailRow("Description", depense.description),
                     _buildDetailRow("Date du dépense", depense.dateDepense),
                     _buildDetailRow(
                         "Sous catégorie", depense.sousCategorie.libelle),
@@ -203,6 +203,26 @@ class _DepenseDetailState extends State<DepenseDetail> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)),
                     ),
+                    const Center(
+                      child: Text(
+                        "Description",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Center(
+                      child: Text(depense.description,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold)),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -238,7 +258,6 @@ class _DepenseDetailState extends State<DepenseDetail> {
                         ),
                       ),
                     ),
-                  
                   ],
                 ),
               ),

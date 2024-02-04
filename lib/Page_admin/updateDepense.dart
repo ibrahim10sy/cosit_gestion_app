@@ -81,7 +81,7 @@ class _UpdateDepenseState extends State<UpdateDepense> {
 
   Future<List<Budget>> fetchBudgets(int id) async {
     final response = await http
-        .get(Uri.parse('http://10.0.2.2:5100/Budget/listeByAdmin/$id'));
+        .get(Uri.parse('https://depenses-cosit.com/Budget/listeByAdmin/$id'));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       List<dynamic> data = json.decode(response.body);
